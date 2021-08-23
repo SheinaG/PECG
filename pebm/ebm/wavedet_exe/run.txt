@@ -1,0 +1,1 @@
+.home/sheina/pebm_toolbox/src/pebm_pkg/wavedet_exe/run_peak_det.sh  /home/sheina/pebm_toolbox/src/pebm_pkg/wavedet_exe/ecg-kit-master "/home/sheina/pebm_toolbox/Test/signal.txt" "/home/sheina/pebm_toolbox/Test/peaks.txt" "200"

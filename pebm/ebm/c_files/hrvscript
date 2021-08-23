@@ -1,0 +1,12 @@
+#!/bin/bash
+RECORD=$1
+ANN=$2
+INT=2
+
+for ((  i = 0 ;  i <= 15;  i++  ))
+do
+START=`expr INT \* $i`
+IP1=`expr $i + 1`
+END=`expr INT \* $IP1`
+rrlist $ANN $RECORD -f "00:$START:00" -t "00:$END:00" > LBNP2_8_$i.rrlist
+done
