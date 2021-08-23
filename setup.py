@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name= "pebm",
-    version="0.0.9",
+    version="0.0.10",
     use_scm_version={
         "root": '..',
         "relative_to": __file__,
@@ -25,9 +25,13 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    
     package_dir={"": "pebm"},
-    packages=setuptools.find_packages(where="pebm"),
+    packages={
+      "pebm"}
+            
     package_data = {
+        '*',
         'c_files': ['*'],
         'wavedet_exe': ['*']
     },
