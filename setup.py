@@ -27,11 +27,10 @@ setuptools.setup(
     ],
     
     package_dir={"": "pebm"},
-    packages={
-      "pebm"}
+    packages={"pebm"},
             
     package_data={
-        'pebm' :['*'],
+        'pebm' : ['*'],
         'c_files': ['*'],
         'wavedet_exe': ['*']
     },
