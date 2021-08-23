@@ -20,7 +20,7 @@ class Preprocessing:
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
-        _check_shape_(signal)
+        _check_shape_(signal, fs)
 
         self.signal = signal
         self.fs = fs
