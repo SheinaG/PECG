@@ -26,8 +26,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     
-    package_dir={"": "pebm"},
-    packages={"pebm"},
+    package_dir={"": "ebm"},
+    packages={"ebm",
+              'c_files',
+              'wavedet_exe'},
             
     package_data={
         'ebm' : ['*'],
