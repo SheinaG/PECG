@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name= "pebm",
-    version="0.0.12",
+    version="0.0.13",
     use_scm_version={
         "root": '..',
         "relative_to": __file__,
@@ -26,15 +26,17 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     
-    package_dir={"": "pebm"},
-    packages={"ebm",
-              'ebm/c_files',
-              'ebm/wavedet_exe'},
+    #package_dir={"": "pebm"},
+    packages={"pebm",
+              "pebm/ebm",
+              'pebm/ebm/c_files',
+              'pebm/ebm/wavedet_exe'},
             
     package_data={
-        'ebm' : ['*'],
-        'ebm/c_files': ['*'],
-        'ebm/wavedet_exe': ['*']
+        'pebm' : ['*'],
+        'pebm/ebm' : ['*'],
+        'pebm/ebm/c_files': ['*'],
+        'pebm/ebm/wavedet_exe': ['*']
     },
     include_package_data=True,
     python_requires=">=3.6",
