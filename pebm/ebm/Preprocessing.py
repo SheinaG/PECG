@@ -3,8 +3,8 @@ import numpy as np
 import mne
 from scipy.signal import butter, sosfiltfilt
 from scipy.spatial import cKDTree
-from src.pebm.FiducialPoints import FiducialPoints
-from src._ErrorHandler import _check_shape_, WrongParameter
+from pebm.ebm.FiducialPoints import FiducialPoints
+from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 
 class Preprocessing:

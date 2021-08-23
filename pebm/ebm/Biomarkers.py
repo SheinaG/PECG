@@ -1,8 +1,8 @@
-from src.pebm.FiducialPoints import FiducialPoints
-from src.pebm.IntervalsDuration import extract_intervals_duration
-from src.pebm.WavesCharacteristics import extract_waves_characteristics
-from src.pebm.Statistics import statistics
-from src._ErrorHandler import _check_shape_, WrongParameter
+from pebm.ebm.FiducialPoints import FiducialPoints
+from pebm.ebm.IntervalsDuration import extract_intervals_duration
+from pebm.ebm.WavesCharacteristics import extract_waves_characteristics
+from pebm.ebm.Statistics import statistics
+from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 
 class Biomarkers:
