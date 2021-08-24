@@ -2,9 +2,9 @@
 
 import numpy as np
 import pebm
-from pebm.ebm import Preprocessing as pre
-from pebm.ebm import FiducialPoints as fp
-from pebm.ebm import Biomarkers as obm
+from pebm.ebm import Preprocessing as Pre
+from pebm.ebm import FiducialPoints as Fp
+from pebm.ebm import Biomarkers as Obm
 import matplotlib.pyplot as plt
 import scipy.io as spio
 from scipy.fft import fft, ifft, fftshift
@@ -24,15 +24,16 @@ signal= signal[:-1]
 
 # build a dictinary
 # try Extract_mor_features
-pre = pre.Preprocessing(signal, freq)
+pre = Pre.Preprocessing(signal, freq)
 f_notch = 60
 fsig =pre.notch(f_notch)
 fsig= pre.bpfilt()
 
-fp = fp.FiducialPoints(signal, freq)
+fp = Fp.FiducialPoints(signal, freq)
 peaks = fp.epltd()
 qrs = fp.xqrs()
-fiducials = fp.wavedet(matlab_pat='/usr/local/MATLAB/MATLAB_Runtime')
+matlab_pat='/usr/local/MATLAB/MATLAB_Runtime'
+fiducials = fp.wavedet(matlab_pat)
 
 b = pre.bsqi()
 
@@ -99,7 +100,7 @@ if plot:
 
 
 
-obm = obm.Biomarkers(signal, freq, fiducials)
+obm = Obm.Biomarkers(signal, freq, matlab_path=matlab_pat)
 ints, stat_i = obm.intervals()
 waves, stat_w = obm.waves()
 

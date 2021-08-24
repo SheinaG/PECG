@@ -6,12 +6,13 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 
 class Biomarkers:
-    def __init__(self, signal, fs, fiducials=None):
+    def __init__(self, signal, fs, fiducials=None, matlab_path =None):
         """
 
         :param signal: The ECG signal as a ndarray.
         :param fs: The frequency of the signal.
         :param fiducials: Dictionary that includes indexes for each fiducial point
+        :param matlab_path: The indexes of the R- points of the ECG signal – optional input
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
@@ -27,7 +28,7 @@ class Biomarkers:
 
         if fiducials is None:
             fp = FiducialPoints(signal, fs)
-            fiducials = fp.wavedet()
+            fiducials = fp.wavedet(matlab_path)
         self.fiducials = fiducials
 
     def intervals(self):
