@@ -72,13 +72,13 @@ class FiducialPoints:
 
         :return: indexes of the R-peaks in the ECG signal.
         """
-        cwd = os.getcwd()
+
         peaks =epltd_all(self.signal, self.fs)
-        os.chdir(cwd)
+
         return peaks
 
     def xqrs(self):
-        cwd = os.getcwd()
+
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             os.chdir(tmpdirname)
@@ -90,7 +90,7 @@ class FiducialPoints:
 
             xqrs.detect()
             peaks = xqrs.qrs_inds
-        os.chdir(cwd)
+
         return peaks
 
 

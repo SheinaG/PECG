@@ -99,11 +99,12 @@ class Preprocessing:
 
         fs = self.fs
         agw = 0.05 #in seconds
+        fp = FiducialPoints(self.signal, fs)
         if peaks is None:
-            refqrs = FiducialPoints.epltd()
+            refqrs = fp.epltd()
         else:
             refqrs = peaks
-        testqrs = FiducialPoints.xqrs()
+        testqrs = fp.xqrs()
         agw *= fs
         if len(refqrs) > 0 and len(testqrs) > 0:
             NB_REF = len(refqrs)
