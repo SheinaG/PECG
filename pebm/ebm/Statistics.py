@@ -8,9 +8,7 @@ def statistics(data_dict):
     for i in data_dict:
         data = data_dict[i]
         data = data[data != -1]
-        if not data:
-            stat_dict[i] = {'mean': -1, 'median': -1, 'min': -1, 'max': -1, 'iqr': -1, 'std': -1}
-        else:
+        if len(data)>0:
             mean_ = np.mean(data)
             median_ = np.median(data)
             min_ = np.amin(data)
@@ -19,5 +17,8 @@ def statistics(data_dict):
             iqr_ = q75 - q25
             std_ = np.std(data)
             stat_dict[i] = {'mean': mean_, 'median': median_, 'min': min_, 'max': max_, 'iqr': iqr_, 'std': std_}
+        else:
+            stat_dict[i] = {'mean': -1, 'median': -1, 'min': -1, 'max': -1, 'iqr': -1, 'std': -1}
+
     return stat_dict
 

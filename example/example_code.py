@@ -24,18 +24,19 @@ signal= signal[:-1]
 
 # build a dictinary
 # try Extract_mor_features
-pre = Pre.Preprocessing(signal, freq)
-f_notch = 60
-fsig =pre.notch(f_notch)
-fsig= pre.bpfilt()
-
-fp = Fp.FiducialPoints(signal, freq)
-peaks = fp.epltd()
-qrs = fp.xqrs()
+# pre = Pre.Preprocessing(signal, freq)
+# f_notch = 60
+# fsig =pre.notch(f_notch)
+# fsig= pre.bpfilt()
+#
+# fp = Fp.FiducialPoints(signal, freq, peaks1)
+# fiducials = fp.wavedet()
+# peaks = fp.epltd()
+# qrs = fp.xqrs()
 matlab_pat='/usr/local/MATLAB/MATLAB_Runtime'
-fiducials = fp.wavedet(matlab_pat)
-
-b = pre.bsqi()
+# fiducials = fp.wavedet(matlab_pat)
+#
+# b = pre.bsqi()
 
 
 #-------------------------------------
