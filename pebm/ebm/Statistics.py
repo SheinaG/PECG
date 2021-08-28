@@ -8,6 +8,8 @@ def statistics(data_dict):
     for i in data_dict:
         data = data_dict[i]
         data = data[data != -1]
+        if not data:
+            stat_dict[i] = {'mean': -1, 'median': -1, 'min': -1, 'max': -1, 'iqr': -1, 'std': -1}
         mean_ = np.mean(data)
         median_ = np.median(data)
         min_ = np.amin(data)
