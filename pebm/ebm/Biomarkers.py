@@ -1,3 +1,4 @@
+import numpy as np
 from pebm.ebm.FiducialPoints import FiducialPoints
 from pebm.ebm.IntervalsDuration import extract_intervals_duration
 from pebm.ebm.WavesCharacteristics import extract_waves_characteristics
@@ -6,7 +7,7 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 
 class Biomarkers:
-    def __init__(self, signal, fs, fiducials=None, matlab_path =None):
+    def __init__(self, signal: np.array, fs, fiducials=None, matlab_path: str = None):
         """
 
         :param signal: The ECG signal as a ndarray.

@@ -1,4 +1,3 @@
-
 import numpy as np
 import mne
 from scipy.signal import butter, sosfiltfilt
@@ -9,8 +8,7 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 class Preprocessing:
 
-
-    def __init__(self, signal, fs):
+    def __init__(self, signal: np.array, fs: int):
         """
         The Preprocessing class provides some routines for pre-filtering
         the ECG signal as well as estimating the signal quality.
@@ -24,11 +22,9 @@ class Preprocessing:
 
         self.signal = signal
         self.fs = fs
-        self.n_freq = None #can be 60 or 50 HZ
+        self.n_freq = None  # can be 60 or 50 HZ
 
-
-
-    def notch(self, n_freq):
+    def notch(self, n_freq: int):
 
         """
         The notch function applies a notch filter in order to remove the power line artifacts.
@@ -46,11 +42,10 @@ class Preprocessing:
         # notch_freq have to be 50 or 60 HZ (make that condition)
         fsig = mne.filter.notch_filter(signal.astype(np.float), fs, freqs=n_freq)
 
-        #plot:
+        # plot:
 
-        self.signal =fsig
+        self.signal = fsig
         return fsig
-
 
     def bpfilt(self):
         """
@@ -61,14 +56,14 @@ class Preprocessing:
         """
         signal = self.signal
         fs = self.fs
-        filter_order = 75 #??
+        filter_order = 75  # ??
         low_cut = 0.67
         high_cut = 100
 
         nyquist_freq = 0.5 * fs
         low = low_cut / nyquist_freq
         high = high_cut / nyquist_freq
-        if fs <= high_cut*2:
+        if fs <= high_cut * 2:
             sos = butter(filter_order, low, btype="high", output='sos', analog=False)
         else:
             sos = butter(filter_order, [low, high], btype="band", output='sos', analog=False)
@@ -76,9 +71,7 @@ class Preprocessing:
         self.signal = fsig
         return fsig
 
-
-
-    def bsqi(self, peaks = None):
+    def bsqi(self, peaks: np.array = None):
 
         """
         This function is based on the following paper:
@@ -98,7 +91,7 @@ class Preprocessing:
         """
 
         fs = self.fs
-        agw = 0.05 #in seconds
+        agw = 0.05  # in seconds
         fp = FiducialPoints(self.signal, fs)
         if peaks is None:
             refqrs = fp.epltd()

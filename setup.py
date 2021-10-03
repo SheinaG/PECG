@@ -5,13 +5,13 @@ import setuptools
 
 setuptools.setup(
     name= "pebm",
-    version="1.0.3",
+    version="0.0.13",
     use_scm_version={
         "root": '..',
         "relative_to": __file__,
         "local_scheme": "node-and-timestamp"
     },
-    author="Example Author",
+    author="sheina Gendelman",
     author_email="sheina@campus.technion.ac.il",
     description="A small example package",
     long_description="aa",

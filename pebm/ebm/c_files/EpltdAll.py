@@ -16,7 +16,7 @@ def epltd_all(signal, fs):
         wfdb.wrsamp(record_name='temp', fs=np.asscalar(fs), units=['mV'], sig_name=['V5'],
                     p_signal=signal_pad.reshape(-1, 1), fmt=['16'])
 
-        prog_dir = my_path + '//epltd_all'
+        prog_dir = my_path + '\\epltd_all'
         ecg_dir = tmpdirname
         command = ';'.join(['EPLTD_PROG_DIR=' + prog_dir,
                             'ECG_DIR=' + ecg_dir,

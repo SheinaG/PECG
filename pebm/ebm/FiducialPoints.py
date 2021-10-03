@@ -10,7 +10,7 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 class FiducialPoints:
 
-    def __init__(self, signal, fs, peaks= None):
+    def __init__(self, signal: np.array, fs: int, peaks: np.array = []):
         """
         The purpose of the FiducialPoints class is to calculate the fiducial pointes of the ECG signal.
         :param signal: The ECG signal as a ndarray.
@@ -27,7 +27,7 @@ class FiducialPoints:
             peaks = self.epltd()
         self.peaks = peaks
 
-    def wavedet(self, matlab_pat = None):
+    def wavedet(self, matlab_pat: str = None):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
         The algorithm is described in the following paper:
@@ -82,7 +82,7 @@ class FiducialPoints:
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             os.chdir(tmpdirname)
-            wfdb.wrsamp(record_name= 'temp', fs=np.asscalar(self.fs), units=['mV'], sig_name=['V5'], p_signal=self.signal.reshape(-1, 1), fmt = ['16'] )
+            wfdb.wrsamp(record_name= 'temp', fs=np.asscalar(np.uint8(self.fs)), units=['mV'], sig_name=['V5'], p_signal=self.signal.reshape(-1, 1), fmt = ['16'] )
             record = wfdb.rdrecord(tmpdirname+'/temp')
             fs = self.fs
             ecg = record.p_signal[:, 0]
