@@ -63,7 +63,7 @@ def extract_waves_characteristics(ecg, freq, features_dict):
                        QRSarea=[features_dict['QRSon'], features_dict['QRSoff']])
     amplitude = {}
     for key in amplitude_points:
-        amplitude[key] = compute_amp(ecg, amplitude_points[key] )
+        amplitude[key] = compute_amp(ecg, freq, amplitude_points[key], factor=1000)
     area = {}
     for key in area_points:
         area[key] = compute_area(ecg, freq, area_points[key], factor=1000)
