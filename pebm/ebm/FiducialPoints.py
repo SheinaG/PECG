@@ -10,24 +10,36 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 class FiducialPoints:
 
-    def __init__(self, signal, fs, peaks= None):
+    def __init__(self, signal: np.array, fs: int, peaks: np.array = []):
         """
-        The purpose of the FiducialPoints class is to calculate the fiducial pointes of the ECG signal.
+        The purpose of the FiducialPoints class is to calculate the fiducial points
         :param signal: The ECG signal as a ndarray.
-        :param fs: The sampling frequency" of the signal.
+        :param fs: The sampling frequency of the signal.
         :param peaks: The indexes of the R- points of the ECG signal – optional input
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
-        _check_shape_(signal)
+        _check_shape_(signal, fs)
 
         self.signal = signal
         self.fs = fs
+        if len(np.shape(signal)) == 2:
+            [ecg_len, ecg_num] = np.shape(signal)
+        elif len(np.shape(signal)) == 1:
+            ecg_num = 1
         if peaks is None:
-            peaks = self.epltd()
+            size_peaks = np.zeros([1, ecg_num]).squeeze()
+            peaks_dict = {}
+            for i in np.arange(0, ecg_num):
+                peaks_dict[str(i)] = self.epltd()
+                size_peaks[i] = len(peaks_dict[str(i)])
+            max_sp = int(np.max(size_peaks))
+            peaks = np.zeros([max_sp, ecg_num])
+            for i in np.arange(0, ecg_num):
+                peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
         self.peaks = peaks
 
-    def wavedet(self, matlab_pat = None):
+    def wavedet(self, matlab_pat: str = None):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
         The algorithm is described in the following paper:
@@ -37,7 +49,8 @@ class FiducialPoints:
 
         :param matlab_pat: Optional input- requiered when runing on a linux machine.
         
-        :returns: Dictionary that includes indexes for each fiducial point
+        :returns:
+            *fiducials: Dictionary that includes indexes for each fiducial point.
         """
 
         signal = self.signal
@@ -72,25 +85,55 @@ class FiducialPoints:
 
         :return: indexes of the R-peaks in the ECG signal.
         """
-        cwd = os.getcwd()
-        peaks =epltd_all(self.signal, self.fs)
-        os.chdir(cwd)
+        signal = self.signal
+        fs = self.fs
+
+        if len(np.shape(signal)) == 2:
+            [ecg_len, ecg_num] = np.shape(signal)
+        elif len(np.shape(signal)) == 1:
+            ecg_num = 1
+
+        size_peaks = np.zeros([1, ecg_num]).squeeze()
+        peaks_dict = {}
+        for i in np.arange(0, ecg_num):
+            peaks_dict[str(i)] = epltd_all(signal[:, i], fs)
+            size_peaks[i] = len(peaks_dict[str(i)])
+        max_sp = int(np.max(size_peaks))
+        peaks = np.zeros([max_sp, ecg_num])
+        for i in np.arange(0, ecg_num):
+            peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
+
         return peaks
 
     def xqrs(self):
-        cwd = os.getcwd()
+
+        signal = self.signal
+        fs = self.signal
+
+        if len(np.shape(signal)) == 2:
+            [ecg_len, ecg_num] = np.shape(signal)
+        elif len(np.shape(signal)) == 1:
+            ecg_num = 1
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             os.chdir(tmpdirname)
-            wfdb.wrsamp(record_name= 'temp', fs=np.asscalar(self.fs), units=['mV'], sig_name=['V5'], p_signal=self.signal.reshape(-1, 1), fmt = ['16'] )
-            record = wfdb.rdrecord(tmpdirname+'/temp')
-            fs = self.fs
-            ecg = record.p_signal[:, 0]
-            xqrs = processing.XQRS(ecg, fs)
 
-            xqrs.detect()
-            peaks = xqrs.qrs_inds
-        os.chdir(cwd)
+            size_peaks = np.zeros([1, ecg_num]).squeeze()
+            peaks_dict = {}
+            for i in np.arange(0, ecg_num):
+                wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint8(fs)), units=['mV'], sig_name=['V5'],
+                            p_signal=signal.reshape(-1, 1), fmt=['16'])
+                record = wfdb.rdrecord(tmpdirname + '/temp')
+                ecg = record.p_signal[:, 0]
+                xqrs = processing.XQRS(ecg, fs)
+                xqrs.detect()
+                peaks_dict[str(i)] = xqrs.qrs_inds
+                size_peaks[i] = len(peaks_dict[str(i)])
+            max_sp = int(np.max(size_peaks))
+            peaks = np.zeros([max_sp, ecg_num])
+            for i in np.arange(0, ecg_num):
+                peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
+
         return peaks
 
 
