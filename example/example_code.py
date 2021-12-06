@@ -1,6 +1,4 @@
 
-
-import numpy as np
 import pebm
 from pebm.ebm import Preprocessing as Pre
 from pebm.ebm import FiducialPoints as Fp
@@ -80,8 +78,8 @@ if plot:
 
     fig = plt.figure()
     plt.style.use('bmh')
-    x1, = plt.plot(f_axis[f_l:f_h],fft_signal_c[f_l:f_h] , 'k')
-    x2, = plt.plot(f_axis[f_l:f_h],fft_fsig_c[f_l:f_h] , 'r', linewidth=1)
+    x1, = plt.plot(f_axis[f_l:f_h], fft_signal_c[f_l:f_h] , 'k')
+    x2, = plt.plot(f_axis[f_l:f_h], fft_fsig_c[f_l:f_h] , 'r', linewidth=1)
     plt.xlabel('f[Hz]')
     plt.ylabel('Amp')
     plt. show()
@@ -94,7 +92,7 @@ if plot:
     fig = plt.figure()
     plt.style.use('bmh')
     x1, = plt.plot(t_axis, fsig_c, 'k')
-    x2 =plt.scatter(t_axis[relevant_R],fsig_c[relevant_R] , c ='r', marker = "o")
+    x2 = plt.scatter(t_axis[relevant_R],fsig_c[relevant_R] , c ='r', marker = "o")
     plt.xlabel('time[sec]')
     plt.ylabel('mV')
     plt. show()
@@ -102,7 +100,7 @@ if plot:
 
 
 
-obm = Obm.Biomarkers(signal, freq, matlab_path=matlab_pat)
+obm = Obm.Biomarkers(signal, freq, fiducials=fiducials,matlab_path=matlab_pat)
 ints, stat_i = obm.intervals()
 waves, stat_w = obm.waves()
 

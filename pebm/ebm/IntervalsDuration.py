@@ -41,7 +41,8 @@ def extract_intervals_duration(fs, features_dict, factor=1000):
                             QT_int=[features_dict['QRSon'], features_dict['Toff']],
                             Twave_int=[features_dict['Ton'], features_dict['Toff']],
                             TP_seg=[features_dict['Toff'][:-1], features_dict['Pon'][1:]],
-                            RR_int=[features_dict['qrs'][:-1], features_dict['qrs'][1:]])
+                            RR_int=[features_dict['qrs'][:-1], features_dict['qrs'][1:]],
+                            R_dep=[features_dict['QRSon'], features_dict['qrs']])
     intervals = {}
     for key in intervals_points:
         intervals[key] = compute_int(fs, intervals_points[key], factor=1000)
