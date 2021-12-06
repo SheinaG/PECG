@@ -20,8 +20,6 @@ else
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64
   LD_LIBRARY_PATH=/usr/local/MATLAB/MATLAB_Runtime/v98/bin/glnxa64:$LD_LIBRARY_PATH
   LD_LIBRARY_PATH=/usr/local/MATLAB/MATLAB_Runtime/v98/runtime/glnxa64/:$LD_LIBRARY_PATH
-#  LD_LIBRARY_PATH=/usr/local/MATLAB/MATLAB_Runtime/v911/bin/glnxa64:$LD_LIBRARY_PATH
-#  LD_LIBRARY_PATH=/usr/local/MATLAB/MATLAB_Runtime/v911/runtime/glnxa64/:$LD_LIBRARY_PATH
 
   export LD_LIBRARY_PATH;
   echo LD_LIBRARY_PATH is ${LD_LIBRARY_PATH};
@@ -32,7 +30,6 @@ else
       args="${args} \"${token}\"" 
       shift
   done
-  echo 'args',$args
   eval "\"${exe_dir}/peak_det\"" $args
 fi
 exit

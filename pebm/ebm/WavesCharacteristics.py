@@ -34,24 +34,6 @@ def compute_area(ecg, freq, features_dict, factor=1000):
 
 
 def extract_waves_characteristics(ecg, freq, features_dict):
-    """
-
-    :param ecg:
-    :param freq:
-    :param features_dict:
-    :return:
-    Wave characteristics:
-	P-wave	Amplitude difference between P-peak and P-off.
-	T-wave	Amplitude difference between T-peak on and T-off.
-	R-wave	R-peak amplitude.
-	P-waveArea	P-wave interval area defined as integral from the P-on to the P-off.
-	TwaveArea	T-wave interval area  defined as integral from the T-on to the T-off.
-	QRSArea	QRS interval area defined as integral from the QRS-on to the QRS-off.
-	STseg	Amplitude difference between QRS-off and T-on.
-	J-point	Amplitude in 40ms after QRS-off as defined by Hollander et al.
-
-
-    """
 
     amplitude_points = dict(Pwave=[features_dict['P'], features_dict['Poff']],
                             Twave=[features_dict['T'], features_dict['Toff']],
@@ -62,11 +44,7 @@ def extract_waves_characteristics(ecg, freq, features_dict):
                        QRSarea=[features_dict['QRSon'], features_dict['QRSoff']])
     amplitude = {}
     for key in amplitude_points:
-<<<<<<< HEAD
         amplitude[key] = compute_amp(ecg, amplitude_points[key])
-=======
-        amplitude[key] = compute_amp(ecg, freq, amplitude_points[key], factor=1000)
->>>>>>> a3afee3446684d266510f07f004a27cccd0ee568
     area = {}
     for key in area_points:
         area[key] = compute_area(ecg, freq, area_points[key], factor=1000)
