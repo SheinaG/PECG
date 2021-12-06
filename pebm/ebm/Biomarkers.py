@@ -1,4 +1,3 @@
-import numpy as np
 from pebm.ebm.FiducialPoints import FiducialPoints
 from pebm.ebm.IntervalsDuration import extract_intervals_duration
 from pebm.ebm.WavesCharacteristics import extract_waves_characteristics
@@ -7,17 +6,16 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 
 class Biomarkers:
-    def __init__(self, signal: np.array, fs, fiducials=None, matlab_path: str = None):
+    def __init__(self, signal, fs, fiducials=None):
         """
 
         :param signal: The ECG signal as a ndarray.
         :param fs: The sampling frequency of the signal.
         :param fiducials: Dictionary that includes indexes for each fiducial point
-        :param matlab_path: The indexes of the R- points of the ECG signal – optional input
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
-        _check_shape_(signal, fs)
+        _check_shape_(signal)
 
         self.signal = signal
         self.fs = fs
@@ -29,7 +27,7 @@ class Biomarkers:
 
         if fiducials is None:
             fp = FiducialPoints(signal, fs)
-            fiducials = fp.wavedet(matlab_path)
+            fiducials = fp.wavedet()
         self.fiducials = fiducials
 
     def intervals(self):

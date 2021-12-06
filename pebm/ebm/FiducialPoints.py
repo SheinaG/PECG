@@ -10,7 +10,7 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 class FiducialPoints:
 
-    def __init__(self, signal: np.array, fs: int, peaks: np.array = []):
+    def __init__(self, signal, fs, peaks= None):
         """
         The purpose of the FiducialPoints class is to calculate the fiducial points
         :param signal: The ECG signal as a ndarray.
@@ -19,7 +19,7 @@ class FiducialPoints:
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
-        _check_shape_(signal, fs)
+        _check_shape_(signal)
 
         self.signal = signal
         self.fs = fs
@@ -39,7 +39,7 @@ class FiducialPoints:
                 peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
         self.peaks = peaks
 
-    def wavedet(self, matlab_pat: str = None):
+    def wavedet(self, matlab_pat = None):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
         The algorithm is described in the following paper:
@@ -85,6 +85,7 @@ class FiducialPoints:
 
         :return: indexes of the R-peaks in the ECG signal.
         """
+<<<<<<< HEAD
         signal = self.signal
         fs = self.fs
 
@@ -134,6 +135,27 @@ class FiducialPoints:
             for i in np.arange(0, ecg_num):
                 peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
 
+=======
+        cwd = os.getcwd()
+        peaks =epltd_all(self.signal, self.fs)
+        os.chdir(cwd)
+        return peaks
+
+    def xqrs(self):
+        cwd = os.getcwd()
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            os.chdir(tmpdirname)
+            wfdb.wrsamp(record_name= 'temp', fs=np.asscalar(self.fs), units=['mV'], sig_name=['V5'], p_signal=self.signal.reshape(-1, 1), fmt = ['16'] )
+            record = wfdb.rdrecord(tmpdirname+'/temp')
+            fs = self.fs
+            ecg = record.p_signal[:, 0]
+            xqrs = processing.XQRS(ecg, fs)
+
+            xqrs.detect()
+            peaks = xqrs.qrs_inds
+        os.chdir(cwd)
+>>>>>>> a3afee3446684d266510f07f004a27cccd0ee568
         return peaks
 
 
