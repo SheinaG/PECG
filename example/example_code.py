@@ -27,7 +27,7 @@ f_notch = 60
 fsig =pre.notch(f_notch)
 fsig= pre.bpfilt()
 
-matlab_pat='/usr/local/MATLAB/MATLAB_Runtime'
+matlab_pat= '/usr/local/MATLAB/R2021a'
 fp = Fp.FiducialPoints(signal, freq, peaks1)
 fiducials = fp.wavedet(matlab_pat)
 peaks = fp.epltd()

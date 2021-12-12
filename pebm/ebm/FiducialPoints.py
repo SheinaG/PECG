@@ -10,7 +10,7 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 class FiducialPoints:
 
-    def __init__(self, signal: np.array, fs: int, peaks: np.array = []):
+    def __init__(self, signal: np.array, fs: int):
         """
         The purpose of the FiducialPoints class is to calculate the fiducial points
         :param signal: The ECG signal as a ndarray.
@@ -23,23 +23,10 @@ class FiducialPoints:
 
         self.signal = signal
         self.fs = fs
-        if len(np.shape(signal)) == 2:
-            [ecg_len, ecg_num] = np.shape(signal)
-        elif len(np.shape(signal)) == 1:
-            ecg_num = 1
-        if peaks is None:
-            size_peaks = np.zeros([1, ecg_num]).squeeze()
-            peaks_dict = {}
-            for i in np.arange(0, ecg_num):
-                peaks_dict[str(i)] = self.epltd()
-                size_peaks[i] = len(peaks_dict[str(i)])
-            max_sp = int(np.max(size_peaks))
-            peaks = np.zeros([max_sp, ecg_num])
-            for i in np.arange(0, ecg_num):
-                peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
-        self.peaks = peaks
+        self.peaks = []
 
-    def wavedet(self, matlab_pat: str = None):
+
+    def wavedet(self, matlab_pat: str = None, peaks: np.array = [] ):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
         The algorithm is described in the following paper:
@@ -55,24 +42,45 @@ class FiducialPoints:
 
         signal = self.signal
         fs = self.fs
-        peaks = self.peaks
+
+        if len(np.shape(signal)) == 2:
+            [ecg_len, ecg_num] = np.shape(signal)
+        elif len(np.shape(signal)) == 1:
+            ecg_num = 1
+        if not peaks:
+            size_peaks = np.zeros([1, ecg_num]).squeeze()
+            peaks_dict = {}
+            for i in np.arange(0, ecg_num):
+                peaks_dict[str(i)] = self.epltd()
+                size_peaks[i] = len(peaks_dict[str(i)])
+            max_sp = int(np.max(size_peaks))
+            peaks = np.zeros([max_sp, ecg_num])
+            for i in np.arange(0, ecg_num):
+                peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
+
+        self.peaks = peaks
+
         fiducials_mat =wavdet(signal, fs, peaks, matlab_pat)
         keys = ["Pon", "P", "Poff", "QRSon", "Q", "qrs", "S", "QRSoff", "Ton", "T", "Toff", "Ttipo", "Ttipoon",
                 "Ttipooff"]
-        position = fiducials_mat['output'][0, 0]
+        position = fiducials_mat['output']
         all_keys = fiducials_mat['output'].dtype.names
-        position_values = []
-        position_keys = []
-        for i, key in enumerate(all_keys):
-            ret_val = position[i].squeeze()
-            if (keys.__contains__(key)):
-                ret_val[np.isnan(ret_val)] = -1
-                ret_val = np.asarray(ret_val, dtype=np.int64)
-                position_values.append(ret_val.astype(int))
-                position_keys.append(key)
-        # -----------------------------------
+        fiducials = {}
 
-        fiducials = dict(zip(position_keys, position_values))
+        num_ecg = np.size(position)
+        for j in np.arange(num_ecg):
+            position_values = []
+            position_keys = []
+            for i, key in enumerate(all_keys):
+                ret_val = position[0,j][i].squeeze()
+                if (keys.__contains__(key)):
+                    ret_val[np.isnan(ret_val)] = -1
+                    ret_val = np.asarray(ret_val, dtype=np.int64)
+                    position_values.append(ret_val.astype(int))
+                    position_keys.append(key)
+            # -----------------------------------
+
+            fiducials[j] = dict(zip(position_keys, position_values))
 
         return fiducials
 
@@ -108,7 +116,7 @@ class FiducialPoints:
     def xqrs(self):
 
         signal = self.signal
-        fs = self.signal
+        fs = self.fs
 
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
@@ -121,8 +129,9 @@ class FiducialPoints:
             size_peaks = np.zeros([1, ecg_num]).squeeze()
             peaks_dict = {}
             for i in np.arange(0, ecg_num):
+                signali = signal[:,i]
                 wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint8(fs)), units=['mV'], sig_name=['V5'],
-                            p_signal=signal.reshape(-1, 1), fmt=['16'])
+                            p_signal=signali.reshape(-1, 1), fmt=['16'])
                 record = wfdb.rdrecord(tmpdirname + '/temp')
                 ecg = record.p_signal[:, 0]
                 xqrs = processing.XQRS(ecg, fs)
@@ -133,7 +142,7 @@ class FiducialPoints:
             peaks = np.zeros([max_sp, ecg_num])
             for i in np.arange(0, ecg_num):
                 peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
-
+        self.peaks = peaks
         return peaks
 
 
