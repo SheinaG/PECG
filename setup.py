@@ -5,13 +5,13 @@ import setuptools
 
 setuptools.setup(
     name= "pebm",
-    version="1.0.4",
+    version="1.0.3",
     use_scm_version={
         "root": '..',
         "relative_to": __file__,
         "local_scheme": "node-and-timestamp"
     },
-    author="sheina Gendelman",
+    author="Example Author",
     author_email="sheina@campus.technion.ac.il",
     description="A small example package",
     long_description="aa",
@@ -27,16 +27,16 @@ setuptools.setup(
     ],
     
     #package_dir={"": "pebm"},
-    packages={"",
-              "ebm",
-              'ebm/c_files',
-              'ebm/wavedet_exe'},
+    packages={"pebm",
+              "pebm/ebm",
+              'pebm/ebm/c_files',
+              'pebm/ebm/wavedet_exe'},
             
     package_data={
-        '' : ['*'],
-        'ebm' : ['*'],
-        'ebm/c_files': ['*'],
-        'ebm/wavedet_exe': ['*']
+        'pebm' : ['*'],
+        'pebm/ebm' : ['*'],
+        'pebm/ebm/c_files': ['*'],
+        'pebm/ebm/wavedet_exe': ['*']
     },
     include_package_data=True,
     python_requires=">=3.6",
