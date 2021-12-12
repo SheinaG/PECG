@@ -20,7 +20,7 @@ fsig= pre.bpfilt()
 
 matlab_pat='/usr/local/MATLAB/R2021a'
 fp = Fp.FiducialPoints(signal, np.uint8(freq))
-
+peaks = fp.epltd()
 peaks = fp.xqrs()
 fiducials = fp.wavedet(matlab_pat)
 

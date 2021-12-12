@@ -42,13 +42,13 @@ class Preprocessing:
         # notch_freq have to be 50 or 60 HZ (make that condition)
         if len(np.shape(signal)) ==2:
             [ecg_len, ecg_num] = np.shape(signal)
+            fsig = np.zeros([ecg_len, ecg_num])
+            for i in np.arange(0, ecg_num):
+                fsig[:, i] = mne.filter.notch_filter(signal[:, i].astype(np.float), fs, freqs=n_freq)
         elif len(np.shape(signal)) ==1:
+            ecg_len = len(signal)
             ecg_num = 1
-        fsig = np.zeros([ecg_len, ecg_num])
-        for i in np.arange(0, ecg_num):
-            fsig[:, i] = mne.filter.notch_filter(signal[:, i].astype(np.float), fs, freqs=n_freq)
-
-        # plot:
+            fsig = mne.filter.notch_filter(signal.astype(np.float), fs, freqs=n_freq)
 
         self.signal = fsig
         return fsig
@@ -76,11 +76,15 @@ class Preprocessing:
 
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
+            fsig = np.zeros([ecg_len, ecg_num])
+            for i in np.arange(0, ecg_num):
+                fsig[:, i] = sosfiltfilt(sos, signal[:, i])
         elif len(np.shape(signal)) == 1:
+            ecg_len = len(signal)
             ecg_num = 1
-        fsig = np.zeros([ecg_len, ecg_num])
-        for i in np.arange(0, ecg_num):
-            fsig[:, i] = sosfiltfilt(sos, signal[:, i])
+            fsig= sosfiltfilt(sos, signal)
+
+
         self.signal = fsig
         return fsig
 

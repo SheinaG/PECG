@@ -6,7 +6,7 @@ import numpy as np
 
 
 
-def epltd_all(signal, fs):
+def epltd_all(signal, fs, tmpdirname=None):
     five_sec = 5 *fs
     pad =signal[0:five_sec]
     signal_pad = np.concatenate((pad, signal))

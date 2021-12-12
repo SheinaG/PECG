@@ -1,6 +1,6 @@
 
 import pebm
-from pebm.ebm import Preprocessing as Pre
+from pebm import Preprocessing as Pre
 from pebm.ebm import FiducialPoints as Fp
 from pebm.ebm import Biomarkers as Obm
 import matplotlib.pyplot as plt
@@ -28,8 +28,8 @@ fsig =pre.notch(f_notch)
 fsig= pre.bpfilt()
 
 matlab_pat= '/usr/local/MATLAB/R2021a'
-fp = Fp.FiducialPoints(signal, freq, peaks1)
-fiducials = fp.wavedet(matlab_pat)
+fp = Fp.FiducialPoints(signal, freq)
+fiducials = fp.wavedet(matlab_pat, peaks1)
 peaks = fp.epltd()
 qrs = fp.xqrs()
 
