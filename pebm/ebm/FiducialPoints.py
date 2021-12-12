@@ -47,7 +47,7 @@ class FiducialPoints:
             [ecg_len, ecg_num] = np.shape(signal)
         elif len(np.shape(signal)) == 1:
             ecg_num = 1
-        if not peaks:
+        if not peaks.any():
             size_peaks = np.zeros([1, ecg_num]).squeeze()
             peaks_dict = {}
             for i in np.arange(0, ecg_num):

@@ -118,7 +118,7 @@ class Preprocessing:
         bsqi = np.zeros([1, ecg_num]).squeeze()
         for i in np.arange(0, ecg_num):
             fp = FiducialPoints(signal[:, i], fs, peaks)
-            if peaks is None:
+            if not peaks.any():
                 refqrs = fp.epltd()
             else:
                 refqrs = peaks
