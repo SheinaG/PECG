@@ -27,16 +27,16 @@ setuptools.setup(
     ],
     
     #package_dir={"": "pebm"},
-    packages={"pebm",
-              "pebm/ebm",
-              'pebm/ebm/c_files',
-              'pebm/ebm/wavedet_exe'},
+    packages={"",
+              "ebm",
+              'ebm/c_files',
+              'ebm/wavedet_exe'},
             
     package_data={
-        'pebm' : ['*'],
-        'pebm/ebm' : ['*'],
-        'pebm/ebm/c_files': ['*'],
-        'pebm/ebm/wavedet_exe': ['*']
+        '' : ['*'],
+        'ebm' : ['*'],
+        'ebm/c_files': ['*'],
+        'ebm/wavedet_exe': ['*']
     },
     include_package_data=True,
     python_requires=">=3.6",
