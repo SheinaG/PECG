@@ -40,12 +40,12 @@ class Preprocessing:
         fs = self.fs
         self.n_freq = n_freq
         # notch_freq have to be 50 or 60 HZ (make that condition)
-        if len(np.shape(signal)) ==2:
+        if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
             fsig = np.zeros([ecg_len, ecg_num])
             for i in np.arange(0, ecg_num):
                 fsig[:, i] = mne.filter.notch_filter(signal[:, i].astype(np.float), fs, freqs=n_freq)
-        elif len(np.shape(signal)) ==1:
+        elif len(np.shape(signal)) == 1:
             ecg_len = len(signal)
             ecg_num = 1
             fsig = mne.filter.notch_filter(signal.astype(np.float), fs, freqs=n_freq)
@@ -82,8 +82,7 @@ class Preprocessing:
         elif len(np.shape(signal)) == 1:
             ecg_len = len(signal)
             ecg_num = 1
-            fsig= sosfiltfilt(sos, signal)
-
+            fsig = sosfiltfilt(sos, signal)
 
         self.signal = fsig
         return fsig
@@ -109,45 +108,57 @@ class Preprocessing:
 
         fs = self.fs
         signal = self.signal
-        agw = 0.05  # in seconds
 
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
+            bsqi = np.zeros([1, ecg_num]).squeeze()
+            for i in np.arange(0, ecg_num):
+                fp = FiducialPoints(signal[:, i], fs)
+                if not peaks.any():
+                    refqrs = fp.epltd()
+                else:
+                    refqrs = peaks
+                testqrs = fp.xqrs()
+                bsqi[i] = calculate_bsqi(refqrs, testqrs, fs)
         elif len(np.shape(signal)) == 1:
-            ecg_num = 1
-        bsqi = np.zeros([1, ecg_num]).squeeze()
-        for i in np.arange(0, ecg_num):
-            fp = FiducialPoints(signal[:, i], fs, peaks)
+            fp = FiducialPoints(signal, fs)
             if not peaks.any():
                 refqrs = fp.epltd()
             else:
                 refqrs = peaks
             testqrs = fp.xqrs()
-            agw *= fs
-            if len(refqrs) > 0 and len(testqrs) > 0:
-                NB_REF = len(refqrs)
-                NB_TEST = len(testqrs)
+            bsqi = calculate_bsqi(refqrs, testqrs, fs)
 
-                tree = cKDTree(refqrs.reshape(-1, 1))
-                Dist, IndMatch = tree.query(testqrs.reshape(-1, 1))
-                IndMatchInWindow = IndMatch[Dist < agw]
-                NB_MATCH_UNIQUE = len(np.unique(IndMatchInWindow))
-                TP = NB_MATCH_UNIQUE
-                FN = NB_REF - TP
-                FP = NB_TEST - TP
-                Se = TP / (TP + FN)
-                PPV = TP / (FP + TP)
-                if (Se + PPV) > 0:
-                    F1 = 2 * Se * PPV / (Se + PPV)
-                    _, ind_plop = np.unique(IndMatchInWindow, return_index=True)
-                    Dist_thres = np.where(Dist < agw)[0]
-                    meanDist = np.mean(Dist[Dist_thres[ind_plop]]) / fs
-                else:
-                    return 0
-
-            else:
-                F1 = 0
-                IndMatch = []
-                meanDist = fs
-            bsqi[i] = F1
         return bsqi
+
+
+def calculate_bsqi(refqrs, testqrs, fs):
+    agw = 0.05
+    agw *= fs
+    if len(refqrs) > 0 and len(testqrs) > 0:
+        NB_REF = len(refqrs)
+        NB_TEST = len(testqrs)
+
+        tree = cKDTree(refqrs.reshape(-1, 1))
+        Dist, IndMatch = tree.query(testqrs.reshape(-1, 1))
+        IndMatchInWindow = IndMatch[Dist < agw]
+        NB_MATCH_UNIQUE = len(np.unique(IndMatchInWindow))
+        TP = NB_MATCH_UNIQUE
+        FN = NB_REF - TP
+        FP = NB_TEST - TP
+        Se = TP / (TP + FN)
+        PPV = TP / (FP + TP)
+        if (Se + PPV) > 0:
+            F1 = 2 * Se * PPV / (Se + PPV)
+            _, ind_plop = np.unique(IndMatchInWindow, return_index=True)
+            Dist_thres = np.where(Dist < agw)[0]
+            meanDist = np.mean(Dist[Dist_thres[ind_plop]]) / fs
+        else:
+            return 0
+
+    else:
+        F1 = 0
+        IndMatch = []
+        meanDist = fs
+    bsqi = F1
+    return bsqi

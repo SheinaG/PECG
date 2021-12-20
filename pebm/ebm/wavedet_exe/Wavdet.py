@@ -19,9 +19,9 @@ def wavdet(signal, fs, peaks, matlab_pat):
             #all_command = ';'.join([set_command, command])
             os.system(command)
         if platform.system() == 'Windows':
-            wavedet_dir = my_path + '/peak_det.exe'
+            wavedet_dir = my_path + '/run_wavedet.exe'
             command = ' '.join([wavedet_dir, '"signal.txt" "peaks.txt" ', str(fs)])
             os.system(command)
-        fiducials_mat = spio.loadmat('output.mat')
+        fiducials_mat = spio.loadmat(tmpdirname +'\\output.mat')
 
     return fiducials_mat

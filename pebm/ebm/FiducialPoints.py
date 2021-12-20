@@ -13,7 +13,7 @@ class FiducialPoints:
     def __init__(self, signal: np.array, fs: int):
         """
         The purpose of the FiducialPoints class is to calculate the fiducial points
-        :param signal: The ECG signal as a ndarray.
+        :param signal: The ECG signal as a two-dimensional ndarray, when the first dimension is the len of the ecg, and the second is the number of leads.
         :param fs: The sampling frequency of the signal.
         :param peaks: The indexes of the R- points of the ECG signal – optional input
         """
@@ -98,18 +98,20 @@ class FiducialPoints:
 
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
+            size_peaks = np.zeros([1, ecg_num]).squeeze()
+            peaks_dict = {}
+            for i in np.arange(0, ecg_num):
+                peaks_dict[str(i)] = epltd_all(signal[:, i], fs)
+                size_peaks[i] = len(peaks_dict[str(i)])
+            max_sp = int(np.max(size_peaks))
+            peaks = np.zeros([max_sp, ecg_num])
+            for i in np.arange(0, ecg_num):
+                peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
         elif len(np.shape(signal)) == 1:
             ecg_num = 1
+            peaks = epltd_all(signal, fs)
 
-        size_peaks = np.zeros([1, ecg_num]).squeeze()
-        peaks_dict = {}
-        for i in np.arange(0, ecg_num):
-            peaks_dict[str(i)] = epltd_all(signal[:, i], fs)
-            size_peaks[i] = len(peaks_dict[str(i)])
-        max_sp = int(np.max(size_peaks))
-        peaks = np.zeros([max_sp, ecg_num])
-        for i in np.arange(0, ecg_num):
-            peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
+
 
         return peaks
 
@@ -120,29 +122,29 @@ class FiducialPoints:
 
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
-        elif len(np.shape(signal)) == 1:
-            ecg_num = 1
-
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            os.chdir(tmpdirname)
-
             size_peaks = np.zeros([1, ecg_num]).squeeze()
             peaks_dict = {}
             for i in np.arange(0, ecg_num):
                 signali = signal[:,i]
-                wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint8(fs)), units=['mV'], sig_name=['V5'],
-                            p_signal=signali.reshape(-1, 1), fmt=['16'])
-                record = wfdb.rdrecord(tmpdirname + '/temp')
-                ecg = record.p_signal[:, 0]
-                xqrs = processing.XQRS(ecg, fs)
-                xqrs.detect()
-                peaks_dict[str(i)] = xqrs.qrs_inds
+                peaks_dict[str(i)] = calculate_xqrs(signali, fs)
                 size_peaks[i] = len(peaks_dict[str(i)])
             max_sp = int(np.max(size_peaks))
             peaks = np.zeros([max_sp, ecg_num])
             for i in np.arange(0, ecg_num):
                 peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
+        elif len(np.shape(signal)) == 1:
+            ecg_num = 1
+            peaks = calculate_xqrs(signal, fs)
         self.peaks = peaks
         return peaks
 
-
+def calculate_xqrs(signal, fs):
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        os.chdir(tmpdirname)
+        wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint8(fs)), units=['mV'], sig_name=['V5'],
+                    p_signal=signal.reshape(-1, 1), fmt=['16'])
+        record = wfdb.rdrecord(tmpdirname + '/temp')
+        ecg = record.p_signal[:, 0]
+        xqrs = processing.XQRS(ecg, fs)
+        xqrs.detect()
+    return  xqrs.qrs_inds
