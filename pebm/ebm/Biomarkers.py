@@ -82,7 +82,7 @@ class Biomarkers:
                 intervals_b[i] = extract_intervals_duration(fs, fiducials[i])
                 intervals_statistics[i] = statistics(intervals_b[i])
         elif len(np.shape(signal)) == 1:
-            intervals_b = extract_intervals_duration(fs, fiducials)
+            intervals_b = extract_intervals_duration(fs, fiducials[0])
             intervals_statistics = statistics(intervals_b)
 
         self.intervals_b = intervals_b
@@ -120,10 +120,10 @@ class Biomarkers:
             waves_b = {}
             waves_statistics = {}
             for i in np.arange(ecg_num):
-                waves_b[i] = extract_waves_characteristics(fs, fiducials[i])
+                waves_b[i] = extract_waves_characteristics(signal[:,i], fs, fiducials[i])
                 waves_statistics[i] = statistics(waves_b[i])
         elif len(np.shape(signal)) == 1:
-            waves_b = extract_waves_characteristics(fs, fiducials)
+            waves_b = extract_waves_characteristics(signal,fs, fiducials[0])
             waves_statistics = statistics(waves_b)
 
         self.waves_b = waves_b

@@ -13,8 +13,9 @@ if [ "x$1" = "x" ]; then
 else
   echo Setting up environment variables
   MCRROOT="$1"
+
   echo ---
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/runtime/glnxa64 ;
+  LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64 ;
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/bin/glnxa64 ;
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64;
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
@@ -30,7 +31,9 @@ else
       args="${args} \"${token}\"" 
       shift
   done
-  eval "\"${exe_dir}/run_wavedet\"" $args
+  eval "\"${exe_dir}/run_wavedet_2021a\"" $args
 fi
+
+
 exit
 

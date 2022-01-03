@@ -87,7 +87,7 @@ class Preprocessing:
         self.signal = fsig
         return fsig
 
-    def bsqi(self, peaks: np.array = None):
+    def bsqi(self,  peaks: np.array = np.array([])):
 
         """
         This function is based on the following paper:
@@ -101,9 +101,11 @@ class Preprocessing:
             ECG signal quality during arrhythmia and its application to false alarm reduction.
             IEEE transactions on biomedical engineering, 60(6), 1660-1666.
 
-        :param peaks:  Annotation of the reference peak detector (Indices of the peaks). If peaks are not given,
+        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given,
          the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.
-        :returns F1:    The 'bsqi' score, between 0 and 1.
+
+
+        :returns F1: The 'bsqi' score, between 0 and 1.
         """
 
         fs = self.fs

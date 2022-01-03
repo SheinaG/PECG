@@ -26,7 +26,7 @@ class FiducialPoints:
         self.peaks = []
 
 
-    def wavedet(self, matlab_pat: str = None, peaks: np.array = [] ):
+    def wavedet(self, matlab_pat: str = None, peaks: np.array = np.array([])):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
         The algorithm is described in the following paper:
@@ -34,7 +34,9 @@ class FiducialPoints:
         A wavelet-based ECG delineator: evaluation on standard databases.
         IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
 
-        :param matlab_pat: Optional input- requiered when runing on a linux machine.
+        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given,
+         the peaks are calculated with epltd detector.
+        :param matlab_pat: Optional input- required when running on a linux machine.
         
         :returns:
             *fiducials: Dictionary that includes indexes for each fiducial point.
@@ -47,16 +49,8 @@ class FiducialPoints:
             [ecg_len, ecg_num] = np.shape(signal)
         elif len(np.shape(signal)) == 1:
             ecg_num = 1
-        if not peaks.any():
-            size_peaks = np.zeros([1, ecg_num]).squeeze()
-            peaks_dict = {}
-            for i in np.arange(0, ecg_num):
-                peaks_dict[str(i)] = self.epltd()
-                size_peaks[i] = len(peaks_dict[str(i)])
-            max_sp = int(np.max(size_peaks))
-            peaks = np.zeros([max_sp, ecg_num])
-            for i in np.arange(0, ecg_num):
-                peaks[:int(size_peaks[i]), i] = peaks_dict[str(i)]
+        if peaks.size ==0:
+            peaks = self.epltd()
 
         self.peaks = peaks
 

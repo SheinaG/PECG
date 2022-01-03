@@ -23,7 +23,7 @@ signal= signal[:-1]
 # build a dictinary
 # try Extract_mor_features
 pre = Pre.Preprocessing(signal, freq)
-bsqi = pre.bsqi(peaks1)
+bsqi = pre.bsqi()
 f_notch = 60
 fsig =pre.notch(f_notch)
 fsig= pre.bpfilt()
@@ -32,7 +32,7 @@ fsig= pre.bpfilt()
 matlab_pat= '/usr/local/MATLAB/R2021a'
 
 fp = Fp.FiducialPoints(signal, freq)
-peaks = fp.epltd()
+#peaks = fp.epltd()
 fiducials = fp.wavedet(matlab_pat, peaks1)
 
 obm = Obm.Biomarkers(signal, freq, fiducials=fiducials,matlab_path=matlab_pat)
