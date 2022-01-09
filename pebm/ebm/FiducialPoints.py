@@ -135,10 +135,10 @@ class FiducialPoints:
 def calculate_xqrs(signal, fs):
     with tempfile.TemporaryDirectory() as tmpdirname:
         os.chdir(tmpdirname)
-        wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint8(fs)), units=['mV'], sig_name=['V5'],
+        wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint(fs)), units=['mV'], sig_name=['V5'],
                     p_signal=signal.reshape(-1, 1), fmt=['16'])
         record = wfdb.rdrecord(tmpdirname + '/temp')
         ecg = record.p_signal[:, 0]
-        xqrs = processing.XQRS(ecg, fs)
-        xqrs.detect()
-    return  xqrs.qrs_inds
+        xqrs = processing.xqrs_detect(ecg, fs, verbose = True)
+        #xqrs.detect()
+    return  xqrs

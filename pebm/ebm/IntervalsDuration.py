@@ -32,7 +32,7 @@ def compute_QTc(QT, RR, factor=1000):
 
 
 def extract_intervals_duration(fs, features_dict, factor=1000):
-    # feat_df = pd.DataFrame()
+
     intervals_points = dict(Pwave_int=[features_dict['Pon'], features_dict['Poff']],
                             PR_int=[features_dict['Pon'], features_dict['QRSon']],
                             PR_seg=[features_dict['Poff'], features_dict['QRSon']],
