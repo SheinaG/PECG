@@ -24,6 +24,11 @@ freq = 400
 matlab_pat= '/usr/local/MATLAB/R2021a'
 
 fp = Fp.FiducialPoints(signal, freq)
+peaks = fp.epltd()
+test_peaks = fp.jqrs()
+
+pre = Pre.Preprocessing(signal, freq)
+bsqi = pre.bsqi(peaks, test_peaks)
 
 fiducials = fp.wavedet(matlab_pat)
 

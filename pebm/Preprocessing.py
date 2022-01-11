@@ -87,7 +87,7 @@ class Preprocessing:
         self.signal = fsig
         return fsig
 
-    def bsqi(self,  peaks: np.array = np.array([])):
+    def bsqi(self,  peaks: np.array = np.array([]), test_peaks: np.array = np.array([])):
 
         """
         This function is based on the following paper:
@@ -120,15 +120,23 @@ class Preprocessing:
                     refqrs = fp.epltd()
                 else:
                     refqrs = peaks
-                testqrs = fp.xqrs()
-                bsqi[i] = calculate_bsqi(refqrs, testqrs, fs)
+
+                if not test_peaks.any():
+                    testqrs = fp.xqrs()
+                else:
+                    testqrs = test_peaks
+
+                bsqi[i] = calculate_bsqi(refqrs[refqrs[:, i]>0,i], testqrs[testqrs[:, i]>0,i], fs)
         elif len(np.shape(signal)) == 1:
             fp = FiducialPoints(signal, fs)
             if not peaks.any():
                 refqrs = fp.epltd()
             else:
                 refqrs = peaks
-            testqrs = fp.xqrs()
+            if not test_peaks.any():
+                testqrs = fp.xqrs()
+            else:
+                testqrs = test_peaks
             bsqi = calculate_bsqi(refqrs, testqrs, fs)
 
         return bsqi

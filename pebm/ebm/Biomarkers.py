@@ -86,7 +86,7 @@ class Biomarkers:
                     intervals_b[i] = extract_intervals_duration(fs, fiducials[i])
                     intervals_statistics[i] = statistics(intervals_b[i])
         elif len(np.shape(signal)) == 1:
-            if np.sum(fiducials['qrs']) == 0:
+            if np.sum(fiducials[0]['qrs']) == 0:
                 intervals_b = -1
                 intervals_statistics = -1
             else:
@@ -135,7 +135,7 @@ class Biomarkers:
                     waves_b[i] = extract_waves_characteristics(signal[:,i], fs, fiducials[i])
                     waves_statistics[i] = statistics(waves_b[i])
         elif len(np.shape(signal)) == 1:
-            if np.sum(fiducials['qrs']) == 0:
+            if np.sum(fiducials[0]['qrs']) == 0:
                 waves_b = -1
                 waves_statistics = -1
             else:
