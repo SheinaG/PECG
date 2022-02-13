@@ -49,7 +49,9 @@ def extract_waves_characteristics(ecg, freq, features_dict):
     for key in area_points:
         area[key] = compute_area(ecg, freq, area_points[key], factor=1000)
     J_offset = int(0.04 * freq)
-    J_ecg = ecg[features_dict['QRSoff'] + J_offset]
+    J_feature = features_dict['QRSoff'] + J_offset
+    J_feature = J_feature[J_feature < len(ecg)]
+    J_ecg = ecg[J_feature]
     J_point = dict(Jpoint=J_ecg)
     Waves = {}
     Waves.update(amplitude)
