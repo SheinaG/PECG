@@ -70,9 +70,10 @@ class FiducialPoints:
             for i, key in enumerate(all_keys):
                 ret_val = position[0,j][i].squeeze()
                 if (keys.__contains__(key)):
-                    ret_val[np.isnan(ret_val)] = -1
-                    ret_val = np.asarray(ret_val, dtype=np.int64)
-                    position_values.append(ret_val.astype(int))
+                    if len(ret_val[np.isnan(ret_val)]):
+                        ret_val[np.isnan(ret_val)] = np.nan
+                    ret_val = np.asarray(ret_val)
+                    position_values.append(ret_val)
                     position_keys.append(key)
             # -----------------------------------
 

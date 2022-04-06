@@ -16,17 +16,17 @@ plot = False
 # signal_dog = signal1.split('\n')
 # signal = np.asarray([float(x) for x in signal_dog])
 # freq = 500
-# ecg_mat = spio.loadmat('human_200Hz_gr.mat')
-# signal = np.asarray(ecg_mat['ecg']).squeeze()
-# peaks1 = np.asarray(ecg_mat['peaks']).squeeze()
-# freq = ecg_mat['fs'][0,0]
+ecg_mat = spio.loadmat('human_200Hz_gr.mat')
+signal = np.asarray(ecg_mat['ecg']).squeeze()
+peaks1 = np.asarray(ecg_mat['peaks']).squeeze()
+freq = ecg_mat['fs'][0,0]
 # #tt =fecgyn_tgen(signal, peaks, freq)
 #
 # signal= signal[:-1]
 
 signal = np.load('ECGs_eran.npy')
 freq = 400
-fiducials = np.load('fiducials_eran.npy', allow_pickle=True).item()
+#fiducials = np.load('fiducials_eran.npy', allow_pickle=True).item()
 # build a dictinary
 # try Extract_mor_features
 # pre = Pre.Preprocessing(signal, freq)
@@ -36,11 +36,11 @@ fiducials = np.load('fiducials_eran.npy', allow_pickle=True).item()
 # fsig= pre.bpfilt()
 #
 #
-# matlab_pat= '/usr/local/MATLAB/R2021a' #for orian
+matlab_pat= '/usr/local/MATLAB/R2021a' #for orian
 #
-# fp = Fp.FiducialPoints(signal, freq)
-# peaks = fp.epltd()
-# fiducials = fp.wavedet(matlab_pat, peaks)
+fp = Fp.FiducialPoints(signal, freq)
+peaks = fp.epltd()
+fiducials = fp.wavedet(matlab_pat, peaks)
 
 obm = Obm.Biomarkers(signal, freq, fiducials=fiducials)
 #ints, stat_i = obm.intervals()

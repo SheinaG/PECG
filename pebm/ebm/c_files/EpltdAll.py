@@ -1,5 +1,6 @@
 import tempfile
 import os
+import stat
 import wfdb
 import pathlib
 import numpy as np
@@ -18,6 +19,7 @@ def epltd_all(signal, fs, tmpdirname=None):
                     p_signal=signal_pad.reshape(-1, 1), fmt=['16'])
 
         prog_dir = my_path + '/epltd_all'
+        os.chmod(my_path, 0o777)
         ecg_dir = tmpdirname
         command = ';'.join(['EPLTD_PROG_DIR=' + prog_dir,
                             'ECG_DIR=' + ecg_dir,

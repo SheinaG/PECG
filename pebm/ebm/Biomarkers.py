@@ -79,16 +79,16 @@ class Biomarkers:
             intervals_b = {}
             intervals_statistics = {}
             for i in np.arange(ecg_num):
-                if np.sum(fiducials[i]['qrs']) ==0:
-                    intervals_b[i] = -1
-                    intervals_statistics[i] = -1
+                if np.sum(fiducials[i]['qrs']) == 0:
+                    intervals_b[i] = np.nan
+                    intervals_statistics[i] = np.nan
                 else:
                     intervals_b[i] = extract_intervals_duration(fs, fiducials[i])
                     intervals_statistics[i] = statistics(intervals_b[i])
         elif len(np.shape(signal)) == 1:
             if np.sum(fiducials[0]['qrs']) == 0:
-                intervals_b = -1
-                intervals_statistics = -1
+                intervals_b = np.nan
+                intervals_statistics = np.nan
             else:
                 intervals_b = extract_intervals_duration(fs, fiducials[0])
                 intervals_statistics = statistics(intervals_b)
@@ -129,15 +129,15 @@ class Biomarkers:
             waves_statistics = {}
             for i in np.arange(ecg_num):
                 if np.sum(fiducials[i]['qrs']) == 0:
-                    waves_b[i] = -1
-                    waves_statistics[i] = -1
+                    waves_b[i] = np.nan
+                    waves_statistics[i] = np.nan
                 else:
                     waves_b[i] = extract_waves_characteristics(signal[:,i], fs, fiducials[i])
                     waves_statistics[i] = statistics(waves_b[i])
         elif len(np.shape(signal)) == 1:
             if np.sum(fiducials[0]['qrs']) == 0:
-                waves_b = -1
-                waves_statistics = -1
+                waves_b = np.nan
+                waves_statistics = np.nan
             else:
                 waves_b = extract_waves_characteristics(signal,fs, fiducials[0])
                 waves_statistics = statistics(waves_b)

@@ -1,6 +1,6 @@
 import tempfile
 import platform
-import os
+import os, sys, stat
 import numpy as np
 import scipy.io as spio
 import pathlib
@@ -14,6 +14,7 @@ def wavdet(signal, fs, peaks, matlab_pat):
         np.savetxt("signal.txt", signal)
         if platform.system() == 'Linux':
             wavedet_dir = my_path + '/run_wavedet_2021a.sh'
+            os.chmod(my_path, 0o777)
             command = ' '.join([wavedet_dir, matlab_pat, '"signal.txt" "peaks.txt"', str(fs)])
             os.system(command)
             fiducials_mat = spio.loadmat(tmpdirname + '/output.mat')

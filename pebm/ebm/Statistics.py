@@ -7,7 +7,7 @@ def statistics(data_dict):
     stat_dict = {}
     for i in data_dict:
         data = data_dict[i]
-        data = data[data != -1]
+        data = data[~np.isnan(data)]
         if len(data)>0:
             mean_ = np.mean(data)
             median_ = np.median(data)

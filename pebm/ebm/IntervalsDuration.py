@@ -2,32 +2,47 @@ import numpy as np
 
 
 def compute_int(freq, features_dict, factor=1000):
+    if len(features_dict[0][~np.isnan(features_dict[0])]) == 0 or \
+            0 == len(features_dict[1][~np.isnan(features_dict[1])]):
+        return np.nan
     begin_fiducial = features_dict[0]
     end_fiducial = features_dict[1]
-    # int = np.zeros(1,len(begin_fiducial))
+
     units = (factor / freq)
-    int = (end_fiducial - begin_fiducial) * units
-    int[(begin_fiducial == -1) | (end_fiducial == -1)] = -1
-    return int
+    intv = (end_fiducial - begin_fiducial) * units
+    intv = intv[~np.isnan(intv)]
+    return intv
 
 
 def compute_QTc(QT, RR, factor=1000):
-    HR = np.median(RR)
+    if len(RR[~np.isnan(RR)]) == 0 or len(QT[~np.isnan(QT)]) == 0:
+        QTc_dict = dict(QTc_b=np.nan,
+                        QTc_frid=np.nan,
+                        QTc_fra=np.nan,
+                        QTc_hod=np.nan)
+        return QTc_dict
+
+    HR = np.median(RR[~np.isnan(RR)])
     HRf = HR / factor
     n = len(QT)
-    QTc_b, QTc_frid, QTc_fra, QTc_hod = [None] * n, [None] * n, [None] * n, [None] * n
+    QTc_b, QTc_frid, QTc_fra, QTc_hod = [np.nan] * n, [np.nan] * n, [np.nan] * n, [np.nan] * n
     for i, QTi in enumerate(QT):
-        if ((HR == -1) | (QTi == -1)):
-            QTc_b[i], QTc_frid[i], QTc_fra[i], QTc_hod[i] = [-1, -1, -1, -1]
+        if ((HR == np.nan) | (QTi == np.nan)):
+            continue
         else:
             QTc_b[i] = QTi / np.sqrt(HRf)  # ms
             QTc_frid[i] = QTi / HRf ** (1 / float(3))  # ms
             QTc_fra[i] = QTi + (0.154 * (1 - HRf) * factor)  # ms
-            QTc_hod[i] = QTi + (0.00175 * (60 / HRf - 60) * factor)  # ms
-    QTc_dict = dict(QTc_b=np.asarray([QTc_b], dtype=np.float64).squeeze(),
-                    QTc_frid=np.asarray([QTc_frid], dtype=np.float64).squeeze(),
-                    QTc_fra=np.asarray([QTc_fra], dtype=np.float64).squeeze(),
-                    QTc_hod=np.asarray([QTc_hod], dtype=np.float64).squeeze())
+            QTc_hod[i] = QTi + (0.00175 * (60 / HRf - 60) * factor) # ms
+    QTc_b = np.asarray([QTc_b], dtype=np.float64).squeeze()
+    QTc_frid = np.asarray([QTc_frid], dtype=np.float64).squeeze()
+    QTc_fra = np.asarray([QTc_fra], dtype=np.float64).squeeze()
+    QTc_hod = np.asarray([QTc_hod], dtype=np.float64).squeeze()
+
+    QTc_dict = dict(QTc_b=QTc_b[~np.isnan(QTc_b)],
+                    QTc_frid=QTc_frid[~np.isnan(QTc_frid)],
+                    QTc_fra=QTc_fra[~np.isnan(QTc_fra)],
+                    QTc_hod=QTc_hod[~np.isnan(QTc_hod)])
     return QTc_dict
 
 
