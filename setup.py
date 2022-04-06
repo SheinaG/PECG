@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name= "pebm",
-    version="1.0.14",
+    version="1.1.0",
     use_scm_version={
         "root": '..',
         "relative_to": __file__,
