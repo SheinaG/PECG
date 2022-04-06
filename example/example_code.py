@@ -24,9 +24,9 @@ freq = ecg_mat['fs'][0,0]
 #
 # signal= signal[:-1]
 
-signal = np.load('ECGs_eran.npy')
-freq = 400
-#fiducials = np.load('fiducials_eran.npy', allow_pickle=True).item()
+# signal = np.load('ECGs_eran.npy')
+# freq = 400
+# fiducials = np.load('fiducials_eran.npy', allow_pickle=True).item()
 # build a dictinary
 # try Extract_mor_features
 # pre = Pre.Preprocessing(signal, freq)
@@ -43,7 +43,7 @@ peaks = fp.epltd()
 fiducials = fp.wavedet(matlab_pat, peaks)
 
 obm = Obm.Biomarkers(signal, freq, fiducials=fiducials)
-#ints, stat_i = obm.intervals()
+ints, stat_i = obm.intervals()
 waves, stat_w = obm.waves()
 
 a= 5
