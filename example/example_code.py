@@ -39,7 +39,7 @@ freq = ecg_mat['fs'][0,0]
 matlab_pat= '/usr/local/MATLAB/R2021a' #for orian
 #
 fp = Fp.FiducialPoints(signal, freq)
-peaks = fp.epltd()
+peaks = fp.epltd
 fiducials = fp.wavedet(matlab_pat, peaks)
 
 obm = Obm.Biomarkers(signal, freq, fiducials=fiducials)

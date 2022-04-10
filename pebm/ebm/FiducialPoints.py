@@ -47,12 +47,19 @@ class FiducialPoints:
         signal = self.signal
         fs = self.fs
 
+        try:
+            cwd = os.getcwd()
+            fl = 1
+        except:
+            print('Not exists current path')
+            fl = 0
+
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
         elif len(np.shape(signal)) == 1:
             ecg_num = 1
         if peaks.size ==0:
-            peaks = self.epltd()
+            peaks = self.epltd
 
         self.peaks = peaks
 
@@ -78,9 +85,11 @@ class FiducialPoints:
             # -----------------------------------
 
             fiducials[j] = dict(zip(position_keys, position_values))
-
+        if fl:
+            os.chdir(cwd)
         return fiducials
 
+    @property
     def epltd(self):
         """
         This function calculates the indexes of the R-peaks with epltd peak detector algorithm.
@@ -90,6 +99,13 @@ class FiducialPoints:
 
         :return: indexes of the R-peaks in the ECG signal.
         """
+        try:
+            cwd = os.getcwd()
+            fl = 1
+        except:
+            fl = 0
+
+
         signal = self.signal
         fs = self.fs
 
@@ -108,7 +124,8 @@ class FiducialPoints:
             ecg_num = 1
             peaks = epltd_all(signal, fs)
 
-
+        if fl:
+            os.chdir(cwd)
 
         return peaks
 
@@ -160,6 +177,12 @@ class FiducialPoints:
         return peaks
 
 def calculate_xqrs(signal, fs):
+    try:
+        cwd = os.getcwd()
+        fl = 1
+    except:
+        print('Not exists current path')
+        fl = 0
     with tempfile.TemporaryDirectory() as tmpdirname:
         os.chdir(tmpdirname)
         wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint(fs)), units=['mV'], sig_name=['V5'],
@@ -168,6 +191,8 @@ def calculate_xqrs(signal, fs):
         ecg = record.p_signal[:, 0]
         xqrs = processing.xqrs_detect(ecg, fs, verbose = True)
         #xqrs.detect()
+    if fl:
+        os.chdir(cwd)
     return  xqrs
 
 
@@ -189,6 +214,12 @@ def calculate_jqrs(signal, fs, thr, rp):
     :param debug: plot results (boolean)
     :return: qrs_pos: position of the qrs (sample)
     '''
+    try:
+        cwd = os.getcwd()
+        fl = 1
+    except:
+        print('Not exists current path')
+        fl = 0
     with tempfile.TemporaryDirectory() as tmpdirname:
         os.chdir(tmpdirname)
         wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint(fs)), units=['mV'], sig_name=['V5'],
@@ -262,4 +293,6 @@ def calculate_jqrs(signal, fs, thr, rp):
                 # if first peak then increment
                 compt = compt + 1
         qrs_pos = maxloc # datapoints QRS positions
+    if fl:
+        os.chdir(cwd)
     return qrs_pos

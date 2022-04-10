@@ -117,7 +117,7 @@ class Preprocessing:
             for i in np.arange(0, ecg_num):
                 fp = FiducialPoints(signal[:, i], fs)
                 if not peaks.any():
-                    refqrs = fp.epltd()
+                    refqrs = fp.epltd
                 else:
                     refqrs = peaks
 
@@ -130,7 +130,7 @@ class Preprocessing:
         elif len(np.shape(signal)) == 1:
             fp = FiducialPoints(signal, fs)
             if not peaks.any():
-                refqrs = fp.epltd()
+                refqrs = fp.epltd
             else:
                 refqrs = peaks
             if not test_peaks.any():
