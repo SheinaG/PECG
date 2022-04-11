@@ -16,10 +16,10 @@ def compute_int(freq, features_dict, factor=1000):
 
 def compute_QTc(QT, RR, factor=1000):
     if len(RR[~np.isnan(RR)]) == 0 or len(QT[~np.isnan(QT)]) == 0:
-        QTc_dict = dict(QTc_b=np.nan,
-                        QTc_frid=np.nan,
-                        QTc_fra=np.nan,
-                        QTc_hod=np.nan)
+        QTc_dict = dict(QTc_b=np.asarray(np.nan),
+                        QTc_frid=np.asarray(np.nan),
+                        QTc_fra=np.asarray(np.nan),
+                        QTc_hod=np.asarray(np.nan))
         return QTc_dict
 
     HR = np.median(RR[~np.isnan(RR)])
@@ -60,7 +60,7 @@ def extract_intervals_duration(fs, features_dict, factor=1000):
                             R_dep=[features_dict['QRSon'], features_dict['qrs']])
     intervals = {}
     for key in intervals_points:
-        intervals[key] = compute_int(fs, intervals_points[key], factor=1000)
+        intervals[key] = np.asarray(compute_int(fs, intervals_points[key], factor=1000))
     QTc_dict = compute_QTc(intervals['QT_int'], intervals['RR_int'], factor=1000)
     intervals.update(QTc_dict)
     return intervals

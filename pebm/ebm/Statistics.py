@@ -18,7 +18,7 @@ def statistics(data_dict):
             std_ = np.std(data)
             stat_dict[i] = {'mean': mean_, 'median': median_, 'min': min_, 'max': max_, 'iqr': iqr_, 'std': std_}
         else:
-            stat_dict[i] = {'mean': -1, 'median': -1, 'min': -1, 'max': -1, 'iqr': -1, 'std': -1}
+            stat_dict[i] = {'mean': np.nan, 'median': np.nan, 'min': np.nan, 'max': np.nan, 'iqr': np.nan, 'std': np.nan}
 
     return stat_dict
 

@@ -59,10 +59,10 @@ def extract_waves_characteristics(ecg, freq, features_dict):
                        QRSarea=[features_dict['QRSon'], features_dict['QRSoff']])
     amplitude = {}
     for key in amplitude_points:
-        amplitude[key] = compute_amp(ecg, amplitude_points[key])
+        amplitude[key] = np.asarray(compute_amp(ecg, amplitude_points[key]))
     area = {}
     for key in area_points:
-        area[key] = compute_area(ecg, freq, area_points[key], factor=1000)
+        area[key] = np.asarray(compute_area(ecg, freq, area_points[key], factor=1000))
 
     #J point
     J_offset = int(0.04 * freq)
@@ -70,9 +70,9 @@ def extract_waves_characteristics(ecg, freq, features_dict):
     J_feature = J_feature[J_feature < len(ecg)]
 
     if len(J_feature[~np.isnan(J_feature)]) == 0:
-        J_ecg = np.nan
+        J_ecg = np.asarray(np.nan)
     else:
-        J_ecg = ecg[J_feature[~np.isnan(J_feature)].astype(int)]
+        J_ecg = np.asarray(ecg[J_feature[~np.isnan(J_feature)].astype(int)])
 
     J_point = dict(Jpoint=J_ecg)
     Waves = {}
