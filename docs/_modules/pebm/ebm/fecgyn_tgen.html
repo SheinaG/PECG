@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pebm.ebm.fecgyn_tgen &mdash; pebm  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pebm
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PEBM API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pebm.html">pebm package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pebm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pebm.ebm.fecgyn_tgen</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pebm.ebm.fecgyn_tgen</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+
+<span class="c1">#matlab function by Joachim Bahar, translated to python by Sheina Gendelman</span>
+
+<div class="viewcode-block" id="fecgyn_tgen"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.fecgyn_tgen.fecgyn_tgen">[docs]</a><span class="k">def</span> <span class="nf">fecgyn_tgen</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">qrs</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+    <span class="c1">#consts</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
+    <span class="n">PI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">start_cycle</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">n_bins</span> <span class="o">=</span> <span class="mi">250</span>
+    <span class="n">Th</span> <span class="o">=</span> <span class="mf">0.9</span>
+    <span class="n">MIN_TRESH</span> <span class="o">=</span> <span class="mf">0.6</span>
+    <span class="n">nc_relev_mode</span> <span class="o">=</span><span class="mi">0</span>
+    <span class="n">MIN_nc</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">n_modes</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">PACE</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">n_rel</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">MIN_TLEN</span> <span class="o">=</span> <span class="mf">0.35</span>
+    <span class="n">template</span><span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1">## calc phase</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_samples</span><span class="p">])</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">qrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">phase</span><span class="p">[</span><span class="mi">0</span><span class="p">:(</span><span class="n">n_samples</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phase</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">L</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="o">-</span><span class="n">L</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="o">/</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">qrs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">phase</span><span class="p">[</span><span class="n">qrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">qrs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="p">,</span> <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">qrs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">phase</span><span class="p">[</span><span class="n">qrs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="o">/</span><span class="n">m</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">PI</span><span class="p">)</span>
+    <span class="n">phase</span><span class="p">[</span><span class="n">phase</span> <span class="o">&gt;</span> <span class="n">PI</span><span class="p">]</span> <span class="o">=</span> <span class="n">phase</span><span class="p">[</span><span class="n">phase</span> <span class="o">&gt;</span> <span class="n">PI</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">PI</span>
+    <span class="c1">####</span>
+
+    <span class="n">phase_change_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">phase</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">phase</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">n_cycles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phase_change_points</span><span class="p">)</span>
+    <span class="n">cycle_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">phase_change_points</span><span class="p">[</span><span class="n">start_cycle</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">phase_change_points</span><span class="p">[</span><span class="n">start_cycle</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cycle_f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="n">phase</span><span class="p">[</span><span class="n">cycle_index</span><span class="p">],</span> <span class="n">ecg</span><span class="p">[</span><span class="n">cycle_index</span><span class="p">])</span>
+    <span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">PI</span><span class="p">,</span> <span class="n">PI</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">),</span> <span class="n">cycle_f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">Mode</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cycles&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">cycle</span><span class="p">},</span>
+            <span class="s1">&#39;mean_cycle&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">cycle</span><span class="p">},</span>
+            <span class="s1">&#39;std_cycle&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="n">n_bins</span><span class="p">])},</span>
+            <span class="s1">&#39;nc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="s1">&#39;cycle_len&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cycle_index</span><span class="p">)}}</span>
+
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">nc_relev_mode</span> <span class="o">&lt;</span> <span class="n">MIN_nc</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">Th</span><span class="o">&gt;</span> <span class="n">MIN_TRESH</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_cycle</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">-</span><span class="mi">2</span><span class="p">):</span>
+
+            <span class="n">cycle_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">phase_change_points</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">phase_change_points</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">cycle_f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="n">phase</span><span class="p">[</span><span class="n">cycle_index</span><span class="p">],</span> <span class="n">ecg</span><span class="p">[</span><span class="n">cycle_index</span><span class="p">])</span>
+            <span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">PI</span><span class="p">,</span> <span class="n">PI</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">),</span> <span class="n">cycle_f</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">ind_mode</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">match</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ind_mode</span> <span class="o">&lt;=</span> <span class="n">n_modes</span><span class="p">):</span>
+                <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">cycle</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;mean_cycle&#39;</span><span class="p">][</span><span class="n">ind_mode</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+                <span class="n">coeff_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">coeff</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="c1">##why??</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">coeff_m</span> <span class="o">&gt;</span> <span class="n">Th</span>
+                <span class="n">ind_mode</span> <span class="o">=</span> <span class="n">ind_mode</span> <span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">n_modes</span> <span class="o">=</span> <span class="n">n_modes</span> <span class="o">+</span><span class="mi">1</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">][</span><span class="n">n_modes</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycle</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;mean_cycle&#39;</span><span class="p">][</span><span class="n">n_modes</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycle</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;std_cycle&#39;</span><span class="p">][</span><span class="n">n_modes</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">])</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">][</span><span class="n">n_modes</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycle_len&#39;</span><span class="p">][</span><span class="n">n_modes</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cycle_index</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">cycle</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;mean_cycle&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;std_cycle&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycle_len&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycle_len&#39;</span><span class="p">][</span><span class="n">ind_mode</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">cycle_index</span><span class="p">)))</span>
+
+        <span class="n">rel_mode_ind</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">n_rel</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycle_len&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">MIN_TLEN</span><span class="o">*</span><span class="n">fs</span><span class="p">):</span>
+                <span class="n">rel_mode_ind</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel_mode_ind</span><span class="p">):</span>
+            <span class="n">template</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">template</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">max_ind</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;nc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+            <span class="n">des1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">n_bins</span><span class="o">/</span><span class="mi">6</span><span class="p">))</span>
+            <span class="n">template</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;mean_cycle&#39;</span><span class="p">][</span><span class="n">max_ind</span><span class="p">],</span> <span class="o">-</span><span class="n">des1</span><span class="p">)</span>
+            <span class="n">template</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;std_cycle&#39;</span><span class="p">][</span><span class="n">max_ind</span><span class="p">],</span> <span class="o">-</span><span class="n">des1</span><span class="p">)</span>
+            <span class="n">mean_cycle_len</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycle_len&#39;</span><span class="p">][</span><span class="n">max_ind</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">Mode</span><span class="p">[</span><span class="s1">&#39;cycle_len&#39;</span><span class="p">][</span><span class="n">max_ind</span><span class="p">])</span>
+            <span class="n">template</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">mean_cycle_len</span><span class="p">)))</span>
+            <span class="n">template</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">mean_cycle_len</span><span class="p">)))</span>
+        <span class="n">Th</span> <span class="o">=</span> <span class="n">Th</span> <span class="o">-</span> <span class="n">PACE</span>
+    <span class="k">return</span> <span class="n">template</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

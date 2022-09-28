@@ -145,3 +145,37 @@ class Biomarkers:
         self.waves_b = waves_b
         self.waves_statistics = waves_statistics
         return self.waves_b, self.waves_statistics
+
+    def isECG(self):
+
+        signal = self.signal
+        fs = self.fs
+        fiducials = self.fiducials
+        score = 0
+        #naive_score:
+        if len(np.shape(signal)) == 2:
+            [ecg_len, ecg_num] = np.shape(signal)
+            score = {}
+            for i in np.arange(ecg_num):
+                score[i] = self.calculate_isECG(fiducials[i])
+        elif len(np.shape(signal)) == 1:
+            score = self.calculate_isECG(fiducials[0])
+        return score
+
+    def calculate_isECG(self, fiducials):
+
+        score = 0
+
+        R_num = len(~np.isnan(fiducials['qrs']))
+        Pon_num = len(~np.isnan(fiducials['Pon']))
+        P_num = len(~np.isnan(fiducials['P']))
+        Poff_num = len(~np.isnan(fiducials['Poff']))
+        Q_num = len(~np.isnan(fiducials['QRSoff']))
+        S_num = len(~np.isnan(fiducials['QRSon']))
+        Ton_num = len(~np.isnan(fiducials['Ton']))
+        T_num = len(~np.isnan(fiducials['T']))
+        Toff_num = len(~np.isnan(fiducials['Toff']))
+
+        score = ~np.isnan(fiducials['P']) & ~np.isnan(fiducials['T']) & ~np.isnan(fiducials['QRSon']) & ~np.isnan(fiducials['QRSoff'])
+
+        return score

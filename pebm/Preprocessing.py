@@ -27,7 +27,7 @@ class Preprocessing:
     def notch(self, n_freq: int):
 
         """
-        The notch function applies a notch filter in order to remove the power line artifacts.
+        The notch function applies a notch filter in order to remove the power line artefacts.
 
         :param n_freq: The expected center frequency of the power line interference.
         Typically 50Hz (e.g. Europe) or 60Hz (e.g. US)

@@ -16,10 +16,13 @@ plot = False
 # signal_dog = signal1.split('\n')
 # signal = np.asarray([float(x) for x in signal_dog])
 # freq = 500
-ecg_mat = spio.loadmat('human_200Hz_gr.mat')
-signal = np.asarray(ecg_mat['ecg']).squeeze()
-peaks1 = np.asarray(ecg_mat['peaks']).squeeze()
-freq = ecg_mat['fs'][0,0]
+raw_ecg = np.load('/MLAIM/AIMLab/Sheina/databases/VTdb/preprocessed_data/uvafdb/0275/ecg_0.npy')
+signal = raw_ecg[41*200*30*60:42*200*30*60]
+freq = 200
+# ecg_mat = spio.loadmat('human_200Hz_gr.mat')
+# signal = np.asarray(ecg_mat['ecg']).squeeze()
+# peaks1 = np.asarray(ecg_mat['peaks']).squeeze()
+# freq = ecg_mat['fs'][0,0]
 # #tt =fecgyn_tgen(signal, peaks, freq)
 #
 # signal= signal[:-1]
@@ -45,6 +48,7 @@ fiducials = fp.wavedet(matlab_pat, peaks)
 obm = Obm.Biomarkers(signal, freq, fiducials=fiducials)
 ints, stat_i = obm.intervals()
 waves, stat_w = obm.waves()
+score = obm.isECG()
 
 a= 5
 
