@@ -8,7 +8,6 @@ from pebm.ebm.FiducialPoints import FiducialPoints
 
 
 class Preprocessing:
-
     def __init__(self, signal: np.array, fs: int):
         """
         The Preprocessing class provides some routines for pre-filtering
@@ -36,7 +35,9 @@ class Preprocessing:
         :return:  the filtered ECG signal
         """
         if n_freq <= 0:
-            raise WrongParameter("center frequency of the power line should be strictly positive")
+            raise WrongParameter(
+                "center frequency of the power line should be strictly positive"
+            )
         signal = self.signal
         fs = self.fs
         self.n_freq = n_freq
@@ -45,7 +46,9 @@ class Preprocessing:
             [ecg_len, ecg_num] = np.shape(signal)
             fsig = np.zeros([ecg_len, ecg_num])
             for i in np.arange(0, ecg_num):
-                fsig[:, i] = mne.filter.notch_filter(signal[:, i].astype(np.float), fs, freqs=n_freq)
+                fsig[:, i] = mne.filter.notch_filter(
+                    signal[:, i].astype(np.float), fs, freqs=n_freq
+                )
         elif len(np.shape(signal)) == 1:
             ecg_len = len(signal)
             ecg_num = 1
@@ -71,9 +74,11 @@ class Preprocessing:
         low = low_cut / nyquist_freq
         high = high_cut / nyquist_freq
         if fs <= high_cut * 2:
-            sos = butter(filter_order, low, btype="high", output='sos', analog=False)
+            sos = butter(filter_order, low, btype="high", output="sos", analog=False)
         else:
-            sos = butter(filter_order, [low, high], btype="band", output='sos', analog=False)
+            sos = butter(
+                filter_order, [low, high], btype="band", output="sos", analog=False
+            )
 
         if len(np.shape(signal)) == 2:
             [ecg_len, ecg_num] = np.shape(signal)
@@ -127,7 +132,9 @@ class Preprocessing:
                 else:
                     testqrs = test_peaks
 
-                bsqi[i] = calculate_bsqi(refqrs[refqrs[:, i] > 0, i], testqrs[testqrs[:, i] > 0, i], fs)
+                bsqi[i] = calculate_bsqi(
+                    refqrs[refqrs[:, i] > 0, i], testqrs[testqrs[:, i] > 0, i], fs
+                )
         elif len(np.shape(signal)) == 1:
             fp = FiducialPoints(signal, fs)
             if not peaks.any():
