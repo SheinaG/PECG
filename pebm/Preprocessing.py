@@ -1,9 +1,10 @@
-import numpy as np
 import mne
+import numpy as np
 from scipy.signal import butter, sosfiltfilt
 from scipy.spatial import cKDTree
-from pebm.ebm.FiducialPoints import FiducialPoints
+
 from pebm._ErrorHandler import _check_shape_, WrongParameter
+from pebm.ebm.FiducialPoints import FiducialPoints
 
 
 class Preprocessing:
@@ -87,7 +88,7 @@ class Preprocessing:
         self.signal = fsig
         return fsig
 
-    def bsqi(self,  peaks: np.array = np.array([]), test_peaks: np.array = np.array([])):
+    def bsqi(self, peaks: np.array = np.array([]), test_peaks: np.array = np.array([])):
 
         """
         This function is based on the following paper:
@@ -126,7 +127,7 @@ class Preprocessing:
                 else:
                     testqrs = test_peaks
 
-                bsqi[i] = calculate_bsqi(refqrs[refqrs[:, i]>0,i], testqrs[testqrs[:, i]>0,i], fs)
+                bsqi[i] = calculate_bsqi(refqrs[refqrs[:, i] > 0, i], testqrs[testqrs[:, i] > 0, i], fs)
         elif len(np.shape(signal)) == 1:
             fp = FiducialPoints(signal, fs)
             if not peaks.any():

@@ -7,6 +7,14 @@ pebm package
 
    pebm.ebm
 
+pebm.Preprocessing
+--------------------------
+
+.. automodule:: pebm.Preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
@@ -15,3 +23,5 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+
+

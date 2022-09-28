@@ -9,7 +9,6 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 class Biomarkers:
     def __init__(self, signal: np.array, fs, fiducials=None, matlab_path: str = None):
         """
-
         :param signal: The ECG signal as a ndarray.
         :param fs: The sampling frequency of the signal.
         :param fiducials: Dictionary that includes indexes for each fiducial point
@@ -34,7 +33,6 @@ class Biomarkers:
 
     def intervals(self):
         """
-
         :returns:
             *intervals_b: Dictionary that includes all the row data, for the intervals and segments biomarkers.
             *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std,
@@ -146,36 +144,5 @@ class Biomarkers:
         self.waves_statistics = waves_statistics
         return self.waves_b, self.waves_statistics
 
-    def isECG(self):
 
-        signal = self.signal
-        fs = self.fs
-        fiducials = self.fiducials
-        score = 0
-        #naive_score:
-        if len(np.shape(signal)) == 2:
-            [ecg_len, ecg_num] = np.shape(signal)
-            score = {}
-            for i in np.arange(ecg_num):
-                score[i] = self.calculate_isECG(fiducials[i])
-        elif len(np.shape(signal)) == 1:
-            score = self.calculate_isECG(fiducials[0])
-        return score
 
-    def calculate_isECG(self, fiducials):
-
-        score = 0
-
-        R_num = len(~np.isnan(fiducials['qrs']))
-        Pon_num = len(~np.isnan(fiducials['Pon']))
-        P_num = len(~np.isnan(fiducials['P']))
-        Poff_num = len(~np.isnan(fiducials['Poff']))
-        Q_num = len(~np.isnan(fiducials['QRSoff']))
-        S_num = len(~np.isnan(fiducials['QRSon']))
-        Ton_num = len(~np.isnan(fiducials['Ton']))
-        T_num = len(~np.isnan(fiducials['T']))
-        Toff_num = len(~np.isnan(fiducials['Toff']))
-
-        score = ~np.isnan(fiducials['P']) & ~np.isnan(fiducials['T']) & ~np.isnan(fiducials['QRSon']) & ~np.isnan(fiducials['QRSoff'])
-
-        return score

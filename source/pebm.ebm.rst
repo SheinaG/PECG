@@ -11,14 +11,6 @@ pebm.ebm.Biomarkers
    :show-inheritance:
    
 
-pebm.ebm.fecgyn_tgen
---------------------------
-
-.. automodule:: pebm.ebm.fecgyn_tgen
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pebm.ebm.FiducialPoints
 --------------------------
 
@@ -35,13 +27,14 @@ pebm.ebm.IntervalsDuration
    :undoc-members:
    :show-inheritance:
 
-pebm.ebm.Preprocessing
---------------------------
+pebm.ebm.WavesCharacteristics
+------------------------------
 
-.. automodule:: pebm.ebm.Preprocessing
+.. automodule:: pebm.ebm.WavesCharacteristics
    :members:
    :undoc-members:
    :show-inheritance:
+
    
 pebm.ebm.Statistics
 --------------------------
@@ -51,13 +44,6 @@ pebm.ebm.Statistics
    :undoc-members:
    :show-inheritance:
 
-pebm.ebm.WavesCharacteristics
-------------------------------
-
-.. automodule:: pebm.ebm.WavesCharacteristics
-   :members:
-   :undoc-members:
-   :show-inheritance:
    
 Module contents
 ---------------
