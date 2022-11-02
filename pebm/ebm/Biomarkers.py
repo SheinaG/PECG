@@ -37,36 +37,40 @@ class Biomarkers:
             *intervals_b: Dictionary that includes all the row data, for the intervals and segments biomarkers.
             *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std,
          for every ‘interval’ biomarker.
+        .. list-table:: Interval duration and segments:
+            :widths: 25 75
+            :header-rows: 1
 
-        Interval duration and segments:
-
-        P-waveint:	Time interval between P-on and P-off.
-
-        PRint:	Time interval between the P-on to the QRS-on.
-
-        PRseg:	Time interval between the P-off to the QRS-on.
-
-        PRint2:	Time interval between P-peak and R-peak as defined by Mao et al.
-
-        QRSint:	Time interval between the QRS-on to the QRS-off.
-
-        QTint:	Time interval between the QRS-on to the T-off.
-
-        QTcBint:	Corrected QT interval (QTc) using Bazett’s formula.
-
-        QTcFriint:	QTc using the Fridericia formula.
-
-        QTcFraint:	QTc using the Framingham formula.
-
-        QTcHint:	QTc using the Hodges formula.
-
-        T-waveint:	Time interval between T-on and T-off.
-
-        TPseg:	Time interval between T-off and P-on.
-
-        RRint:	Time interval between sequential R-peaks.
-
-        Rdep: Time interval betweem Q-on and R-peak.
+            * - Biomarker
+              - Description
+            * - P-waveint
+              - Time interval between P-on and P-off.
+            * - PRint
+              - Time interval between the P-on to the QRS-on.
+            * - PRseg
+              - Time interval between the P-off to the QRS-on.
+            * - PRint2
+              - Time interval between P-peak and R-peak as defined by Mao et al.
+            * - QRSint
+              - Time interval between the QRS-on to the QRS-off.
+            * - QTint
+              - Time interval between the QRS-on to the T-off.
+            * - QTcBint
+              - Corrected QT interval (QTc) using Bazett’s formula.
+            * - QTcFriint
+              - QTc using the Fridericia formula.
+            * - QTcFraint
+              - QTc using the Framingham formula.
+            * - QTcHint
+              - QTc using the Hodges formula.
+            * - T-waveint
+              - Time interval between T-on and T-off.
+            * - TPseg
+              - Time interval between T-off and P-on.
+            * - RRint
+              - Time interval between sequential R-peaks.
+            * - Rdep
+              - Time interval betweem Q-on and R-peak.
         """
         fs = self.fs
         fiducials = self.fiducials
@@ -77,14 +81,14 @@ class Biomarkers:
             intervals_b = {}
             intervals_statistics = {}
             for i in np.arange(ecg_num):
-                if np.sum(fiducials[i]["qrs"]) == 0:
+                if np.sum(fiducials[i]['qrs']) == 0:
                     intervals_b[i] = np.nan
                     intervals_statistics[i] = np.nan
                 else:
                     intervals_b[i] = extract_intervals_duration(fs, fiducials[i])
                     intervals_statistics[i] = statistics(intervals_b[i])
         elif len(np.shape(signal)) == 1:
-            if np.sum(fiducials[0]["qrs"]) == 0:
+            if np.sum(fiducials[0]['qrs']) == 0:
                 intervals_b = np.nan
                 intervals_statistics = np.nan
             else:
@@ -101,21 +105,29 @@ class Biomarkers:
             *waves_b: Dictionary that includes all the row data, for every ‘wave’ biomarker.
             *waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every ‘wave’ biomarker.
 
-        P-wave:	Amplitude difference between P-peak and P-off.
+        .. list-table:: Interval duration and segments:
+            :widths: 25 75
+            :header-rows: 1
 
-        T-wave:	Amplitude difference between T-peak on and T-off.
+            * - Biomarker
+              - Description
 
-        R-wave:	R-peak amplitude.
-
-        P-waveArea:	P-wave interval area defined as integral from the P-on to the P-off.
-
-        T-waveArea:	T-wave interval area  defined as integral from the T-on to the T-off.
-
-        QRSArea: QRS interval area defined as integral from the QRS-on to the QRS-off.
-
-        STseg:	Amplitude difference between QRS-off and T-on.
-
-        J-point: Amplitude in 40ms after QRS-off as defined by Hollander et al.
+            * - P-wave
+              - Amplitude difference between P-peak and P-off.
+            * - T-wave
+              - Amplitude difference between T-peak on and T-off.
+            * - R-wave:
+              - R-peak amplitude.
+            * - P-waveArea
+              - P-wave interval area defined as integral from the P-on to the P-off.
+            * - T-waveArea
+              - T-wave interval area  defined as integral from the T-on to the T-off.
+            * - QRSArea
+              - QRS interval area defined as integral from the QRS-on to the QRS-off.
+            * - STseg
+              - Amplitude difference between QRS-off and T-on.
+            * - J-point
+              - Amplitude in 40ms after QRS-off as defined by Hollander et al.
         """
         signal = self.signal
         fs = self.fs
@@ -126,22 +138,23 @@ class Biomarkers:
             waves_b = {}
             waves_statistics = {}
             for i in np.arange(ecg_num):
-                if np.sum(fiducials[i]["qrs"]) == 0:
+                if np.sum(fiducials[i]['qrs']) == 0:
                     waves_b[i] = np.nan
                     waves_statistics[i] = np.nan
                 else:
-                    waves_b[i] = extract_waves_characteristics(
-                        signal[:, i], fs, fiducials[i]
-                    )
+                    waves_b[i] = extract_waves_characteristics(signal[:,i], fs, fiducials[i])
                     waves_statistics[i] = statistics(waves_b[i])
         elif len(np.shape(signal)) == 1:
-            if np.sum(fiducials[0]["qrs"]) == 0:
+            if np.sum(fiducials[0]['qrs']) == 0:
                 waves_b = np.nan
                 waves_statistics = np.nan
             else:
-                waves_b = extract_waves_characteristics(signal, fs, fiducials[0])
+                waves_b = extract_waves_characteristics(signal,fs, fiducials[0])
                 waves_statistics = statistics(waves_b)
 
         self.waves_b = waves_b
         self.waves_statistics = waves_statistics
         return self.waves_b, self.waves_statistics
+
+
+
