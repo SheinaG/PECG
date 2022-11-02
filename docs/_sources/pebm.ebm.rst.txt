@@ -19,31 +19,6 @@ pebm.ebm.FiducialPoints
    :undoc-members:
    :show-inheritance:
 
-pebm.ebm.IntervalsDuration
---------------------------
-
-.. automodule:: pebm.ebm.IntervalsDuration
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pebm.ebm.WavesCharacteristics
-------------------------------
-
-.. automodule:: pebm.ebm.WavesCharacteristics
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-   
-pebm.ebm.Statistics
---------------------------
-
-.. automodule:: pebm.ebm.Statistics
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
    
 Module contents
 ---------------
