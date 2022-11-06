@@ -41,8 +41,8 @@ class Biomarkers:
 
     def intervals(self):
         """
-        :return: intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments**: biomarkers.
-        :return: intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments**: biomarker.
+        :return: intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.
+        :return: intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.
 
         .. list-table:: **Interval duration and segments**:
             :widths: 25 75
