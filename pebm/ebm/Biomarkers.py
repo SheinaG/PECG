@@ -14,9 +14,12 @@ class Biomarkers:
         :param fiducials: Dictionary that includes indexes for each fiducial point
         :param matlab_path: The indexes of the R- points of the ECG signal – optional input
 
-        obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)
-        ints, stat_i = obm.intervals()
-        waves, stat_w = obm.waves()
+        .. code-block:: python
+
+            obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)
+            ints, stat_i = obm.intervals()
+            waves, stat_w = obm.waves()
+
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
@@ -37,10 +40,8 @@ class Biomarkers:
 
     def intervals(self):
         """
-        :returns:
-            *intervals_b: Dictionary that includes all the row data, for the intervals and segments biomarkers.
-            *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std,
-         for every ‘interval’ biomarker.
+        :return: intervals_b: Dictionary that includes all the row data, for the intervals and segments biomarkers.
+        :return: intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every ‘interval’ biomarker.
 
         .. list-table:: **Interval duration and segments**:
             :widths: 25 75
@@ -108,8 +109,8 @@ class Biomarkers:
 
     def waves(self):
         """
-        :returns: waves_b: Dictionary that includes all the row data, for every ‘wave’ biomarker.
-        :returns: waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every ‘wave’ biomarker.
+        :return: waves_b: Dictionary that includes all the row data, for every ‘wave’ biomarker.
+        :return: waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every ‘wave’ biomarker.
 
 
         .. list-table:: **Waves characteristics**:

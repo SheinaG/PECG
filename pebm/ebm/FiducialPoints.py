@@ -46,15 +46,25 @@ class FiducialPoints:
     def wavedet(self, matlab_pat: str = None, peaks: np.array = np.array([])):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
-        The algorithm is described in the following paper:
-        Martinze at el (2004),
-        A wavelet-based ECG delineator: evaluation on standard databases.
-        IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
+        The algorithm is described in the following paper: [1]_.
+
+        .. [1] Martinze at el (2004),
+            A wavelet-based ECG delineator: evaluation on standard databases.
+            IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
 
         :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.
         :param matlab_pat: Optional input- required when running on a linux machine.
         
-        :returns: fiducials: Dictionary that includes indexes for each fiducial point.
+        :return: fiducials: Dictionary that includes indexes for each fiducial point.
+
+        .. code-block:: python
+
+            from pebm.ebm import FiducialPoints as Fp
+            matlab_pat= '/usr/local/MATLAB/R2021a'
+            fp = Fp.FiducialPoints(f_ecg_rec, fs)
+            peaks = fp.epltd
+            fiducials = fp.wavedet(matlab_pat, peaks)
+
         """
 
         signal = self.signal
@@ -112,6 +122,11 @@ class FiducialPoints:
             IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
 
         :return: indexes of the R-peaks in the ECG signal.
+
+        .. code-block:: python
+
+            peaks = fp.epltd
+
         """
         try:
             cwd = os.getcwd()
@@ -143,7 +158,14 @@ class FiducialPoints:
         return peaks
 
     def xqrs(self):
+        """
+        This function wraps the XQRS function of the WFDB package.
 
+        .. code-block:: python
+
+            peaks = fp.xqrs()
+
+        """
         signal = self.signal
         fs = self.fs
 
@@ -179,11 +201,18 @@ class FiducialPoints:
 
         .. [2] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
             IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
+
         :param signal: vector of ecg signal amplitude (mV)
         :param fs: sampling frequency (Hz)
         :param thr: threshold (nu)
         :param rp: refractory period (sec)
         :return: qrs_pos: position of the qrs (sample)
+
+
+        .. code-block:: python
+
+            peaks = fp.jqrs()
+
         """
         signal = self.signal
         fs = self.fs
