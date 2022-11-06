@@ -18,13 +18,18 @@ class FiducialPoints:
         """
         The purpose of the FiducialPoints class is to calculate the fiducial points.
 
-        :param signal: The ECG signal as a two-dimensional ndarray, when the first dimension is the len of the ecg,
-        and the second is the number of leads.
+        :param signal: The ECG signal as a two-dimensional ndarray, when the first dimension is the len of the ecg, and the second is the number of leads.
         :param fs: The sampling frequency of the signal.
-        :param peaks: The
-        indexes of the R- points of the ECG signal – optional input.
-        :param n_pools: The number of cores to use when
-        calculating the fiducials.
+        :param peaks: The indexes of the R- points of the ECG signal – optional input.
+        :param n_pools: The number of cores to use when calculating the fiducials.
+
+        .. code-block:: python
+
+            matlab_pat= '/usr/local/MATLAB/R2021a'
+            fp = Fp.FiducialPoints(f_ecg_rec, fs)
+            peaks = fp.epltd
+            fiducials = fp.wavedet(matlab_pat, peaks)
+
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
@@ -46,13 +51,10 @@ class FiducialPoints:
         A wavelet-based ECG delineator: evaluation on standard databases.
         IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
 
-        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are
-        not given, the peaks are calculated with epltd detector.
-        :param matlab_pat: Optional input- required when
-        running on a linux machine.
+        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.
+        :param matlab_pat: Optional input- required when running on a linux machine.
         
-        :returns:
-            *fiducials: Dictionary that includes indexes for each fiducial point.
+        :returns: fiducials: Dictionary that includes indexes for each fiducial point.
         """
 
         signal = self.signal
@@ -100,13 +102,14 @@ class FiducialPoints:
             os.chdir(cwd)
         return fiducials
 
-    @property
+    #@property
     def epltd(self):
         """
         This function calculates the indexes of the R-peaks with epltd peak detector algorithm.
-        This algorithm were introduced by Pan, Jiapu; Tompkins, Willis J. (March 1985).
-        "A Real-Time QRS Detection Algorithm". IEEE Transactions on Biomedical Engineering.
-        BME-32 (3): 230–236
+        This algorithm were introduced by [1]_.
+
+        .. [1] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
+            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
 
         :return: indexes of the R-peaks in the ECG signal.
         """
@@ -169,9 +172,11 @@ class FiducialPoints:
         the input ecg is already pre-filtered i.e. bandpass filtered and that the
         power-line interference was removed. Of note, NaN should be represented by the
         value -32768 in the ecg (WFDB standard).
+
         .. [1] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.
             "A comparison of single channel fetal ECG extraction methods." Annals of
             biomedical engineering 42, no. 6 (2014): 1340-1353.
+
         .. [2] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
             IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
         :param signal: vector of ecg signal amplitude (mV)
