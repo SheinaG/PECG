@@ -205,15 +205,25 @@
 <div class="viewcode-block" id="FiducialPoints.wavedet"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.wavedet">[docs]</a>    <span class="k">def</span> <span class="nf">wavedet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matlab_pat</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The wavedat function uses the matlab algorithm wavedet, compiled for python.</span>
-<span class="sd">        The algorithm is described in the following paper:</span>
-<span class="sd">        Martinze at el (2004),</span>
-<span class="sd">        A wavelet-based ECG delineator: evaluation on standard databases.</span>
-<span class="sd">        IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</span>
+<span class="sd">        The algorithm is described in the following paper: [1]_.</span>
+
+<span class="sd">        .. [1] Martinze at el (2004),</span>
+<span class="sd">            A wavelet-based ECG delineator: evaluation on standard databases.</span>
+<span class="sd">            IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</span>
 
 <span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.</span>
 <span class="sd">        :param matlab_pat: Optional input- required when running on a linux machine.</span>
 <span class="sd">        </span>
-<span class="sd">        :returns: fiducials: Dictionary that includes indexes for each fiducial point.</span>
+<span class="sd">        :return: fiducials: Dictionary that includes indexes for each fiducial point.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from pebm.ebm import FiducialPoints as Fp</span>
+<span class="sd">            matlab_pat= &#39;/usr/local/MATLAB/R2021a&#39;</span>
+<span class="sd">            fp = Fp.FiducialPoints(f_ecg_rec, fs)</span>
+<span class="sd">            peaks = fp.epltd</span>
+<span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
@@ -265,12 +275,17 @@
 <div class="viewcode-block" id="FiducialPoints.epltd"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.epltd">[docs]</a>    <span class="k">def</span> <span class="nf">epltd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates the indexes of the R-peaks with epltd peak detector algorithm.</span>
-<span class="sd">        This algorithm were introduced by [1]_.</span>
+<span class="sd">        This algorithm were introduced by [2]_.</span>
 
-<span class="sd">        .. [1] Pan, Jiapu, and Willis J. Tompkins. &quot;A real-time QRS detection algorithm.&quot;</span>
+<span class="sd">        .. [2] Pan, Jiapu, and Willis J. Tompkins. &quot;A real-time QRS detection algorithm.&quot;</span>
 <span class="sd">            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.</span>
 
 <span class="sd">        :return: indexes of the R-peaks in the ECG signal.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            peaks = fp.epltd</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -302,7 +317,14 @@
         <span class="k">return</span> <span class="n">peaks</span></div>
 
 <div class="viewcode-block" id="FiducialPoints.xqrs"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.xqrs">[docs]</a>    <span class="k">def</span> <span class="nf">xqrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function wraps the XQRS function of the WFDB package.</span>
 
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            peaks = fp.xqrs()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
         <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
 
@@ -326,23 +348,28 @@
 
 <div class="viewcode-block" id="FiducialPoints.jqrs"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.jqrs">[docs]</a>    <span class="k">def</span> <span class="nf">jqrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thr</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">rp</span><span class="o">=</span> <span class="mf">.25</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The function is an Implementation of an energy based qrs detector [1]_. The algorithm is an</span>
+<span class="sd">        The function is an Implementation of an energy based qrs detector [3]_. The algorithm is an</span>
 <span class="sd">        adaptation of the popular Pan &amp; Tompkins algorithm [2]_. The function assumes</span>
 <span class="sd">        the input ecg is already pre-filtered i.e. bandpass filtered and that the</span>
 <span class="sd">        power-line interference was removed. Of note, NaN should be represented by the</span>
 <span class="sd">        value -32768 in the ecg (WFDB standard).</span>
 
-<span class="sd">        .. [1] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.</span>
+<span class="sd">        .. [3] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.</span>
 <span class="sd">            &quot;A comparison of single channel fetal ECG extraction methods.&quot; Annals of</span>
 <span class="sd">            biomedical engineering 42, no. 6 (2014): 1340-1353.</span>
 
-<span class="sd">        .. [2] Pan, Jiapu, and Willis J. Tompkins. &quot;A real-time QRS detection algorithm.&quot;</span>
-<span class="sd">            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.</span>
+
 <span class="sd">        :param signal: vector of ecg signal amplitude (mV)</span>
 <span class="sd">        :param fs: sampling frequency (Hz)</span>
 <span class="sd">        :param thr: threshold (nu)</span>
 <span class="sd">        :param rp: refractory period (sec)</span>
 <span class="sd">        :return: qrs_pos: position of the qrs (sample)</span>
+
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            peaks = fp.jqrs()</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
         <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>

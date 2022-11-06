@@ -116,9 +116,9 @@ class FiducialPoints:
     def epltd(self):
         """
         This function calculates the indexes of the R-peaks with epltd peak detector algorithm.
-        This algorithm were introduced by [1]_.
+        This algorithm were introduced by [2]_.
 
-        .. [1] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
+        .. [2] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
             IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
 
         :return: indexes of the R-peaks in the ECG signal.
@@ -189,18 +189,16 @@ class FiducialPoints:
 
     def jqrs(self, thr=0.8, rp= .25):
         """
-        The function is an Implementation of an energy based qrs detector [1]_. The algorithm is an
+        The function is an Implementation of an energy based qrs detector [3]_. The algorithm is an
         adaptation of the popular Pan & Tompkins algorithm [2]_. The function assumes
         the input ecg is already pre-filtered i.e. bandpass filtered and that the
         power-line interference was removed. Of note, NaN should be represented by the
         value -32768 in the ecg (WFDB standard).
 
-        .. [1] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.
+        .. [3] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.
             "A comparison of single channel fetal ECG extraction methods." Annals of
             biomedical engineering 42, no. 6 (2014): 1340-1353.
 
-        .. [2] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
-            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
 
         :param signal: vector of ecg signal amplitude (mV)
         :param fs: sampling frequency (Hz)
