@@ -172,6 +172,10 @@
 <span class="sd">        :param fs: The sampling frequency of the signal.</span>
 <span class="sd">        :param fiducials: Dictionary that includes indexes for each fiducial point</span>
 <span class="sd">        :param matlab_path: The indexes of the R- points of the ECG signal – optional input</span>
+
+<span class="sd">        obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)</span>
+<span class="sd">        ints, stat_i = obm.intervals()</span>
+<span class="sd">        waves, stat_w = obm.waves()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WrongParameter</span><span class="p">(</span><span class="s2">&quot;Sampling frequency should be strictly positive&quot;</span><span class="p">)</span>
@@ -196,7 +200,8 @@
 <span class="sd">            *intervals_b: Dictionary that includes all the row data, for the intervals and segments biomarkers.</span>
 <span class="sd">            *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std,</span>
 <span class="sd">         for every ‘interval’ biomarker.</span>
-<span class="sd">        .. list-table:: Interval duration and segments:</span>
+
+<span class="sd">        .. list-table:: **Interval duration and segments**:</span>
 <span class="sd">            :widths: 25 75</span>
 <span class="sd">            :header-rows: 1</span>
 
@@ -230,6 +235,8 @@
 <span class="sd">              - Time interval between sequential R-peaks.</span>
 <span class="sd">            * - Rdep</span>
 <span class="sd">              - Time interval betweem Q-on and R-peak.</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
         <span class="n">fiducials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiducials</span>
@@ -260,11 +267,11 @@
 
 <div class="viewcode-block" id="Biomarkers.waves"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.Biomarkers.Biomarkers.waves">[docs]</a>    <span class="k">def</span> <span class="nf">waves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :returns:</span>
-<span class="sd">            *waves_b: Dictionary that includes all the row data, for every ‘wave’ biomarker.</span>
-<span class="sd">            *waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every ‘wave’ biomarker.</span>
+<span class="sd">        :returns: waves_b: Dictionary that includes all the row data, for every ‘wave’ biomarker.</span>
+<span class="sd">        :returns: waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every ‘wave’ biomarker.</span>
 
-<span class="sd">        .. list-table:: Interval duration and segments:</span>
+
+<span class="sd">        .. list-table:: **Waves characteristics**:</span>
 <span class="sd">            :widths: 25 75</span>
 <span class="sd">            :header-rows: 1</span>
 

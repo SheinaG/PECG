@@ -177,13 +177,18 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The purpose of the FiducialPoints class is to calculate the fiducial points.</span>
 
-<span class="sd">        :param signal: The ECG signal as a two-dimensional ndarray, when the first dimension is the len of the ecg,</span>
-<span class="sd">        and the second is the number of leads.</span>
+<span class="sd">        :param signal: The ECG signal as a two-dimensional ndarray, when the first dimension is the len of the ecg, and the second is the number of leads.</span>
 <span class="sd">        :param fs: The sampling frequency of the signal.</span>
-<span class="sd">        :param peaks: The</span>
-<span class="sd">        indexes of the R- points of the ECG signal – optional input.</span>
-<span class="sd">        :param n_pools: The number of cores to use when</span>
-<span class="sd">        calculating the fiducials.</span>
+<span class="sd">        :param peaks: The indexes of the R- points of the ECG signal – optional input.</span>
+<span class="sd">        :param n_pools: The number of cores to use when calculating the fiducials.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            matlab_pat= &#39;/usr/local/MATLAB/R2021a&#39;</span>
+<span class="sd">            fp = Fp.FiducialPoints(f_ecg_rec, fs)</span>
+<span class="sd">            peaks = fp.epltd</span>
+<span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WrongParameter</span><span class="p">(</span><span class="s2">&quot;Sampling frequency should be strictly positive&quot;</span><span class="p">)</span>
@@ -205,13 +210,10 @@
 <span class="sd">        A wavelet-based ECG delineator: evaluation on standard databases.</span>
 <span class="sd">        IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</span>
 
-<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are</span>
-<span class="sd">        not given, the peaks are calculated with epltd detector.</span>
-<span class="sd">        :param matlab_pat: Optional input- required when</span>
-<span class="sd">        running on a linux machine.</span>
+<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.</span>
+<span class="sd">        :param matlab_pat: Optional input- required when running on a linux machine.</span>
 <span class="sd">        </span>
-<span class="sd">        :returns:</span>
-<span class="sd">            *fiducials: Dictionary that includes indexes for each fiducial point.</span>
+<span class="sd">        :returns: fiducials: Dictionary that includes indexes for each fiducial point.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
@@ -259,13 +261,14 @@
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fiducials</span></div>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">epltd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#@property</span>
+<div class="viewcode-block" id="FiducialPoints.epltd"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.epltd">[docs]</a>    <span class="k">def</span> <span class="nf">epltd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function calculates the indexes of the R-peaks with epltd peak detector algorithm.</span>
-<span class="sd">        This algorithm were introduced by Pan, Jiapu; Tompkins, Willis J. (March 1985).</span>
-<span class="sd">        &quot;A Real-Time QRS Detection Algorithm&quot;. IEEE Transactions on Biomedical Engineering.</span>
-<span class="sd">        BME-32 (3): 230–236</span>
+<span class="sd">        This algorithm were introduced by [1]_.</span>
+
+<span class="sd">        .. [1] Pan, Jiapu, and Willis J. Tompkins. &quot;A real-time QRS detection algorithm.&quot;</span>
+<span class="sd">            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.</span>
 
 <span class="sd">        :return: indexes of the R-peaks in the ECG signal.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -296,7 +299,7 @@
         <span class="k">if</span> <span class="n">fl</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">peaks</span>
+        <span class="k">return</span> <span class="n">peaks</span></div>
 
 <div class="viewcode-block" id="FiducialPoints.xqrs"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.xqrs">[docs]</a>    <span class="k">def</span> <span class="nf">xqrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -328,9 +331,11 @@
 <span class="sd">        the input ecg is already pre-filtered i.e. bandpass filtered and that the</span>
 <span class="sd">        power-line interference was removed. Of note, NaN should be represented by the</span>
 <span class="sd">        value -32768 in the ecg (WFDB standard).</span>
+
 <span class="sd">        .. [1] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.</span>
 <span class="sd">            &quot;A comparison of single channel fetal ECG extraction methods.&quot; Annals of</span>
 <span class="sd">            biomedical engineering 42, no. 6 (2014): 1340-1353.</span>
+
 <span class="sd">        .. [2] Pan, Jiapu, and Willis J. Tompkins. &quot;A real-time QRS detection algorithm.&quot;</span>
 <span class="sd">            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.</span>
 <span class="sd">        :param signal: vector of ecg signal amplitude (mV)</span>
