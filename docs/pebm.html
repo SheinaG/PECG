@@ -185,21 +185,27 @@ the ECG signal as well as estimating the signal quality.</p>
 </ul>
 </dd>
 </dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pebm</span>
+<span class="kn">from</span> <span class="nn">pebm</span> <span class="kn">import</span> <span class="n">Preprocessing</span> <span class="k">as</span> <span class="n">Pre</span>
+<span class="n">pre</span> <span class="o">=</span> <span class="n">Pre</span><span class="o">.</span><span class="n">Preprocessing</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="pebm.Preprocessing.Preprocessing.notch">
 <span class="sig-name descname"><span class="pre">notch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_freq</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pebm/Preprocessing.html#Preprocessing.notch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pebm.Preprocessing.Preprocessing.notch" title="Permalink to this definition">¶</a></dt>
 <dd><p>The notch function applies a notch filter in order to remove the power line artefacts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n_freq</strong> – The expected center frequency of the power line interference.</p>
+<dd class="field-odd"><p><strong>n_freq</strong> – The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the filtered ECG signal</p>
 </dd>
 </dl>
-<p>Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the filtered ECG signal</p>
-</dd>
-</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f_notch</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="n">filtered_ecg_rec</span> <span class="o">=</span> <span class="n">pre</span><span class="o">.</span><span class="n">notch</span><span class="p">(</span><span class="n">f_notch</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -212,31 +218,45 @@ this function uses a zero-phase Butterworth filter with 75 coefficients.</p>
 <dd class="field-odd"><p>the filtered ECG signal</p>
 </dd>
 </dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ecg_rec</span> <span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">bpfilt</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pebm.Preprocessing.Preprocessing.bsqi">
 <span class="sig-name descname"><span class="pre">bsqi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=float64)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_peaks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=float64)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pebm/Preprocessing.html#Preprocessing.bsqi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pebm.Preprocessing.Preprocessing.bsqi" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>This function is based on the following paper:</dt><dd><p>Li, Qiao, Roger G. Mark, and Gari D. Clifford.
+<dd><p>bSQI is an automated algorithm to detect poor-quality electrocardiograms.
+This function is based on the following paper:<a class="footnote-reference brackets" href="#id3" id="id1">1</a>.
+The implementation itself is based on: <a class="footnote-reference brackets" href="#id4" id="id2">2</a>.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Li, Qiao, Roger G. Mark, and Gari D. Clifford.
 “Robust heart rate estimation from multiple asynchronous noisy sources
 using signal quality indices and a Kalman filter.”
 Physiological measurement 29.1 (2007): 15.</p>
 </dd>
-<dt>The implementation itself is based on:</dt><dd><p>Behar, J., Oster, J., Li, Q., &amp; Clifford, G. D. (2013).
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Behar, J., Oster, J., Li, Q., &amp; Clifford, G. D. (2013).
 ECG signal quality during arrhythmia and its application to false alarm reduction.
 IEEE transactions on biomedical engineering, 60(6), 1660-1666.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given,
-the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.</p>
+<dd class="field-odd"><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.</p>
 </dd>
-<dt class="field-even">Returns F1</dt>
-<dd class="field-even"><p>The ‘bsqi’ score, between 0 and 1.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>F1: The ‘bsqi’ score, between 0 and 1.</p>
 </dd>
 </dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>epltd_peaks = fp.epltd()
+xqrs_peaks = fp.xqrs()
+bsqi_score = pre.bsqi(epltd_peaks, xqrs_peaks)
+if bsqi_score &lt; 0.8:
+    print(&#39;It&#39;s a bad quality ECG recording!&#39;)
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

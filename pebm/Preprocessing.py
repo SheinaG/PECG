@@ -18,9 +18,11 @@ class Preprocessing:
         :param fs: The sampling frequency of the signal.
 
         .. code-block:: python
+
             import pebm
             from pebm import Preprocessing as Pre
             pre = Pre.Preprocessing(signal, fs)
+
         """
         if fs <= 0:
             raise WrongParameter("Sampling frequency should be strictly positive")
@@ -35,14 +37,15 @@ class Preprocessing:
         """
         The notch function applies a notch filter in order to remove the power line artefacts.
 
-        :param n_freq: The expected center frequency of the power line interference.
-        Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
+        :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
 
-        :return:  the filtered ECG signal
+        :return: the filtered ECG signal
+
 
         .. code-block:: python
+
             f_notch = 60
-            filtered_ecg_rec =pre.notch(f_notch)
+            filtered_ecg_rec = pre.notch(f_notch)
 
         """
         if n_freq <= 0:
@@ -72,7 +75,9 @@ class Preprocessing:
         :return: the filtered ECG signal
 
         .. code-block:: python
+
             filtered_ecg_rec =pre.bpfilt()
+
         """
         signal = self.signal
         fs = self.fs
@@ -104,24 +109,24 @@ class Preprocessing:
     def bsqi(self, peaks: np.array = np.array([]), test_peaks: np.array = np.array([])):
 
         """
-        This function is based on the following paper:
-            Li, Qiao, Roger G. Mark, and Gari D. Clifford.
+        bSQI is an automated algorithm to detect poor-quality electrocardiograms.
+        This function is based on the following paper:[1]_.
+        The implementation itself is based on: [2]_.
+
+        .. [1] Li, Qiao, Roger G. Mark, and Gari D. Clifford.
             "Robust heart rate estimation from multiple asynchronous noisy sources
             using signal quality indices and a Kalman filter."
             Physiological measurement 29.1 (2007): 15.
-
-        The implementation itself is based on:
-            Behar, J., Oster, J., Li, Q., & Clifford, G. D. (2013).
+        .. [2] Behar, J., Oster, J., Li, Q., & Clifford, G. D. (2013).
             ECG signal quality during arrhythmia and its application to false alarm reduction.
             IEEE transactions on biomedical engineering, 60(6), 1660-1666.
 
-        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given,
-         the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.
+        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.
 
-
-        :returns F1: The 'bsqi' score, between 0 and 1.
+        :return: F1: The 'bsqi' score, between 0 and 1.
 
         .. code-block:: python
+
             epltd_peaks = fp.epltd()
             xqrs_peaks = fp.xqrs()
             bsqi_score = pre.bsqi(epltd_peaks, xqrs_peaks)
