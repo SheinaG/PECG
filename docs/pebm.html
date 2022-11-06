@@ -199,7 +199,7 @@ the ECG signal as well as estimating the signal quality.</p>
 <dd class="field-odd"><p><strong>n_freq</strong> – The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the filtered ECG signal</p>
+<dd class="field-even"><p>The filtered ECG signal</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f_notch</span> <span class="o">=</span> <span class="mi">60</span>
@@ -215,7 +215,7 @@ the ECG signal as well as estimating the signal quality.</p>
 this function uses a zero-phase Butterworth filter with 75 coefficients.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the filtered ECG signal</p>
+<dd class="field-odd"><p>The filtered ECG signal</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ecg_rec</span> <span class="o">=</span><span class="n">pre</span><span class="o">.</span><span class="n">bpfilt</span><span class="p">()</span>
@@ -244,10 +244,13 @@ IEEE transactions on biomedical engineering, 60(6), 1660-1666.</p>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.</p></li>
+<li><p><strong>test_peaks</strong> – Optional input - Annotation of the anther reference peak detector (Indices of the peaks). If test peaks are not given, the test peaks are calculated with xqrs detector.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>F1: The ‘bsqi’ score, between 0 and 1.</p>
+<dd class="field-even"><p>The ‘bsqi’ score, between 0 and 1.</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>epltd_peaks = fp.epltd()

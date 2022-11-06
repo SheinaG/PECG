@@ -191,7 +191,8 @@
 </ul>
 </dd>
 </dl>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obm</span> <span class="o">=</span> <span class="n">Obm</span><span class="o">.</span><span class="n">Biomarkers</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pebm.ebm</span> <span class="kn">import</span> <span class="n">Biomarkers</span> <span class="k">as</span> <span class="n">Obm</span>
+<span class="n">obm</span> <span class="o">=</span> <span class="n">Obm</span><span class="o">.</span><span class="n">Biomarkers</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">)</span>
 <span class="n">ints</span><span class="p">,</span> <span class="n">stat_i</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">intervals</span><span class="p">()</span>
 <span class="n">waves</span><span class="p">,</span> <span class="n">stat_w</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">waves</span><span class="p">()</span>
 </pre></div>

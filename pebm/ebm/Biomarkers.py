@@ -16,6 +16,7 @@ class Biomarkers:
 
         .. code-block:: python
 
+            from pebm.ebm import Biomarkers as Obm
             obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)
             ints, stat_i = obm.intervals()
             waves, stat_w = obm.waves()

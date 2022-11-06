@@ -112,7 +112,6 @@ class FiducialPoints:
             os.chdir(cwd)
         return fiducials
 
-    #@property
     def epltd(self):
         """
         This function calculates the indexes of the R-peaks with epltd peak detector algorithm.
@@ -199,13 +198,11 @@ class FiducialPoints:
             "A comparison of single channel fetal ECG extraction methods." Annals of
             biomedical engineering 42, no. 6 (2014): 1340-1353.
 
-
         :param signal: vector of ecg signal amplitude (mV)
         :param fs: sampling frequency (Hz)
         :param thr: threshold (nu)
         :param rp: refractory period (sec)
         :return: qrs_pos: position of the qrs (sample)
-
 
         .. code-block:: python
 
@@ -275,23 +272,6 @@ class FiducialPoints:
 
     @staticmethod
     def __calculate_jqrs(signal, fs, thr, rp):
-        '''The function is an Implementation of an energy based qrs detector [1]_. The algorithm is an
-        adaptation of the popular Pan & Tompkins algorithm [2]_. The function assumes
-        the input ecg is already pre-filtered i.e. bandpass filtered and that the
-        power-line interference was removed. Of note, NaN should be represented by the
-        value -32768 in the ecg (WFDB standard).
-        .. [1] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.
-            "A comparison of single channel fetal ECG extraction methods." Annals of
-            biomedical engineering 42, no. 6 (2014): 1340-1353.
-        .. [2] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
-            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
-        :param signal: vector of ecg signal amplitude (mV)
-        :param fs: sampling frequency (Hz)
-        :param thr: threshold (nu)
-        :param rp: refractory period (sec)
-        :param debug: plot results (boolean)
-        :return: qrs_pos: position of the qrs (sample)
-        '''
         try:
             cwd = os.getcwd()
             fl = 1

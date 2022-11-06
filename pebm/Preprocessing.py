@@ -39,7 +39,7 @@ class Preprocessing:
 
         :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
 
-        :return: the filtered ECG signal
+        :return: The filtered ECG signal
 
 
         .. code-block:: python
@@ -72,7 +72,7 @@ class Preprocessing:
         The bpfilt function applies a bandpass filter between [0.67, 100] Hz,
         this function uses a zero-phase Butterworth filter with 75 coefficients.
 
-        :return: the filtered ECG signal
+        :return: The filtered ECG signal
 
         .. code-block:: python
 
@@ -107,7 +107,6 @@ class Preprocessing:
         return fsig
 
     def bsqi(self, peaks: np.array = np.array([]), test_peaks: np.array = np.array([])):
-
         """
         bSQI is an automated algorithm to detect poor-quality electrocardiograms.
         This function is based on the following paper:[1]_.
@@ -121,9 +120,10 @@ class Preprocessing:
             ECG signal quality during arrhythmia and its application to false alarm reduction.
             IEEE transactions on biomedical engineering, 60(6), 1660-1666.
 
-        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.
+        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.
+        :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks). If test peaks are not given, the test peaks are calculated with xqrs detector.
 
-        :return: F1: The 'bsqi' score, between 0 and 1.
+        :return: The 'bsqi' score, between 0 and 1.
 
         .. code-block:: python
 

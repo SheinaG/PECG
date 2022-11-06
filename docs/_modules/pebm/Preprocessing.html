@@ -198,7 +198,7 @@
 
 <span class="sd">        :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)</span>
 
-<span class="sd">        :return: the filtered ECG signal</span>
+<span class="sd">        :return: The filtered ECG signal</span>
 
 
 <span class="sd">        .. code-block:: python</span>
@@ -231,7 +231,7 @@
 <span class="sd">        The bpfilt function applies a bandpass filter between [0.67, 100] Hz,</span>
 <span class="sd">        this function uses a zero-phase Butterworth filter with 75 coefficients.</span>
 
-<span class="sd">        :return: the filtered ECG signal</span>
+<span class="sd">        :return: The filtered ECG signal</span>
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -266,7 +266,6 @@
         <span class="k">return</span> <span class="n">fsig</span></div>
 
 <div class="viewcode-block" id="Preprocessing.bsqi"><a class="viewcode-back" href="../../pebm.html#pebm.Preprocessing.Preprocessing.bsqi">[docs]</a>    <span class="k">def</span> <span class="nf">bsqi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">test_peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
-
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        bSQI is an automated algorithm to detect poor-quality electrocardiograms.</span>
 <span class="sd">        This function is based on the following paper:[1]_.</span>
@@ -280,9 +279,10 @@
 <span class="sd">            ECG signal quality during arrhythmia and its application to false alarm reduction.</span>
 <span class="sd">            IEEE transactions on biomedical engineering, 60(6), 1660-1666.</span>
 
-<span class="sd">        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector, the test peaks are calculated with xqrs detector.</span>
+<span class="sd">        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.</span>
+<span class="sd">        :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks). If test peaks are not given, the test peaks are calculated with xqrs detector.</span>
 
-<span class="sd">        :return: F1: The &#39;bsqi&#39; score, between 0 and 1.</span>
+<span class="sd">        :return: The &#39;bsqi&#39; score, between 0 and 1.</span>
 
 <span class="sd">        .. code-block:: python</span>
 
