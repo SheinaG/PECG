@@ -14,7 +14,7 @@ setuptools.setup(
   author="sheina Gendelman",
   author_email="sheina@campus.technion.ac.il",
   description="PEBM: a python toolbox for ECG morphological analysis.",
-  long_description = file: README.md,
+  long_description = "file: README.md",
   long_description_content_type="text/markdown",
   url="https://github.com/pypa/sampleproject",
   project_urls={
