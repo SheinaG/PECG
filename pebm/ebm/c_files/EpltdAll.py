@@ -15,7 +15,7 @@ def epltd_all(signal, fs, tmpdirname=None):
     my_path = str(pathlib.Path(__file__).parent.resolve())
     with tempfile.TemporaryDirectory() as tmpdirname:
         os.chdir(tmpdirname)
-        wfdb.wrsamp(record_name='temp', fs=np.asscalar(fs), units=['mV'], sig_name=['V1'],
+        wfdb.wrsamp(record_name='temp', fs=int(fs), units=['mV'], sig_name=['V1'],
                     p_signal=signal_pad.reshape(-1, 1), fmt=['16'])
 
         prog_dir = my_path + '/epltd_all'
