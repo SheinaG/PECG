@@ -1,6 +1,14 @@
 pebm.ebm package
 ================
 
+pebm.ebm.FiducialPoints
+--------------------------
+
+.. automodule:: pebm.ebm.FiducialPoints
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 pebm.ebm.Biomarkers
 --------------------------
@@ -10,15 +18,6 @@ pebm.ebm.Biomarkers
    :undoc-members:
    :show-inheritance:
    
-
-pebm.ebm.FiducialPoints
---------------------------
-
-.. automodule:: pebm.ebm.FiducialPoints
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
    
 Module contents
 ---------------
