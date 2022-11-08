@@ -40,7 +40,7 @@ Python >= 3.6
 
 numpy == 1.19.4
 
-importlib == 4.8.2
+importlib-meatadata == 4.8.2
 
 mne == 0.23.4
 
