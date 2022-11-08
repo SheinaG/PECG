@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
   name= "pebm",
-  version='1.1.4', 
+  version='1.1.5', 
   use_scm_version={
       "root": '..',
       "relative_to": __file__,
@@ -40,4 +40,5 @@ setuptools.setup(
   },
   include_package_data=True,
   python_requires=">=3.6",
+  install_requires = {numpy , mne, scipy, wfdb, importlib-meatadata}
 )
