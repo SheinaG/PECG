@@ -25,10 +25,8 @@ class FiducialPoints:
 
         .. code-block:: python
 
-            matlab_pat= '/usr/local/MATLAB/R2021a'
+            from pebm.ebm import FiducialPoints as Fp
             fp = Fp.FiducialPoints(f_ecg_rec, fs)
-            peaks = fp.epltd
-            fiducials = fp.wavedet(matlab_pat, peaks)
 
         """
         if fs <= 0:
@@ -46,7 +44,8 @@ class FiducialPoints:
     def wavedet(self, matlab_pat: str = None, peaks: np.array = np.array([])):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
-        The algorithm is described in the following paper: [1]_.
+        The algorithm is described in the following paper: [1]_. The function is calculating
+        the fiducial points of the ECG recording using wavelet transform.
 
         .. [1] Martinze at el (2004),
             A wavelet-based ECG delineator: evaluation on standard databases.
@@ -59,9 +58,7 @@ class FiducialPoints:
 
         .. code-block:: python
 
-            from pebm.ebm import FiducialPoints as Fp
-            matlab_pat= '/usr/local/MATLAB/R2021a'
-            fp = Fp.FiducialPoints(f_ecg_rec, fs)
+            matlab_pat = '/usr/local/MATLAB/R2021a'
             peaks = fp.epltd
             fiducials = fp.wavedet(matlab_pat, peaks)
 

@@ -76,7 +76,7 @@ class Preprocessing:
 
         .. code-block:: python
 
-            filtered_ecg_rec =pre.bpfilt()
+            filtered_ecg_rec = pre.bpfilt()
 
         """
         signal = self.signal

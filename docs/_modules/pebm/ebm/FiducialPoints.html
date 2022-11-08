@@ -184,10 +184,8 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            matlab_pat= &#39;/usr/local/MATLAB/R2021a&#39;</span>
+<span class="sd">            from pebm.ebm import FiducialPoints as Fp</span>
 <span class="sd">            fp = Fp.FiducialPoints(f_ecg_rec, fs)</span>
-<span class="sd">            peaks = fp.epltd</span>
-<span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -205,7 +203,8 @@
 <div class="viewcode-block" id="FiducialPoints.wavedet"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.FiducialPoints.FiducialPoints.wavedet">[docs]</a>    <span class="k">def</span> <span class="nf">wavedet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matlab_pat</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The wavedat function uses the matlab algorithm wavedet, compiled for python.</span>
-<span class="sd">        The algorithm is described in the following paper: [1]_.</span>
+<span class="sd">        The algorithm is described in the following paper: [1]_. The function is calculating</span>
+<span class="sd">        the fiducial points of the ECG recording using wavelet transform.</span>
 
 <span class="sd">        .. [1] Martinze at el (2004),</span>
 <span class="sd">            A wavelet-based ECG delineator: evaluation on standard databases.</span>
@@ -218,9 +217,7 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            from pebm.ebm import FiducialPoints as Fp</span>
-<span class="sd">            matlab_pat= &#39;/usr/local/MATLAB/R2021a&#39;</span>
-<span class="sd">            fp = Fp.FiducialPoints(f_ecg_rec, fs)</span>
+<span class="sd">            matlab_pat = &#39;/usr/local/MATLAB/R2021a&#39;</span>
 <span class="sd">            peaks = fp.epltd</span>
 <span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
 
