@@ -218,7 +218,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            matlab_pat = &#39;/usr/local/MATLAB/R2021a&#39;</span>
-<span class="sd">            peaks = fp.epltd</span>
+<span class="sd">            peaks = fp.epltd()</span>
 <span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -243,8 +243,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span>
 
         <span class="n">fiducials_mat</span> <span class="o">=</span> <span class="n">wavdet</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">matlab_pat</span><span class="p">)</span>
-        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pon&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;Poff&quot;</span><span class="p">,</span> <span class="s2">&quot;QRSon&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;qrs&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;QRSoff&quot;</span><span class="p">,</span> <span class="s2">&quot;Ton&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;Toff&quot;</span><span class="p">,</span> <span class="s2">&quot;Ttipo&quot;</span><span class="p">,</span> <span class="s2">&quot;Ttipoon&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Ttipooff&quot;</span><span class="p">]</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pon&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;Poff&quot;</span><span class="p">,</span> <span class="s2">&quot;QRSon&quot;</span><span class="p">,</span> <span class="s2">&quot;qrs&quot;</span><span class="p">,</span> <span class="s2">&quot;QRSoff&quot;</span><span class="p">,</span> <span class="s2">&quot;Ton&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;Toff&quot;</span><span class="p">]</span>
         <span class="n">position</span> <span class="o">=</span> <span class="n">fiducials_mat</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
         <span class="n">all_keys</span> <span class="o">=</span> <span class="n">fiducials_mat</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span>
         <span class="n">fiducials</span> <span class="o">=</span> <span class="p">{}</span>

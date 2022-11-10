@@ -59,7 +59,7 @@ class FiducialPoints:
         .. code-block:: python
 
             matlab_pat = '/usr/local/MATLAB/R2021a'
-            peaks = fp.epltd
+            peaks = fp.epltd()
             fiducials = fp.wavedet(matlab_pat, peaks)
 
         """
@@ -84,8 +84,7 @@ class FiducialPoints:
         self.peaks = peaks
 
         fiducials_mat = wavdet(signal, fs, peaks, matlab_pat)
-        keys = ["Pon", "P", "Poff", "QRSon", "Q", "qrs", "S", "QRSoff", "Ton", "T", "Toff", "Ttipo", "Ttipoon",
-                "Ttipooff"]
+        keys = ["Pon", "P", "Poff", "QRSon", "qrs", "QRSoff", "Ton", "T", "Toff"]
         position = fiducials_mat['output']
         all_keys = fiducials_mat['output'].dtype.names
         fiducials = {}
