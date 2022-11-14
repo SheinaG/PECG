@@ -1,16 +1,16 @@
-pebm package
+pecg package
 ============
 
 .. toctree::
    :maxdepth: 4
 
-   pebm.ebm
+   pecg.ecg
 
 
-pebm.Preprocessing
+pecg.Preprocessing
 --------------------------
 
-.. automodule:: pebm.Preprocessing
+.. automodule:: pecg.Preprocessing
    :members:
    :undoc-members:
    :show-inheritance:
@@ -19,9 +19,7 @@ pebm.Preprocessing
 Module contents
 ---------------
 
-.. automodule:: pebm
+.. automodule:: pecg
    :members:
    :undoc-members:
    :show-inheritance:
-
-

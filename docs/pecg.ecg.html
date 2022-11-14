@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pecg.ecg package &mdash; pecg  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pecg package" href="pecg.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pecg
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="pecg.html">pecg package</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pecg.ecg package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-pecg.ecg.FiducialPoints">pecg.ecg.FiducialPoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pecg.ecg.Biomarkers">pecg.ecg.Biomarkers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pecg.ecg">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pecg.html#module-pecg.Preprocessing">pecg.Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pecg.html#module-pecg">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pecg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="pecg.html">pecg package</a> &raquo;</li>
+        
+      <li>pecg.ecg package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/pecg.ecg.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pecg-ecg-package">
+<h1>pecg.ecg package<a class="headerlink" href="#pecg-ecg-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-pecg.ecg.FiducialPoints">
+<span id="pecg-ecg-fiducialpoints"></span><h2>pecg.ecg.FiducialPoints<a class="headerlink" href="#module-pecg.ecg.FiducialPoints" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pecg.ecg.FiducialPoints.FiducialPoints">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pecg.ecg.FiducialPoints.</span></span><span class="sig-name descname"><span class="pre">FiducialPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_pools</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The purpose of the FiducialPoints class is to calculate the fiducial points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> – the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</p></li>
+<li><p><strong>fs</strong> – The sampling frequency of the signal.[Hz]</p></li>
+<li><p><strong>n_pools</strong> – The number of cores to use when calculating the XQRS peaks,the default is 1.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">FiducialPoints</span> <span class="k">as</span> <span class="n">Fp</span>
+
+<span class="n">fp</span> <span class="o">=</span> <span class="n">Fp</span><span class="o">.</span><span class="n">FiducialPoints</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pecg.ecg.FiducialPoints.FiducialPoints.wavedet">
+<span class="sig-name descname"><span class="pre">wavedet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matlab_pat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">array([],</span> <span class="pre">dtype=float64)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints.wavedet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints.wavedet" title="Permalink to this definition">¶</a></dt>
+<dd><p>The wavedat function uses the matlab algorithm wavedet, compiled for python.</p>
+<p>The algorithm is described in the following paper: <a class="footnote-reference brackets" href="#id2" id="id1">1</a>. The function is calculating</p>
+<p>the fiducial points of the ECG recording using wavelet transform.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Martinze at el (2004),</p>
+<p>A wavelet-based ECG delineator: evaluation on standard databases.</p>
+<p>IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matlab_pat</strong> – path to matlab runtime 2021a directory</p></li>
+<li><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the epltd detector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>fiducials: Dictionary that includes indexes for each fiducial point.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matlab_pat</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/MATLAB/R2021a&#39;</span>
+
+<span class="n">peaks</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">epltd</span><span class="p">()</span>
+
+<span class="n">fiducials</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">wavedet</span><span class="p">(</span><span class="n">matlab_pat</span><span class="p">,</span> <span class="n">peaks</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pecg.ecg.FiducialPoints.FiducialPoints.epltd">
+<span class="sig-name descname"><span class="pre">epltd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints.epltd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints.epltd" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the indexes of the R-peaks with epltd peak detector algorithm.</p>
+<p>This algorithm were introduced by <a class="footnote-reference brackets" href="#id4" id="id3">2</a>.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets">2</span><span class="fn-backref">(<a href="#id3">1</a>,<a href="#id6">2</a>)</span></dt>
+<dd><p>Pan, Jiapu, and Willis J. Tompkins. “A real-time QRS detection algorithm.”</p>
+<p>IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">peaks</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">epltd</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pecg.ecg.FiducialPoints.FiducialPoints.xqrs">
+<span class="sig-name descname"><span class="pre">xqrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints.xqrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints.xqrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function wraps the XQRS function of the WFDB package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">peaks</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">xqrs</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pecg.ecg.FiducialPoints.FiducialPoints.jqrs">
+<span class="sig-name descname"><span class="pre">jqrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints.jqrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints.jqrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function is an Implementation of an energy based qrs detector <a class="footnote-reference brackets" href="#id7" id="id5">3</a>. The algorithm is an</p>
+<p>adaptation of the popular Pan &amp; Tompkins algorithm <a class="footnote-reference brackets" href="#id4" id="id6">2</a>. The function assumes</p>
+<p>the input ecg is already pre-filtered i.e. bandpass filtered and that the</p>
+<p>power-line interference was removed. Of note, NaN should be represented by the</p>
+<p>value -32768 in the ecg (WFDB standard).</p>
+<dl class="footnote brackets">
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id5">3</a></span></dt>
+<dd><p>Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.</p>
+<p>“A comparison of single channel fetal ECG extraction methods.” Annals of</p>
+<p>biomedical engineering 42, no. 6 (2014): 1340-1353.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>thr</strong> – threshold, default value is 0.8.</p></li>
+<li><p><strong>rp</strong> – refractory period (sec), default value is 0.25.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of</p>
+</dd>
+</dl>
+<p>channels or leads and N is the number of peaks.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">peaks</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">jqrs</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pecg.ecg.Biomarkers">
+<span id="pecg-ecg-biomarkers"></span><h2>pecg.ecg.Biomarkers<a class="headerlink" href="#module-pecg.ecg.Biomarkers" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pecg.ecg.Biomarkers.Biomarkers">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pecg.ecg.Biomarkers.</span></span><span class="sig-name descname"><span class="pre">Biomarkers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fiducials</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/Biomarkers.html#Biomarkers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.Biomarkers.Biomarkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> – The ECG signal as a ndarray.</p></li>
+<li><p><strong>fs</strong> – The sampling frequency of the signal [Hz].</p></li>
+<li><p><strong>fiducials</strong> – Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">Biomarkers</span> <span class="k">as</span> <span class="n">Obm</span>
+
+<span class="n">obm</span> <span class="o">=</span> <span class="n">Obm</span><span class="o">.</span><span class="n">Biomarkers</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">)</span>
+
+<span class="n">ints</span><span class="p">,</span> <span class="n">stat_i</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">intervals</span><span class="p">()</span>
+
+<span class="n">waves</span><span class="p">,</span> <span class="n">stat_w</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">waves</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pecg.ecg.Biomarkers.Biomarkers.intervals">
+<span class="sig-name descname"><span class="pre">intervals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/Biomarkers.html#Biomarkers.intervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.Biomarkers.Biomarkers.intervals" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><em>intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments*</em> biomarkers.</p>
+<p><em>intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments*</em> biomarker.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pecg.ecg.Biomarkers.Biomarkers.waves">
+<span class="sig-name descname"><span class="pre">waves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/Biomarkers.html#Biomarkers.waves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.Biomarkers.Biomarkers.waves" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><em>waves_b: Dictionary that includes all the row data, for every **Waves characteristic*</em> biomarker.</p>
+<p><em>waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic*</em> biomarker.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pecg.ecg">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pecg.ecg" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pecg.html" class="btn btn-neutral float-left" title="pecg package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

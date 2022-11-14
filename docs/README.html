@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>PhysioZoo ECG documentation &mdash; pecg  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pecg
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pecg.html">pecg package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pecg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>PhysioZoo ECG documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/README.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="physiozoo-ecg-documentation">
+<h1>PhysioZoo ECG documentation<a class="headerlink" href="#physiozoo-ecg-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Digital electrocardiography biomarkers to assess cardiac conduction.</p>
+<p>Based on the paper
+S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to assess cardiac conduction,” 2021 Computing in Cardiology (CinC), 2021, pp. 1-4, doi: 10.23919/CinC53138.2021.9662857.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The electrocardiogram (ECG) is a standard tool used in medical practice for identifying cardiac pathologies. Because the necessary expertise to interpret this tracing is not readily available in all medical institutions or at all in some large areas of developing countries, there is a need to create a data-driven approach that can automatically capture the information contained in this physiological time series. The primary objective of this package is to identify and implement clinically important digital ECG biomarkers for the purpose of creating a reference toolbox and software for ECG morphological analysis.</p>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Few steps are required to extract the morphological ECG biomarkers, thos steps are impelemented in the PEBM toolbox:</p>
+<ol class="arabic simple">
+<li><p>ECG Signal Preprocessing - Before computing the ECG morphological biomarkers, prefiltering of the raw ECG time series is performed to remove the baseline wander as well as remove high frequency noise. Specifically, the toolbox include a zero phase second-order infinite impulse response bandpass filter with the passband of 0.67Hz - 100Hz to remove baseline wander and high frequency noise. Also, the toolbox include an optional Notch filter that can be set to 50 or 60Hz to remove the power-line interference.</p></li>
+<li><p>ECG Fiducial Points Detection - The toolbox include the epltd R-peaks algorithem, and the the well-known wavedet algorithm for ECG fiducial points  detection.</p></li>
+<li><p>Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet then the feature was marked as a NaN. For an ECG channel a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.</p></li>
+</ol>
+<p>![alt text](<a class="reference external" href="https://github.com/SheinaG/PECG/blob/master/ecg_wth_bio.png?raw=true">https://github.com/SheinaG/PECG/blob/master/ecg_wth_bio.png?raw=true</a>)</p>
+<ol class="arabic simple" start="4">
+<li><p>Summary Statistics - For a specified time window the five summary statistics (median, min, max, Ql and Q3) are computed for all ECG biomarkers.</p></li>
+</ol>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Available on pip, with the command:
+pip install pebm</p>
+<p>pip project: pip install -i <a class="reference external" href="https://test.pypi.org/simple/">https://test.pypi.org/simple/</a> pebm</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Python &gt;= 3.6</p>
+<p>numpy == 1.19.4</p>
+<p>mne == 0.23.4</p>
+<p>scipy == 1.5.2</p>
+<p>wfdb == 3.4.0</p>
+<p>All the requirements are installed when the toolbox is installed, no need for additional commands.</p>
+</div>
+<div class="section" id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<p>To run the wavdet fiucial-points detector matlab runtime (MCR) 2021a is requierd. <a class="reference external" href="https://www.mathworks.com/products/compiler/matlab-runtime.html">https://www.mathworks.com/products/compiler/matlab-runtime.html</a></p>
+<p>To run the epltd peak detector additional wfdb toolbox is requierd. <a class="reference external" href="https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml">https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml</a></p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

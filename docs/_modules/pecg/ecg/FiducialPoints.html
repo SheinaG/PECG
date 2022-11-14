@@ -1,0 +1,911 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pecg.ecg.FiducialPoints &mdash; pecg  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pecg
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pecg.html">pecg package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pecg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pecg.ecg.FiducialPoints</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pecg.ecg.FiducialPoints</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="k">as</span> <span class="nn">sc_signal</span>
+
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="kn">import</span> <span class="nn">wfdb</span>
+
+<span class="kn">from</span> <span class="nn">wfdb</span> <span class="kn">import</span> <span class="n">processing</span>
+
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+
+
+
+<span class="kn">from</span> <span class="nn">pecg._ErrorHandler</span> <span class="kn">import</span> <span class="n">_check_shape_</span><span class="p">,</span> <span class="n">WrongParameter</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.c_files.EpltdAll</span> <span class="kn">import</span> <span class="n">epltd_all</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.wavedet_exe.Wavdet</span> <span class="kn">import</span> <span class="n">wavdet</span>
+
+
+
+
+
+<div class="viewcode-block" id="FiducialPoints"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.FiducialPoints.FiducialPoints">[docs]</a><span class="k">class</span> <span class="nc">FiducialPoints</span><span class="p">:</span>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_pools</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The purpose of the FiducialPoints class is to calculate the fiducial points.</span>
+
+
+
+<span class="sd">        :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</span>
+
+<span class="sd">        :param fs: The sampling frequency of the signal.[Hz]</span>
+
+<span class="sd">        :param n_pools: The number of cores to use when calculating the XQRS peaks,the default is 1.</span>
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            from pecg.ecg import FiducialPoints as Fp</span>
+
+<span class="sd">            fp = Fp.FiducialPoints(f_ecg_rec, fs)</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">WrongParameter</span><span class="p">(</span><span class="s2">&quot;Sampling frequency should be strictly positive&quot;</span><span class="p">)</span>
+
+        <span class="n">_check_shape_</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">n_pools</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_pools</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_pools</span> <span class="o">=</span> <span class="n">n_pools</span>
+
+
+
+<div class="viewcode-block" id="FiducialPoints.wavedet"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.FiducialPoints.FiducialPoints.wavedet">[docs]</a>    <span class="k">def</span> <span class="nf">wavedet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matlab_pat</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The wavedat function uses the matlab algorithm wavedet, compiled for python.</span>
+
+<span class="sd">        The algorithm is described in the following paper: [1]_. The function is calculating</span>
+
+<span class="sd">        the fiducial points of the ECG recording using wavelet transform.</span>
+
+
+
+<span class="sd">        .. [1] Martinze at el (2004),</span>
+
+<span class="sd">            A wavelet-based ECG delineator: evaluation on standard databases.</span>
+
+<span class="sd">            IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</span>
+
+
+
+<span class="sd">        :param matlab_pat: path to matlab runtime 2021a directory</span>
+
+<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the epltd detector.</span>
+
+
+
+<span class="sd">        :return: fiducials: Dictionary that includes indexes for each fiducial point.</span>
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            matlab_pat = &#39;/usr/local/MATLAB/R2021a&#39;</span>
+
+<span class="sd">            peaks = fp.epltd()</span>
+
+<span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">except</span><span class="p">:</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not exists current path&#39;</span><span class="p">)</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">peaks</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epltd</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span>
+
+
+
+        <span class="n">fiducials_mat</span> <span class="o">=</span> <span class="n">wavdet</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">matlab_pat</span><span class="p">)</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pon&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;Poff&quot;</span><span class="p">,</span> <span class="s2">&quot;QRSon&quot;</span><span class="p">,</span> <span class="s2">&quot;qrs&quot;</span><span class="p">,</span> <span class="s2">&quot;QRSoff&quot;</span><span class="p">,</span> <span class="s2">&quot;Ton&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;Toff&quot;</span><span class="p">]</span>
+
+        <span class="n">position</span> <span class="o">=</span> <span class="n">fiducials_mat</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="n">fiducials_mat</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span>
+
+        <span class="n">fiducials</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+
+        <span class="n">num_ecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_ecg</span><span class="p">):</span>
+
+            <span class="n">position_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">position_keys</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_keys</span><span class="p">):</span>
+
+                <span class="n">ret_val</span> <span class="o">=</span> <span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">keys</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
+
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ret_val</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ret_val</span><span class="p">)]):</span>
+
+                        <span class="n">ret_val</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ret_val</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                    <span class="n">ret_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ret_val</span><span class="p">)</span>
+
+                    <span class="n">position_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ret_val</span><span class="p">)</span>
+
+                    <span class="n">position_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+            <span class="c1"># -----------------------------------</span>
+
+
+
+            <span class="n">fiducials</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">position_keys</span><span class="p">,</span> <span class="n">position_values</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">fl</span><span class="p">:</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fiducials</span></div>
+
+
+
+<div class="viewcode-block" id="FiducialPoints.epltd"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.FiducialPoints.FiducialPoints.epltd">[docs]</a>    <span class="k">def</span> <span class="nf">epltd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        This function calculates the indexes of the R-peaks with epltd peak detector algorithm.</span>
+
+<span class="sd">        This algorithm were introduced by [2]_.</span>
+
+
+
+<span class="sd">        .. [2] Pan, Jiapu, and Willis J. Tompkins. &quot;A real-time QRS detection algorithm.&quot;</span>
+
+<span class="sd">            IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.</span>
+
+
+
+<span class="sd">        :return: indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks.</span>
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            peaks = fp.epltd()</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">except</span><span class="p">:</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">size_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+            <span class="n">peaks_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">epltd_all</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">fs</span><span class="p">)</span>
+
+                <span class="n">size_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+            <span class="n">max_sp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">size_peaks</span><span class="p">))</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">max_sp</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">peaks</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">size_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">epltd_all</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+
+
+        <span class="k">if</span> <span class="n">fl</span><span class="p">:</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+
+
+        <span class="k">return</span> <span class="n">peaks</span></div>
+
+
+
+<div class="viewcode-block" id="FiducialPoints.xqrs"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.FiducialPoints.FiducialPoints.xqrs">[docs]</a>    <span class="k">def</span> <span class="nf">xqrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        This function wraps the XQRS function of the WFDB package.</span>
+
+
+
+<span class="sd">        :return: indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks.</span>
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            peaks = fp.xqrs()</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">size_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+            <span class="n">peaks_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">signali</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+                <span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_xqrs</span><span class="p">(</span><span class="n">signali</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+                <span class="n">size_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+            <span class="n">max_sp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">size_peaks</span><span class="p">))</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">max_sp</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">peaks</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">size_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_xqrs</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span>
+
+        <span class="k">return</span> <span class="n">peaks</span></div>
+
+
+
+<div class="viewcode-block" id="FiducialPoints.jqrs"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.FiducialPoints.FiducialPoints.jqrs">[docs]</a>    <span class="k">def</span> <span class="nf">jqrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">rp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">.25</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The function is an Implementation of an energy based qrs detector [3]_. The algorithm is an</span>
+
+<span class="sd">        adaptation of the popular Pan &amp; Tompkins algorithm [2]_. The function assumes</span>
+
+<span class="sd">        the input ecg is already pre-filtered i.e. bandpass filtered and that the</span>
+
+<span class="sd">        power-line interference was removed. Of note, NaN should be represented by the</span>
+
+<span class="sd">        value -32768 in the ecg (WFDB standard).</span>
+
+
+
+<span class="sd">        .. [3] Behar, Joachim, Alistair Johnson, Gari D. Clifford, and Julien Oster.</span>
+
+<span class="sd">            &quot;A comparison of single channel fetal ECG extraction methods.&quot; Annals of</span>
+
+<span class="sd">            biomedical engineering 42, no. 6 (2014): 1340-1353.</span>
+
+
+
+<span class="sd">        :param thr: threshold, default value is 0.8.</span>
+
+<span class="sd">        :param rp: refractory period (sec), default value is 0.25.</span>
+
+<span class="sd">        :return: indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of</span>
+
+<span class="sd">        channels or leads and N is the number of peaks.</span>
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            peaks = fp.jqrs()</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">size_peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+            <span class="n">peaks_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">signali</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+                <span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_jqrs</span><span class="p">(</span><span class="n">signali</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">thr</span><span class="p">,</span> <span class="n">rp</span><span class="p">)</span>
+
+                <span class="n">size_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+            <span class="n">max_sp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">size_peaks</span><span class="p">))</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">max_sp</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">peaks</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">size_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">peaks_dict</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">peaks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_jqrs</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">thr</span><span class="p">,</span> <span class="n">rp</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span>
+
+        <span class="k">return</span> <span class="n">peaks</span></div>
+
+
+
+    <span class="nd">@staticmethod</span>
+
+    <span class="k">def</span> <span class="nf">__calculate_xqrs</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">n_pools</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">except</span><span class="p">:</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not exists current path&#39;</span><span class="p">)</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">)</span>
+
+            <span class="n">wfdb</span><span class="o">.</span><span class="n">wrsamp</span><span class="p">(</span><span class="n">record_name</span><span class="o">=</span><span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asscalar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">(</span><span class="n">fs</span><span class="p">)),</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mV&#39;</span><span class="p">],</span> <span class="n">sig_name</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V5&#39;</span><span class="p">],</span>
+
+                        <span class="n">p_signal</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fmt</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;16&#39;</span><span class="p">])</span>
+
+            <span class="n">record</span> <span class="o">=</span> <span class="n">wfdb</span><span class="o">.</span><span class="n">rdrecord</span><span class="p">(</span><span class="n">tmpdirname</span> <span class="o">+</span> <span class="s1">&#39;/temp&#39;</span><span class="p">)</span>
+
+            <span class="n">ecg</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">p_signal</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">pool_to_close</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">n_pools</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">n_pools</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+                    <span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">n_pools</span><span class="p">)</span>
+
+                    <span class="n">pool_to_close</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="n">borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">),</span> <span class="n">n_pools</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+                <span class="n">ecg_wins</span> <span class="o">=</span> <span class="p">[</span><span class="n">ecg</span><span class="p">[</span><span class="n">borders</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">borders</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">borders</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+
+                <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ecg_wins</span><span class="p">])</span>
+
+                <span class="n">ecg_wins</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ecg_wins</span><span class="p">]</span>
+
+                <span class="n">fss</span> <span class="o">=</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_pools</span><span class="p">)</span>
+
+                <span class="n">sampfrom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_pools</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+                <span class="n">sampto</span> <span class="o">=</span> <span class="s1">&#39;end&#39;</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_pools</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+
+                <span class="n">conf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_pools</span><span class="p">)</span>
+
+                <span class="n">learn</span> <span class="o">=</span> <span class="kc">True</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_pools</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+                <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_pools</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+                <span class="n">res</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">processing</span><span class="o">.</span><span class="n">xqrs_detect</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ecg_wins</span><span class="p">,</span> <span class="n">fss</span><span class="p">,</span> <span class="n">sampfrom</span><span class="p">,</span> <span class="n">sampto</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">learn</span><span class="p">,</span> <span class="n">verbose</span><span class="p">))</span>
+
+                <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lengths</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">-</span> <span class="n">lengths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">))]</span>
+
+                <span class="n">xqrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="nb">tuple</span><span class="p">([</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">borders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_pools</span><span class="p">)]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">pool_to_close</span><span class="p">:</span>
+
+                    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">xqrs</span> <span class="o">=</span> <span class="n">processing</span><span class="o">.</span><span class="n">xqrs_detect</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+
+        <span class="k">if</span> <span class="n">fl</span><span class="p">:</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">xqrs</span>
+
+
+
+    <span class="nd">@staticmethod</span>
+
+    <span class="k">def</span> <span class="nf">__calculate_jqrs</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">thr</span><span class="p">,</span> <span class="n">rp</span><span class="p">):</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">except</span><span class="p">:</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not exists current path&#39;</span><span class="p">)</span>
+
+            <span class="n">fl</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">)</span>
+
+            <span class="n">wfdb</span><span class="o">.</span><span class="n">wrsamp</span><span class="p">(</span><span class="n">record_name</span><span class="o">=</span><span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asscalar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">(</span><span class="n">fs</span><span class="p">)),</span> <span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mV&#39;</span><span class="p">],</span> <span class="n">sig_name</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V5&#39;</span><span class="p">],</span>
+
+                        <span class="n">p_signal</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fmt</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;16&#39;</span><span class="p">])</span>
+
+            <span class="n">record</span> <span class="o">=</span> <span class="n">wfdb</span><span class="o">.</span><span class="n">rdrecord</span><span class="p">(</span><span class="n">tmpdirname</span> <span class="o">+</span> <span class="s1">&#39;/temp&#39;</span><span class="p">)</span>
+
+            <span class="n">ecg</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">p_signal</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">INT_NB_COEFF</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">7</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">/</span> <span class="mi">256</span><span class="p">))</span>  <span class="c1"># length is 30 for fs=256Hz</span>
+
+            <span class="n">dffecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>  <span class="c1"># differenciate (one datapoint shorter)</span>
+
+            <span class="n">sqrecg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">dffecg</span><span class="p">)</span>  <span class="c1"># square ecg</span>
+
+            <span class="n">intecg</span> <span class="o">=</span> <span class="n">sc_signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">INT_NB_COEFF</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+
+                                       <span class="mi">1</span><span class="p">,</span> <span class="n">sqrecg</span><span class="p">)</span>  <span class="c1"># integrate</span>
+
+            <span class="n">mdfint</span> <span class="o">=</span> <span class="n">intecg</span>
+
+            <span class="n">delay</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">INT_NB_COEFF</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">mdfint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">mdfint</span><span class="p">,</span> <span class="o">-</span><span class="n">delay</span><span class="p">)</span>  <span class="c1"># remove filter delay for scanning back through ecg</span>
+
+            <span class="c1"># thresholding</span>
+
+            <span class="n">mdfint_temp</span> <span class="o">=</span> <span class="n">mdfint</span>
+
+            <span class="n">mdfint_temp_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">mdfint_temp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ecg</span> <span class="o">==</span> <span class="o">-</span><span class="mi">32768</span><span class="p">))</span>  <span class="c1"># exclude the NaN (encoded in WFDB format)</span>
+
+            <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">mdfint_temp</span><span class="p">)</span>
+
+            <span class="n">ind_xs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">98</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)))</span>
+
+            <span class="n">en_thres</span> <span class="o">=</span> <span class="n">xs</span><span class="p">[</span><span class="n">ind_xs</span><span class="p">]</span>
+
+            <span class="n">poss_reg</span> <span class="o">=</span> <span class="n">mdfint</span> <span class="o">&gt;</span> <span class="n">thr</span> <span class="o">*</span> <span class="n">en_thres</span>
+
+            <span class="n">tm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">fs</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">fs</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="n">fs</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># search back</span>
+
+            <span class="n">SEARCH_BACK</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">SEARCH_BACK</span><span class="p">:</span>
+
+                <span class="n">indAboveThreshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">poss_reg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># indices of samples above threshold</span>
+
+                <span class="n">RRv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">tm</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">indAboveThreshold</span><span class="p">])</span>  <span class="c1"># compute RRv</span>
+
+                <span class="n">medRRv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">RRv</span><span class="p">[</span><span class="n">RRv</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">])</span>
+
+                <span class="n">indMissedBeat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">RRv</span> <span class="o">&gt;</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">medRRv</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># missed a peak?</span>
+
+                <span class="c1"># find interval onto which a beat might have been missed</span>
+
+                <span class="n">indStart</span> <span class="o">=</span> <span class="n">indAboveThreshold</span><span class="p">[</span><span class="n">indMissedBeat</span><span class="p">]</span>
+
+                <span class="n">indEnd</span> <span class="o">=</span> <span class="n">indAboveThreshold</span><span class="p">[</span><span class="n">indMissedBeat</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">indStart</span><span class="p">)):</span>
+
+                    <span class="c1"># look for a peak on this interval by lowering the energy threshold</span>
+
+                    <span class="n">poss_reg</span><span class="p">[</span><span class="n">indStart</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">indEnd</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">mdfint</span><span class="p">[</span><span class="n">indStart</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">indEnd</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">thr</span> <span class="o">*</span> <span class="n">en_thres</span><span class="p">)</span>
+
+            <span class="c1"># find indices into boudaries of each segment</span>
+
+            <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">poss_reg</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># remember to zero pad at start</span>
+
+            <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">poss_reg</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># remember to zero pad at end</span>
+
+            <span class="n">nb_s</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+
+            <span class="n">loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">nb_s</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nb_s</span><span class="p">):</span>
+
+                <span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+
+                <span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+            <span class="n">sign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">loc</span><span class="p">])</span>
+
+            <span class="c1"># loop through all possibilities</span>
+
+            <span class="n">compt</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">NB_PEAKS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+
+            <span class="n">maxval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">NB_PEAKS</span><span class="p">])</span>
+
+            <span class="n">maxloc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">NB_PEAKS</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NB_PEAKS</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="n">sign</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                    <span class="c1"># if sign is positive then look for positive peaks</span>
+
+                    <span class="n">maxval</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+                    <span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="c1"># if sign is negative then look for negative peaks</span>
+
+                    <span class="n">maxval</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+                    <span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">ecg</span><span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+                <span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">+</span> <span class="n">left</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+                <span class="c1"># refractory period - has proved to improve results</span>
+
+                <span class="k">if</span> <span class="n">compt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">-</span> <span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">rp</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">maxval</span><span class="p">[</span><span class="n">compt</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">maxval</span><span class="p">[</span><span class="n">compt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])):</span>
+
+                        <span class="n">maxval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">maxval</span><span class="p">,</span> <span class="n">compt</span><span class="p">)</span>
+
+                        <span class="n">maxloc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">maxloc</span><span class="p">,</span> <span class="n">compt</span><span class="p">)</span>
+
+                    <span class="k">elif</span> <span class="p">(</span><span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span><span class="p">]</span> <span class="o">-</span> <span class="n">maxloc</span><span class="p">[</span><span class="n">compt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">rp</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
+
+                            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">maxval</span><span class="p">[</span><span class="n">compt</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">maxval</span><span class="p">[</span><span class="n">compt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])):</span>
+
+                        <span class="n">maxval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">maxval</span><span class="p">,</span> <span class="n">compt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+                        <span class="n">maxloc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">maxloc</span><span class="p">,</span> <span class="n">compt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+
+                        <span class="n">compt</span> <span class="o">=</span> <span class="n">compt</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="c1"># if first peak then increment</span>
+
+                    <span class="n">compt</span> <span class="o">=</span> <span class="n">compt</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="n">qrs_pos</span> <span class="o">=</span> <span class="n">maxloc</span>  <span class="c1"># datapoints QRS positions</span>
+
+        <span class="k">if</span> <span class="n">fl</span><span class="p">:</span>
+
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">qrs_pos</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

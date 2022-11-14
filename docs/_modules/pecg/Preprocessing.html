@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pecg.Preprocessing &mdash; pecg  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pecg
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pecg.html">pecg package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pecg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pecg.Preprocessing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pecg.Preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">mne</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">butter</span><span class="p">,</span> <span class="n">sosfiltfilt</span>
+
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">cKDTree</span>
+
+
+
+<span class="kn">from</span> <span class="nn">pecg._ErrorHandler</span> <span class="kn">import</span> <span class="n">_check_shape_</span><span class="p">,</span> <span class="n">WrongParameter</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.FiducialPoints</span> <span class="kn">import</span> <span class="n">FiducialPoints</span>
+
+
+
+
+
+<div class="viewcode-block" id="Preprocessing"><a class="viewcode-back" href="../../pecg.html#pecg.Preprocessing.Preprocessing">[docs]</a><span class="k">class</span> <span class="nc">Preprocessing</span><span class="p">:</span>
+
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The Preprocessing class provides some routines for pre-filtering</span>
+
+<span class="sd">        the ECG signal as well as estimating the signal quality.</span>
+
+
+
+<span class="sd">        :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N i the number of samples.</span>
+
+<span class="sd">        :param fs: The sampling frequency of the signal.</span>
+
+
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            import pecg</span>
+
+<span class="sd">            from pecg import Preprocessing as Pre</span>
+
+<span class="sd">            pre = Pre.Preprocessing(signal, fs)</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">WrongParameter</span><span class="p">(</span><span class="s2">&quot;Sampling frequency should be strictly positive&quot;</span><span class="p">)</span>
+
+        <span class="n">_check_shape_</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_freq</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># can be 60 or 50 HZ</span>
+
+
+
+<div class="viewcode-block" id="Preprocessing.notch"><a class="viewcode-back" href="../../pecg.html#pecg.Preprocessing.Preprocessing.notch">[docs]</a>    <span class="k">def</span> <span class="nf">notch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+
+
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The notch function applies a notch filter in order to remove the power line artefacts.</span>
+
+
+
+<span class="sd">        :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)</span>
+
+
+
+<span class="sd">        :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</span>
+
+
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            f_notch = 60</span>
+
+<span class="sd">            filtered_ecg_rec = pre.notch(f_notch)</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">n_freq</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">WrongParameter</span><span class="p">(</span><span class="s2">&quot;center frequency of the power line should be strictly positive&quot;</span><span class="p">)</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_freq</span> <span class="o">=</span> <span class="n">n_freq</span>
+
+        <span class="c1"># notch_freq have to be 50 or 60 HZ (make that condition)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">fsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">fsig</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">notch_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">ecg_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">fsig</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">notch_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="n">n_freq</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">fsig</span>
+
+        <span class="k">return</span> <span class="n">fsig</span></div>
+
+
+
+<div class="viewcode-block" id="Preprocessing.bpfilt"><a class="viewcode-back" href="../../pecg.html#pecg.Preprocessing.Preprocessing.bpfilt">[docs]</a>    <span class="k">def</span> <span class="nf">bpfilt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The bpfilt function applies a bandpass filter between [0.67, 100] Hz,</span>
+
+<span class="sd">        this function uses a zero-phase Butterworth filter with 75 coefficients.</span>
+
+
+
+<span class="sd">        :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</span>
+
+
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            filtered_ecg_rec = pre.bpfilt()</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+        <span class="n">filter_order</span> <span class="o">=</span> <span class="mi">75</span>  <span class="c1"># ??</span>
+
+        <span class="n">low_cut</span> <span class="o">=</span> <span class="mf">0.67</span>
+
+        <span class="n">high_cut</span> <span class="o">=</span> <span class="mi">100</span>
+
+
+
+        <span class="n">nyquist_freq</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">fs</span>
+
+        <span class="n">low</span> <span class="o">=</span> <span class="n">low_cut</span> <span class="o">/</span> <span class="n">nyquist_freq</span>
+
+        <span class="n">high</span> <span class="o">=</span> <span class="n">high_cut</span> <span class="o">/</span> <span class="n">nyquist_freq</span>
+
+        <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="n">high_cut</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="n">sos</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">sos</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="p">[</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">],</span> <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;sos&#39;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">fsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">fsig</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">ecg_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">fsig</span> <span class="o">=</span> <span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="n">signal</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">fsig</span>
+
+        <span class="k">return</span> <span class="n">fsig</span></div>
+
+
+
+<div class="viewcode-block" id="Preprocessing.bsqi"><a class="viewcode-back" href="../../pecg.html#pecg.Preprocessing.Preprocessing.bsqi">[docs]</a>    <span class="k">def</span> <span class="nf">bsqi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">test_peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        bSQI is an automated algorithm to detect poor-quality electrocardiograms.</span>
+
+<span class="sd">        This function is based on the following paper:[1]_.</span>
+
+<span class="sd">        The implementation itself is based on: [2]_.</span>
+
+
+
+<span class="sd">        .. [1] Li, Qiao, Roger G. Mark, and Gari D. Clifford.</span>
+
+<span class="sd">            &quot;Robust heart rate estimation from multiple asynchronous noisy sources</span>
+
+<span class="sd">            using signal quality indices and a Kalman filter.&quot;</span>
+
+<span class="sd">            Physiological measurement 29.1 (2007): 15.</span>
+
+<span class="sd">        .. [2] Behar, J., Oster, J., Li, Q., &amp; Clifford, G. D. (2013).</span>
+
+<span class="sd">            ECG signal quality during arrhythmia and its application to false alarm reduction.</span>
+
+<span class="sd">            IEEE transactions on biomedical engineering, 60(6), 1660-1666.</span>
+
+
+
+<span class="sd">        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with epltd detector.</span>
+
+<span class="sd">        :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when N is the number of peaks. If test peaks are not given, the test peaks are calculated with xqrs detector.</span>
+
+
+
+<span class="sd">        :return: The &#39;bsqi&#39; score, a flout between 0 and 1.</span>
+
+
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            epltd_peaks = fp.epltd()</span>
+
+<span class="sd">            xqrs_peaks = fp.xqrs()</span>
+
+<span class="sd">            bsqi_score = pre.bsqi(epltd_peaks, xqrs_peaks)</span>
+
+<span class="sd">            if bsqi_score &lt; 0.8:</span>
+
+<span class="sd">                print(&#39;It&#39;s a bad quality ECG recording!&#39;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">bsqi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="n">fp</span> <span class="o">=</span> <span class="n">FiducialPoints</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">fs</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">peaks</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+
+                    <span class="n">refqrs</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">epltd</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">refqrs</span> <span class="o">=</span> <span class="n">peaks</span>
+
+
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">test_peaks</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+
+                    <span class="n">testqrs</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">xqrs</span><span class="p">()</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">testqrs</span> <span class="o">=</span> <span class="n">test_peaks</span>
+
+
+
+                <span class="n">bsqi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_bsqi</span><span class="p">(</span><span class="n">refqrs</span><span class="p">[</span><span class="n">refqrs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">testqrs</span><span class="p">[</span><span class="n">testqrs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">fs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">fp</span> <span class="o">=</span> <span class="n">FiducialPoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">peaks</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+
+                <span class="n">refqrs</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">epltd</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">refqrs</span> <span class="o">=</span> <span class="n">peaks</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">test_peaks</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+
+                <span class="n">testqrs</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">xqrs</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">testqrs</span> <span class="o">=</span> <span class="n">test_peaks</span>
+
+            <span class="n">bsqi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_bsqi</span><span class="p">(</span><span class="n">refqrs</span><span class="p">,</span> <span class="n">testqrs</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+
+
+        <span class="k">return</span> <span class="n">bsqi</span></div>
+
+
+
+    <span class="nd">@staticmethod</span>
+
+    <span class="k">def</span> <span class="nf">__calculate_bsqi</span><span class="p">(</span><span class="n">refqrs</span><span class="p">,</span> <span class="n">testqrs</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+
+        <span class="n">agw</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+        <span class="n">agw</span> <span class="o">*=</span> <span class="n">fs</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">refqrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">testqrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">NB_REF</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">refqrs</span><span class="p">)</span>
+
+            <span class="n">NB_TEST</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">testqrs</span><span class="p">)</span>
+
+
+
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">refqrs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">Dist</span><span class="p">,</span> <span class="n">IndMatch</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">testqrs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">IndMatchInWindow</span> <span class="o">=</span> <span class="n">IndMatch</span><span class="p">[</span><span class="n">Dist</span> <span class="o">&lt;</span> <span class="n">agw</span><span class="p">]</span>
+
+            <span class="n">NB_MATCH_UNIQUE</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">IndMatchInWindow</span><span class="p">))</span>
+
+            <span class="n">TP</span> <span class="o">=</span> <span class="n">NB_MATCH_UNIQUE</span>
+
+            <span class="n">FN</span> <span class="o">=</span> <span class="n">NB_REF</span> <span class="o">-</span> <span class="n">TP</span>
+
+            <span class="n">FP</span> <span class="o">=</span> <span class="n">NB_TEST</span> <span class="o">-</span> <span class="n">TP</span>
+
+            <span class="n">Se</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">TP</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+
+            <span class="n">PPV</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">/</span> <span class="p">(</span><span class="n">FP</span> <span class="o">+</span> <span class="n">TP</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">Se</span> <span class="o">+</span> <span class="n">PPV</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="n">F1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Se</span> <span class="o">*</span> <span class="n">PPV</span> <span class="o">/</span> <span class="p">(</span><span class="n">Se</span> <span class="o">+</span> <span class="n">PPV</span><span class="p">)</span>
+
+                <span class="n">_</span><span class="p">,</span> <span class="n">ind_plop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">IndMatchInWindow</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="n">Dist_thres</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Dist</span> <span class="o">&lt;</span> <span class="n">agw</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">meanDist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Dist</span><span class="p">[</span><span class="n">Dist_thres</span><span class="p">[</span><span class="n">ind_plop</span><span class="p">]])</span> <span class="o">/</span> <span class="n">fs</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="k">return</span> <span class="mi">0</span>
+
+
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">F1</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">IndMatch</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">meanDist</span> <span class="o">=</span> <span class="n">fs</span>
+
+        <span class="n">bsqi</span> <span class="o">=</span> <span class="n">F1</span>
+
+        <span class="k">return</span> <span class="n">bsqi</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

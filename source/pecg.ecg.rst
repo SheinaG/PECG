@@ -1,19 +1,19 @@
-pebm.ebm package
+pecg.ecg package
 ================
 
-pebm.ebm.FiducialPoints
+pecg.ecg.FiducialPoints
 --------------------------
 
-.. automodule:: pebm.ebm.FiducialPoints
+.. automodule:: pecg.ecg.FiducialPoints
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-pebm.ebm.Biomarkers
+pecg.ecg.Biomarkers
 --------------------------
 
-.. automodule:: pebm.ebm.Biomarkers
+.. automodule:: pecg.ecg.Biomarkers
    :members:
    :undoc-members:
    :show-inheritance:
@@ -22,7 +22,7 @@ pebm.ebm.Biomarkers
 Module contents
 ---------------
 
-.. automodule:: pebm.ebm
+.. automodule:: pecg.ecg
    :members:
    :undoc-members:
    :show-inheritance:
