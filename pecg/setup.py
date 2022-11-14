@@ -1,15 +1,13 @@
-
-
 import setuptools
 
 
 setuptools.setup(
-    name= "pecg",
+    name="pecg",
     version="1.1.7",
     use_scm_version={
-        "root": '..',
+        "root": "..",
         "relative_to": __file__,
-        "local_scheme": "node-and-timestamp"
+        "local_scheme": "node-and-timestamp",
     },
     author="Example Author",
     author_email="sheina@campus.technion.ac.il",
@@ -27,10 +25,7 @@ setuptools.setup(
     ],
     package_dir={"": "pebm"},
     packages=setuptools.find_packages(where="pebm"),
-    package_data = {
-        'c_files': ['*'],
-        'wavedet_exe': ['*']
-    },
+    package_data={"c_files": ["*"], "wavedet_exe": ["*"]},
     include_package_data=True,
     python_requires=">=3.6",
 )
