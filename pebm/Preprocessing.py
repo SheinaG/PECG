@@ -14,8 +14,9 @@ class Preprocessing:
         The Preprocessing class provides some routines for pre-filtering
         the ECG signal as well as estimating the signal quality.
 
-        :param signal: the ECG signal as a ndarray.
+        :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N i the number of samples.
         :param fs: The sampling frequency of the signal.
+
 
         .. code-block:: python
 
@@ -39,7 +40,7 @@ class Preprocessing:
 
         :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
 
-        :return: The filtered ECG signal
+        :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.
 
 
         .. code-block:: python
@@ -72,7 +73,8 @@ class Preprocessing:
         The bpfilt function applies a bandpass filter between [0.67, 100] Hz,
         this function uses a zero-phase Butterworth filter with 75 coefficients.
 
-        :return: The filtered ECG signal
+        :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.
+
 
         .. code-block:: python
 
@@ -120,10 +122,11 @@ class Preprocessing:
             ECG signal quality during arrhythmia and its application to false alarm reduction.
             IEEE transactions on biomedical engineering, 60(6), 1660-1666.
 
-        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.
-        :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks). If test peaks are not given, the test peaks are calculated with xqrs detector.
+        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with epltd detector.
+        :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when N is the number of peaks. If test peaks are not given, the test peaks are calculated with xqrs detector.
 
-        :return: The 'bsqi' score, between 0 and 1.
+        :return: The 'bsqi' score, a flout between 0 and 1.
+
 
         .. code-block:: python
 

@@ -7,12 +7,12 @@ from pebm._ErrorHandler import _check_shape_, WrongParameter
 
 
 class Biomarkers:
-    def __init__(self, signal: np.array, fs, fiducials=None, matlab_path: str = None):
+    def __init__(self, signal: np.array, fs: int, fiducials: dict):
         """
         :param signal: The ECG signal as a ndarray.
-        :param fs: The sampling frequency of the signal.
-        :param fiducials: Dictionary that includes indexes for each fiducial point
-        :param matlab_path: The indexes of the R- points of the ECG signal – optional input
+        :param fs: The sampling frequency of the signal [Hz].
+        :param fiducials: Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.
+
 
         .. code-block:: python
 
@@ -34,15 +34,13 @@ class Biomarkers:
         self.intervals_statistics = {}
         self.waves_statistics = {}
 
-        if fiducials is None:
-            fp = FiducialPoints(signal, fs)
-            fiducials = fp.wavedet(matlab_path)
-        self.fiducials = fiducials
 
     def intervals(self):
         """
-        :return: intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.
-        :return: intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.
+        :return:
+            *intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.
+            *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.
+
 
         .. list-table:: **Interval duration and segments**:
             :widths: 25 75
@@ -110,8 +108,9 @@ class Biomarkers:
 
     def waves(self):
         """
-        :return: waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.
-        :return: waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.
+        :return:
+            *waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.
+            *waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.
 
 
         .. list-table:: **Waves characteristics**:

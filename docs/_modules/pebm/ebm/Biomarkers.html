@@ -166,12 +166,12 @@
 
 
 <div class="viewcode-block" id="Biomarkers"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.Biomarkers.Biomarkers">[docs]</a><span class="k">class</span> <span class="nc">Biomarkers</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matlab_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param signal: The ECG signal as a ndarray.</span>
-<span class="sd">        :param fs: The sampling frequency of the signal.</span>
-<span class="sd">        :param fiducials: Dictionary that includes indexes for each fiducial point</span>
-<span class="sd">        :param matlab_path: The indexes of the R- points of the ECG signal – optional input</span>
+<span class="sd">        :param fs: The sampling frequency of the signal [Hz].</span>
+<span class="sd">        :param fiducials: Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.</span>
+
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -193,15 +193,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">intervals_statistics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">waves_statistics</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="n">fiducials</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fp</span> <span class="o">=</span> <span class="n">FiducialPoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
-            <span class="n">fiducials</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">wavedet</span><span class="p">(</span><span class="n">matlab_path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fiducials</span> <span class="o">=</span> <span class="n">fiducials</span>
 
 <div class="viewcode-block" id="Biomarkers.intervals"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.Biomarkers.Biomarkers.intervals">[docs]</a>    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.</span>
-<span class="sd">        :return: intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.</span>
+<span class="sd">        :return:</span>
+<span class="sd">            *intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.</span>
+<span class="sd">            *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.</span>
+
 
 <span class="sd">        .. list-table:: **Interval duration and segments**:</span>
 <span class="sd">            :widths: 25 75</span>
@@ -269,8 +267,9 @@
 
 <div class="viewcode-block" id="Biomarkers.waves"><a class="viewcode-back" href="../../../pebm.ebm.html#pebm.ebm.Biomarkers.Biomarkers.waves">[docs]</a>    <span class="k">def</span> <span class="nf">waves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.</span>
-<span class="sd">        :return: waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.</span>
+<span class="sd">        :return:</span>
+<span class="sd">            *waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.</span>
+<span class="sd">            *waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.</span>
 
 
 <span class="sd">        .. list-table:: **Waves characteristics**:</span>

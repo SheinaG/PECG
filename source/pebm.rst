@@ -1,6 +1,11 @@
 pebm package
 ============
 
+.. toctree::
+   :maxdepth: 4
+
+   pebm.ebm
+
 
 pebm.Preprocessing
 --------------------------
@@ -9,12 +14,6 @@ pebm.Preprocessing
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-.. toctree::
-   :maxdepth: 4
-
-   pebm.ebm
 
 
 Module contents

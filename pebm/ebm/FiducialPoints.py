@@ -18,10 +18,9 @@ class FiducialPoints:
         """
         The purpose of the FiducialPoints class is to calculate the fiducial points.
 
-        :param signal: The ECG signal as a two-dimensional ndarray, when the first dimension is the len of the ecg, and the second is the number of leads.
-        :param fs: The sampling frequency of the signal.
-        :param peaks: The indexes of the R- points of the ECG signal – optional input.
-        :param n_pools: The number of cores to use when calculating the fiducials.
+        :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.
+        :param fs: The sampling frequency of the signal.[Hz]
+        :param n_pools: The number of cores to use when calculating the XQRS peaks,the default is 1.
 
         .. code-block:: python
 
@@ -41,7 +40,7 @@ class FiducialPoints:
         else:
             self.n_pools = n_pools
 
-    def wavedet(self, matlab_pat: str = None, peaks: np.array = np.array([])):
+    def wavedet(self, matlab_pat: str, peaks: np.array = np.array([])):
         """
         The wavedat function uses the matlab algorithm wavedet, compiled for python.
         The algorithm is described in the following paper: [1]_. The function is calculating
@@ -51,9 +50,9 @@ class FiducialPoints:
             A wavelet-based ECG delineator: evaluation on standard databases.
             IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
 
-        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks). If peaks are not given, the peaks are calculated with epltd detector.
-        :param matlab_pat: Optional input- required when running on a linux machine.
-        
+        :param matlab_pat: path to matlab runtime 2021a directory
+        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the epltd detector.
+
         :return: fiducials: Dictionary that includes indexes for each fiducial point.
 
         .. code-block:: python
@@ -116,11 +115,11 @@ class FiducialPoints:
         .. [2] Pan, Jiapu, and Willis J. Tompkins. "A real-time QRS detection algorithm."
             IEEE Trans. Biomed. Eng 32.3 (1985): 230-236.
 
-        :return: indexes of the R-peaks in the ECG signal.
+        :return: indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks.
 
         .. code-block:: python
 
-            peaks = fp.epltd
+            peaks = fp.epltd()
 
         """
         try:
@@ -156,6 +155,8 @@ class FiducialPoints:
         """
         This function wraps the XQRS function of the WFDB package.
 
+        :return: indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks.
+
         .. code-block:: python
 
             peaks = fp.xqrs()
@@ -182,7 +183,7 @@ class FiducialPoints:
         self.peaks = peaks
         return peaks
 
-    def jqrs(self, thr=0.8, rp= .25):
+    def jqrs(self, thr: float = 0.8, rp: float = .25):
         """
         The function is an Implementation of an energy based qrs detector [3]_. The algorithm is an
         adaptation of the popular Pan & Tompkins algorithm [2]_. The function assumes
@@ -194,11 +195,10 @@ class FiducialPoints:
             "A comparison of single channel fetal ECG extraction methods." Annals of
             biomedical engineering 42, no. 6 (2014): 1340-1353.
 
-        :param signal: vector of ecg signal amplitude (mV)
-        :param fs: sampling frequency (Hz)
-        :param thr: threshold (nu)
-        :param rp: refractory period (sec)
-        :return: qrs_pos: position of the qrs (sample)
+        :param thr: threshold, default value is 0.8.
+        :param rp: refractory period (sec), default value is 0.25.
+        :return: indexes of the R-peaks in the ECG signal, as an ndarray of shape (L,N), when L is the number of
+        channels or leads and N is the number of peaks.
 
         .. code-block:: python
 
