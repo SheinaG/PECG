@@ -1,4 +1,4 @@
 include *.c
 recursive-include c_files
 recursive-include wavedet_exe
-recursive-include ebm
+recursive-include ecg

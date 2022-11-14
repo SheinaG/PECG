@@ -4,7 +4,7 @@ import setuptools
 
 
 setuptools.setup(
-  name= "pebm",
+  name= "pecg",
   version='1.1.8', 
   
   use_scm_version={
@@ -14,7 +14,7 @@ setuptools.setup(
   },
   author="sheina Gendelman",
   author_email="sheina@campus.technion.ac.il",
-  description="PEBM: a python toolbox for ECG morphological analysis.",
+  description="pecg: a python toolbox for ECG morphological analysis.",
   long_description = "file: README.md",
   long_description_content_type="text/markdown",
   url="https://github.com/pypa/sampleproject",
@@ -27,17 +27,17 @@ setuptools.setup(
       "Operating System :: OS Independent",
   ],
   
-  #package_dir={"": "pebm"},
-  packages={"pebm",
-            "pebm/ebm",
-            'pebm/ebm/c_files',
-            'pebm/ebm/wavedet_exe'},
+  #package_dir={"": "pecg"},
+  packages={"pecg",
+            "pecg/ecg",
+            'pecg/ecg/c_files',
+            'pecg/ecg/wavedet_exe'},
           
   package_data={
-      'pebm' : ['*'],
-      'pebm/ebm' : ['*'],
-      'pebm/ebm/c_files': ['*'],
-      'pebm/ebm/wavedet_exe': ['*']
+      'pecg' : ['*'],
+      'pecg/ecg' : ['*'],
+      'pecg/ecg/c_files': ['*'],
+      'pecg/ecg/wavedet_exe': ['*']
   },
   include_package_data=True,
   python_requires=">=3.6",
