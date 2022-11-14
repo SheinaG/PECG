@@ -6,7 +6,7 @@ readme.close()
 
 setuptools.setup(
     name="pecg",
-    version="0.0.0",
+    version="0.0.1",
     use_scm_version={
         "root": "..",
         "relative_to": __file__,
