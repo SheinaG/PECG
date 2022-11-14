@@ -1,6 +1,6 @@
 import setuptools
 
-readme = open('README.rst', 'r')
+readme = open('README.md', 'r')
 README_TEXT = readme.read()
 readme.close()
 
