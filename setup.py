@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name="pecg",
-    version="1.1.8",
+    version="0.0.0",
     use_scm_version={
         "root": "..",
         "relative_to": __file__,

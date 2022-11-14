@@ -14,7 +14,7 @@ class Preprocessing:
         The Preprocessing class provides some routines for pre-filtering
         the ECG signal as well as estimating the signal quality.
         :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N i the number of samples.
-        :param fs: The sampling frequency of the signal.
+        :param fs: The sampling frequency of the signal [Hz].
 
 
         .. code-block:: python
