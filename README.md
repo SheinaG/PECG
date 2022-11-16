@@ -55,3 +55,4 @@ To run the epltd peak detector additional wfdb toolbox is requierd. https://arch
 
 ## Documentation
 
+https://pecg.readthedocs.io/en/latest/
