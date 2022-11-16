@@ -38,8 +38,8 @@ class Biomarkers:
     def intervals(self):
         """
         :return:
-            *intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.
-            *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.
+            * intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.
+            * intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.
 
 
         .. list-table:: **Interval duration and segments**:
@@ -109,8 +109,8 @@ class Biomarkers:
     def waves(self):
         """
         :return:
-            *waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.
-            *waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.
+            * waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.
+            * waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.
 
 
         .. list-table:: **Waves characteristics**:

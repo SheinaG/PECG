@@ -34,7 +34,7 @@ Installation
 Available on pip, with the command: 
 pip install pebm
 
-pip project: pip install -i https://test.pypi.org/simple/ pecg
+pip project: pip install pecg
 
 Requirements
 -----------------------
@@ -61,4 +61,4 @@ To run the epltd peak detector additional wfdb toolbox is requierd. https://arch
 Documentation
 ------------------------
 
-
+https://pecg.readthedocs.io/en/latest/
