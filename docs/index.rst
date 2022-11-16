@@ -7,7 +7,7 @@
 
 .. toctree::
    :maxdepth: 4
-   :caption: PECG API REFERENCE:
+   :caption: POBM API REFERENCE:
 
    pecg
 
