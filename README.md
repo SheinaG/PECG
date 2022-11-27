@@ -28,9 +28,7 @@ Few steps are required to extract the morphological ECG biomarkers, thos steps a
 ## Installation
 
 Available on pip, with the command: 
-pip install pebm
-
-pip project: pip install pecg
+pip install pecg
 
 ## Requirements
 
