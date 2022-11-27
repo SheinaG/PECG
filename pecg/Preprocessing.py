@@ -120,16 +120,16 @@ class Preprocessing:
             ECG signal quality during arrhythmia and its application to false alarm reduction.
             IEEE transactions on biomedical engineering, 60(6), 1660-1666.
 
-        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with epltd detector.
+        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with jqrs detector.
         :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when N is the number of peaks. If test peaks are not given, the test peaks are calculated with xqrs detector.
         :return: The 'bsqi' score, a flout between 0 and 1.
 
 
         .. code-block:: python
 
-            epltd_peaks = fp.epltd()
+            jqrs_peaks = fp.jqrs()
             xqrs_peaks = fp.xqrs()
-            bsqi_score = pre.bsqi(epltd_peaks, xqrs_peaks)
+            bsqi_score = pre.bsqi(jqrs_peaks, xqrs_peaks)
             if bsqi_score < 0.8:
                 print('It's a bad quality ECG recording!')
 
@@ -144,7 +144,7 @@ class Preprocessing:
             for i in np.arange(0, ecg_num):
                 fp = FiducialPoints(signal[:, i], fs)
                 if not peaks.any():
-                    refqrs = fp.epltd
+                    refqrs = fp.jqrs()
                 else:
                     refqrs = peaks
 
@@ -157,7 +157,7 @@ class Preprocessing:
         elif len(np.shape(signal)) == 1:
             fp = FiducialPoints(signal, fs)
             if not peaks.any():
-                refqrs = fp.epltd
+                refqrs = fp.jqrs()
             else:
                 refqrs = peaks
             if not test_peaks.any():

@@ -51,14 +51,14 @@ class FiducialPoints:
             IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
 
         :param matlab_pat: path to matlab runtime 2021a directory
-        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the epltd detector.
+        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.
         :return: fiducials: Dictionary that includes indexes for each fiducial point.
 
 
         .. code-block:: python
 
             matlab_pat = '/usr/local/MATLAB/R2021a'
-            peaks = fp.epltd()
+            peaks = fp.jqrs()
             fiducials = fp.wavedet(matlab_pat, peaks)
 
 
