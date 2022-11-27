@@ -218,7 +218,7 @@ IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>matlab_pat</strong> – path to matlab runtime 2021a directory</p></li>
-<li><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the epltd detector.</p></li>
+<li><p><strong>peaks</strong> – Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -226,7 +226,7 @@ IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matlab_pat</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/MATLAB/R2021a&#39;</span>
-<span class="n">peaks</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">epltd</span><span class="p">()</span>
+<span class="n">peaks</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">jqrs</span><span class="p">()</span>
 <span class="n">fiducials</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">wavedet</span><span class="p">(</span><span class="n">matlab_pat</span><span class="p">,</span> <span class="n">peaks</span><span class="p">)</span>
 </pre></div>
 </div>

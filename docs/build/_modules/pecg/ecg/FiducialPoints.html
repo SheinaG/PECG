@@ -90,7 +90,7 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">POBM API REFERENCE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../pecg.html">pecg package</a></li>
 </ul>
@@ -212,14 +212,14 @@
 <span class="sd">            IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</span>
 
 <span class="sd">        :param matlab_pat: path to matlab runtime 2021a directory</span>
-<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the epltd detector.</span>
+<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.</span>
 <span class="sd">        :return: fiducials: Dictionary that includes indexes for each fiducial point.</span>
 
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            matlab_pat = &#39;/usr/local/MATLAB/R2021a&#39;</span>
-<span class="sd">            peaks = fp.epltd()</span>
+<span class="sd">            peaks = fp.jqrs()</span>
 <span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
 
 
