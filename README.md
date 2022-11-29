@@ -48,6 +48,7 @@ All the python requirements exept wfdb are installed when the toolbox is install
 ### System Requirements:
 
 If you use linux machine - to run the wavdet fiucial-points detector matlab runtime (MCR) 2021a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
+
 If you run on windows- to run the wavdet fiucial-points detector matlab runtime (MCR) 2020a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
 
 To run the epltd peak detector additional wfdb toolbox is requierd. https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml. If you don't want or can't install this - Its Ok! you can use anther peak detectors from the package. 
