@@ -1,12 +1,9 @@
 import setuptools
 
-readme = open('README.md', 'r')
-README_TEXT = readme.read()
-readme.close()
 
 setuptools.setup(
     name="pecg",
-    version="0.0.1",
+    version="1.1.8",
     use_scm_version={
         "root": "..",
         "relative_to": __file__,
@@ -15,10 +12,12 @@ setuptools.setup(
     author="sheina Gendelman",
     author_email="sheina@campus.technion.ac.il",
     description="pecg: a python toolbox for ECG morphological analysis.",
-    long_description=README_TEXT,
+    long_description="file: README.md",
     long_description_content_type="text/markdown",
-    url="https://github.com/SheinaG/PECG",
-
+    url="https://github.com/pypa/sampleproject",
+    project_urls={
+        "Bug Tracker": "https://github.com/pypa/sampleproject/issues",
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

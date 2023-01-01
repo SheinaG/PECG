@@ -61,7 +61,7 @@ class Preprocessing:
         elif len(np.shape(signal)) == 1:
             ecg_len = len(signal)
             ecg_num = 1
-            fsig = mne.filter.notch_filter(signal.astype(np.float), fs, freqs=n_freq)
+            fsig = mne.filter.notch_filter(signal.astype(float), fs, freqs=n_freq)
 
         self.signal = fsig
         return fsig

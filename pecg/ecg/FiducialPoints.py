@@ -83,7 +83,7 @@ class FiducialPoints:
 
         self.peaks = peaks
 
-        fiducials_mat = wavdet(signal, fs, peaks, matlab_pat)
+        fiducials_mat, tempdirname = wavdet(signal, fs, peaks, matlab_pat)
         keys = ["Pon", "P", "Poff", "QRSon", "qrs", "QRSoff", "Ton", "T", "Toff"]
         position = fiducials_mat['output']
         all_keys = fiducials_mat['output'].dtype.names
@@ -106,6 +106,7 @@ class FiducialPoints:
             fiducials[j] = dict(zip(position_keys, position_values))
         if fl:
             os.chdir(cwd)
+        tempdirname.cleanup()
         return fiducials
 
     def epltd(self):
@@ -230,45 +231,26 @@ class FiducialPoints:
         return peaks
 
     @staticmethod
-    def __calculate_xqrs(signal, fs, n_pools=10):
+    def __calculate_xqrs(signal, fs):
         try:
             cwd = os.getcwd()
             fl = 1
         except:
             print('Not exists current path')
             fl = 0
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            os.chdir(tmpdirname)
-            wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint(fs)), units=['mV'], sig_name=['V5'],
-                        p_signal=signal.reshape(-1, 1), fmt=['16'])
-            record = wfdb.rdrecord(tmpdirname + '/temp')
-            ecg = record.p_signal[:, 0]
-            pool_to_close = False
-            if n_pools > 1:
-                if n_pools is None:
-                    pool = multiprocessing.Pool(n_pools)
-                    pool_to_close = True
-                borders = np.round(np.linspace(0, len(ecg), n_pools + 1)).astype(int)
-                ecg_wins = [ecg[borders[i]:borders[i + 1]] for i in range(len(borders) - 1)]
-                lengths = np.array([len(e) for e in ecg_wins])
-                ecg_wins = [np.tile(e, 2) for e in ecg_wins]
-                fss = fs * np.ones(n_pools)
-                sampfrom = np.zeros(n_pools, dtype=int)
-                sampto = 'end' * np.ones(n_pools, dtype=object)
-                conf = np.array([None] * n_pools)
-                learn = True * np.ones(n_pools, dtype=bool)
-                verbose = False * np.ones(n_pools, dtype=bool)
-                res = pool.starmap(processing.xqrs_detect, zip(ecg_wins, fss, sampfrom, sampto, conf, learn, verbose))
-                res = [res[i][res[i] > lengths[i]] - lengths[i] for i in range(len(res))]
-                xqrs = np.concatenate(tuple([res[i] + borders[i] for i in range(n_pools)])).astype(int)
-                if pool_to_close:
-                    pool.close()
-            else:
-                xqrs = processing.xqrs_detect(ecg, fs, verbose=True)
+        tmpdirname = tempfile.TemporaryDirectory()
+        os.chdir(tmpdirname.name)
+        wfdb.wrsamp(record_name='temp', fs=fs, units=['mV'], sig_name=['V5'],
+                    p_signal=signal.reshape(-1, 1), fmt=['16'])
+        record = wfdb.rdrecord(tmpdirname.name + '/temp')
+        ecg = record.p_signal[:, 0]
+        xqrs = processing.xqrs_detect(ecg, fs=fs)
 
         if fl:
             os.chdir(cwd)
+        tmpdirname.cleanup()
         return xqrs
+
 
     @staticmethod
     def __calculate_jqrs(signal, fs, thr, rp):
@@ -278,80 +260,82 @@ class FiducialPoints:
         except:
             print('Not exists current path')
             fl = 0
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            os.chdir(tmpdirname)
-            wfdb.wrsamp(record_name='temp', fs=np.asscalar(np.uint(fs)), units=['mV'], sig_name=['V5'],
-                        p_signal=signal.reshape(-1, 1), fmt=['16'])
-            record = wfdb.rdrecord(tmpdirname + '/temp')
-            ecg = record.p_signal[:, 0]
-            INT_NB_COEFF = int(np.round(7 * fs / 256))  # length is 30 for fs=256Hz
-            dffecg = np.diff(ecg)  # differenciate (one datapoint shorter)
-            sqrecg = np.square(dffecg)  # square ecg
-            intecg = sc_signal.lfilter(np.ones(INT_NB_COEFF, dtype=int),
-                                       1, sqrecg)  # integrate
-            mdfint = intecg
-            delay = math.ceil(INT_NB_COEFF / 2)
-            mdfint = np.roll(mdfint, -delay)  # remove filter delay for scanning back through ecg
-            # thresholding
-            mdfint_temp = mdfint
-            mdfint_temp_ = np.delete(mdfint_temp, np.where(ecg == -32768))  # exclude the NaN (encoded in WFDB format)
-            xs = np.sort(mdfint_temp)
-            ind_xs = int(np.round(98 / 100 * len(xs)))
-            en_thres = xs[ind_xs]
-            poss_reg = mdfint > thr * en_thres
-            tm = np.arange(start=1 / fs, stop=(len(ecg) + 1) / fs, step=1 / fs).reshape(1, -1)
-            # search back
-            SEARCH_BACK = 1
-            if SEARCH_BACK:
-                indAboveThreshold = np.where(poss_reg)[0]  # indices of samples above threshold
-                RRv = np.diff(tm[0, indAboveThreshold])  # compute RRv
-                medRRv = np.median(RRv[RRv > 0.01])
-                indMissedBeat = np.where(RRv > 1.5 * medRRv)[0]  # missed a peak?
-                # find interval onto which a beat might have been missed
-                indStart = indAboveThreshold[indMissedBeat]
-                indEnd = indAboveThreshold[indMissedBeat + 1]
-                for i in range(0, len(indStart)):
-                    # look for a peak on this interval by lowering the energy threshold
-                    poss_reg[indStart[i]: indEnd[i]] = mdfint[indStart[i]: indEnd[i]] > (0.25 * thr * en_thres)
-            # find indices into boudaries of each segment
-            left = np.where(np.diff(np.pad(1 * poss_reg, (1, 0), 'constant')) == 1)[0]  # remember to zero pad at start
-            right = np.where(np.diff(np.pad(1 * poss_reg, (0, 1), 'constant')) == -1)[0]  # remember to zero pad at end
-            nb_s = len(left < 30 * fs)
-            loc = np.zeros([1, nb_s], dtype=int)
-            for j in range(0, nb_s):
-                loc[0, j] = np.argmax(np.abs(ecg[left[j]:right[j] + 1]))
-                loc[0, j] = int(loc[0, j] + left[j])
-            sign = np.median(ecg[loc])
-            # loop through all possibilities
-            compt = 0
-            NB_PEAKS = len(left)
-            maxval = np.zeros([NB_PEAKS])
-            maxloc = np.zeros([NB_PEAKS], dtype=int)
-            for j in range(0, NB_PEAKS):
-                if sign > 0:
-                    # if sign is positive then look for positive peaks
-                    maxval[compt] = np.max(ecg[left[j]:right[j] + 1])
-                    maxloc[compt] = np.argmax(ecg[left[j]:right[j] + 1])
+        tmpdirname =  tempfile.TemporaryDirectory()
+        os.chdir(str(tmpdirname.name))
+        wfdb.wrsamp(record_name='temp', fs=fs, units=['mV'], sig_name=['V5'],
+                    p_signal=signal.reshape(-1, 1), fmt=['16'])
+        record = wfdb.rdrecord(tmpdirname.name + '/temp')
+        ecg = record.p_signal[:, 0]
+        INT_NB_COEFF = int(np.round(7 * fs / 256))  # length is 30 for fs=256Hz
+        dffecg = np.diff(ecg)  # differenciate (one datapoint shorter)
+        sqrecg = np.square(dffecg)  # square ecg
+        intecg = sc_signal.lfilter(np.ones(INT_NB_COEFF, dtype=int),
+                                   1, sqrecg)  # integrate
+        mdfint = intecg
+        delay = math.ceil(INT_NB_COEFF / 2)
+        mdfint = np.roll(mdfint, -delay)  # remove filter delay for scanning back through ecg
+        # thresholding
+        mdfint_temp = mdfint
+        mdfint_temp_ = np.delete(mdfint_temp, np.where(ecg == -32768))  # exclude the NaN (encoded in WFDB format)
+        xs = np.sort(mdfint_temp)
+        ind_xs = int(np.round(98 / 100 * len(xs)))
+        en_thres = xs[ind_xs]
+        poss_reg = mdfint > thr * en_thres
+        tm = np.arange(start=1 / fs, stop=(len(ecg) + 1) / fs, step=1 / fs).reshape(1, -1)
+        # search back
+        SEARCH_BACK = 1
+        if SEARCH_BACK:
+            indAboveThreshold = np.where(poss_reg)[0]  # indices of samples above threshold
+            RRv = np.diff(tm[0, indAboveThreshold])  # compute RRv
+            medRRv = np.median(RRv[RRv > 0.01])
+            indMissedBeat = np.where(RRv > 1.5 * medRRv)[0]  # missed a peak?
+            # find interval onto which a beat might have been missed
+            indStart = indAboveThreshold[indMissedBeat]
+            indEnd = indAboveThreshold[indMissedBeat + 1]
+            for i in range(0, len(indStart)):
+                # look for a peak on this interval by lowering the energy threshold
+                poss_reg[indStart[i]: indEnd[i]] = mdfint[indStart[i]: indEnd[i]] > (0.25 * thr * en_thres)
+        # find indices into boudaries of each segment
+        left = np.where(np.diff(np.pad(1 * poss_reg, (1, 0), 'constant')) == 1)[0]  # remember to zero pad at start
+        right = np.where(np.diff(np.pad(1 * poss_reg, (0, 1), 'constant')) == -1)[0]  # remember to zero pad at end
+        nb_s = len(left < 30 * fs)
+        loc = np.zeros([1, nb_s], dtype=int)
+        for j in range(0, nb_s):
+            loc[0, j] = np.argmax(np.abs(ecg[left[j]:right[j] + 1]))
+            loc[0, j] = int(loc[0, j] + left[j])
+        sign = np.median(ecg[loc])
+        # loop through all possibilities
+        compt = 0
+        NB_PEAKS = len(left)
+        maxval = np.zeros([NB_PEAKS])
+        maxloc = np.zeros([NB_PEAKS], dtype=int)
+        for j in range(0, NB_PEAKS):
+            if sign > 0:
+                # if sign is positive then look for positive peaks
+                maxval[compt] = np.max(ecg[left[j]:right[j] + 1])
+                maxloc[compt] = np.argmax(ecg[left[j]:right[j] + 1])
+            else:
+                # if sign is negative then look for negative peaks
+                maxval[compt] = np.min(ecg[left[j]:right[j] + 1])
+                maxloc[compt] = np.argmin(ecg[left[j]:right[j] + 1])
+            maxloc[compt] = maxloc[compt] + left[j]
+            # refractory period - has proved to improve results
+            if compt > 0:
+                if (maxloc[compt] - maxloc[compt - 1] < fs * rp) & (np.abs(maxval[compt]) < np.abs(maxval[compt - 1])):
+                    maxval = np.delete(maxval, compt)
+                    maxloc = np.delete(maxloc, compt)
+                elif (maxloc[compt] - maxloc[compt - 1] < fs * rp) & (
+                        np.abs(maxval[compt]) >= np.abs(maxval[compt - 1])):
+                    maxval = np.delete(maxval, compt - 1)
+                    maxloc = np.delete(maxloc, compt - 1)
                 else:
-                    # if sign is negative then look for negative peaks
-                    maxval[compt] = np.min(ecg[left[j]:right[j] + 1])
-                    maxloc[compt] = np.argmin(ecg[left[j]:right[j] + 1])
-                maxloc[compt] = maxloc[compt] + left[j]
-                # refractory period - has proved to improve results
-                if compt > 0:
-                    if (maxloc[compt] - maxloc[compt - 1] < fs * rp) & (np.abs(maxval[compt]) < np.abs(maxval[compt - 1])):
-                        maxval = np.delete(maxval, compt)
-                        maxloc = np.delete(maxloc, compt)
-                    elif (maxloc[compt] - maxloc[compt - 1] < fs * rp) & (
-                            np.abs(maxval[compt]) >= np.abs(maxval[compt - 1])):
-                        maxval = np.delete(maxval, compt - 1)
-                        maxloc = np.delete(maxloc, compt - 1)
-                    else:
-                        compt = compt + 1
-                else:
-                    # if first peak then increment
                     compt = compt + 1
-            qrs_pos = maxloc  # datapoints QRS positions
+            else:
+                # if first peak then increment
+                compt = compt + 1
+        qrs_pos = maxloc  # datapoints QRS positions
+
         if fl:
             os.chdir(cwd)
-        return
+        tmpdirname.cleanup()
+        return qrs_pos

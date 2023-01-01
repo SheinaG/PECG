@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pecg.ecg.Biomarkers &mdash; pecg  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pecg
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pecg.html">pecg package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pecg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pecg.ecg.Biomarkers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pecg.ecg.Biomarkers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.FiducialPoints</span> <span class="kn">import</span> <span class="n">FiducialPoints</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.IntervalsDuration</span> <span class="kn">import</span> <span class="n">extract_intervals_duration</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.WavesCharacteristics</span> <span class="kn">import</span> <span class="n">extract_waves_characteristics</span>
+
+<span class="kn">from</span> <span class="nn">pecg.ecg.Statistics</span> <span class="kn">import</span> <span class="n">statistics</span>
+
+<span class="kn">from</span> <span class="nn">pecg._ErrorHandler</span> <span class="kn">import</span> <span class="n">_check_shape_</span><span class="p">,</span> <span class="n">WrongParameter</span>
+
+
+
+
+
+<div class="viewcode-block" id="Biomarkers"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.Biomarkers.Biomarkers">[docs]</a><span class="k">class</span> <span class="nc">Biomarkers</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param signal: The ECG signal as a ndarray.</span>
+
+<span class="sd">        :param fs: The sampling frequency of the signal [Hz].</span>
+
+<span class="sd">        :param fiducials: Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.</span>
+
+
+
+
+
+<span class="sd">        .. code-block:: python</span>
+
+
+
+<span class="sd">            from pecg.ecg import Biomarkers as Obm</span>
+
+<span class="sd">            obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)</span>
+
+<span class="sd">            ints, stat_i = obm.intervals()</span>
+
+<span class="sd">            waves, stat_w = obm.waves()</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">WrongParameter</span><span class="p">(</span><span class="s2">&quot;Sampling frequency should be strictly positive&quot;</span><span class="p">)</span>
+
+        <span class="n">_check_shape_</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fiducials</span> <span class="o">=</span> <span class="n">fiducials</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">intervals_b</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">waves_b</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">intervals_statistics</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">waves_statistics</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+
+
+
+<div class="viewcode-block" id="Biomarkers.intervals"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.Biomarkers.Biomarkers.intervals">[docs]</a>    <span class="k">def</span> <span class="nf">intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+
+<span class="sd">            *intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.</span>
+
+<span class="sd">            *intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.</span>
+
+
+
+
+
+<span class="sd">        .. list-table:: **Interval duration and segments**:</span>
+
+<span class="sd">            :widths: 25 75</span>
+
+<span class="sd">            :header-rows: 1</span>
+
+
+
+<span class="sd">            * - Biomarker</span>
+
+<span class="sd">              - Description</span>
+
+<span class="sd">            * - P-waveint</span>
+
+<span class="sd">              - Time interval between P-on and P-off.</span>
+
+<span class="sd">            * - PRint</span>
+
+<span class="sd">              - Time interval between the P-on to the QRS-on.</span>
+
+<span class="sd">            * - PRseg</span>
+
+<span class="sd">              - Time interval between the P-off to the QRS-on.</span>
+
+<span class="sd">            * - PRint2</span>
+
+<span class="sd">              - Time interval between P-peak and R-peak as defined by Mao et al.</span>
+
+<span class="sd">            * - QRSint</span>
+
+<span class="sd">              - Time interval between the QRS-on to the QRS-off.</span>
+
+<span class="sd">            * - QTint</span>
+
+<span class="sd">              - Time interval between the QRS-on to the T-off.</span>
+
+<span class="sd">            * - QTcBint</span>
+
+<span class="sd">              - Corrected QT interval (QTc) using Bazett’s formula.</span>
+
+<span class="sd">            * - QTcFriint</span>
+
+<span class="sd">              - QTc using the Fridericia formula.</span>
+
+<span class="sd">            * - QTcFraint</span>
+
+<span class="sd">              - QTc using the Framingham formula.</span>
+
+<span class="sd">            * - QTcHint</span>
+
+<span class="sd">              - QTc using the Hodges formula.</span>
+
+<span class="sd">            * - T-waveint</span>
+
+<span class="sd">              - Time interval between T-on and T-off.</span>
+
+<span class="sd">            * - TPseg</span>
+
+<span class="sd">              - Time interval between T-off and P-on.</span>
+
+<span class="sd">            * - RRint</span>
+
+<span class="sd">              - Time interval between sequential R-peaks.</span>
+
+<span class="sd">            * - Rdep</span>
+
+<span class="sd">              - Time interval betweem Q-on and R-peak.</span>
+
+
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+        <span class="n">fiducials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiducials</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">intervals_b</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">intervals_statistics</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">fiducials</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;qrs&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+                    <span class="n">intervals_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                    <span class="n">intervals_statistics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">intervals_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">extract_intervals_duration</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                    <span class="n">intervals_statistics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">statistics</span><span class="p">(</span><span class="n">intervals_b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">fiducials</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;qrs&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="n">intervals_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                <span class="n">intervals_statistics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">intervals_b</span> <span class="o">=</span> <span class="n">extract_intervals_duration</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="n">intervals_statistics</span> <span class="o">=</span> <span class="n">statistics</span><span class="p">(</span><span class="n">intervals_b</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">intervals_b</span> <span class="o">=</span> <span class="n">intervals_b</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">intervals_statistics</span> <span class="o">=</span> <span class="n">intervals_statistics</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">intervals_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">intervals_statistics</span></div>
+
+
+
+<div class="viewcode-block" id="Biomarkers.waves"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.Biomarkers.Biomarkers.waves">[docs]</a>    <span class="k">def</span> <span class="nf">waves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+
+<span class="sd">            *waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.</span>
+
+<span class="sd">            *waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.</span>
+
+
+
+
+
+<span class="sd">        .. list-table:: **Waves characteristics**:</span>
+
+<span class="sd">            :widths: 25 75</span>
+
+<span class="sd">            :header-rows: 1</span>
+
+
+
+<span class="sd">            * - Biomarker</span>
+
+<span class="sd">              - Description</span>
+
+
+
+<span class="sd">            * - P-wave</span>
+
+<span class="sd">              - Amplitude difference between P-peak and P-off.</span>
+
+<span class="sd">            * - T-wave</span>
+
+<span class="sd">              - Amplitude difference between T-peak on and T-off.</span>
+
+<span class="sd">            * - R-wave:</span>
+
+<span class="sd">              - R-peak amplitude.</span>
+
+<span class="sd">            * - P-waveArea</span>
+
+<span class="sd">              - P-wave interval area defined as integral from the P-on to the P-off.</span>
+
+<span class="sd">            * - T-waveArea</span>
+
+<span class="sd">              - T-wave interval area  defined as integral from the T-on to the T-off.</span>
+
+<span class="sd">            * - QRSArea</span>
+
+<span class="sd">              - QRS interval area defined as integral from the QRS-on to the QRS-off.</span>
+
+<span class="sd">            * - STseg</span>
+
+<span class="sd">              - Amplitude difference between QRS-off and T-on.</span>
+
+<span class="sd">            * - J-point</span>
+
+<span class="sd">              - Amplitude in 40ms after QRS-off as defined by Hollander et al.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
+
+        <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
+
+        <span class="n">fiducials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fiducials</span>
+
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+            <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+            <span class="n">waves_b</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">waves_statistics</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ecg_num</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">fiducials</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;qrs&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+                    <span class="n">waves_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                    <span class="n">waves_statistics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">waves_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">extract_waves_characteristics</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+                    <span class="n">waves_statistics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">statistics</span><span class="p">(</span><span class="n">waves_b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">fiducials</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;qrs&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="n">waves_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+                <span class="n">waves_statistics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">waves_b</span> <span class="o">=</span> <span class="n">extract_waves_characteristics</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="n">waves_statistics</span> <span class="o">=</span> <span class="n">statistics</span><span class="p">(</span><span class="n">waves_b</span><span class="p">)</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">waves_b</span> <span class="o">=</span> <span class="n">waves_b</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">waves_statistics</span> <span class="o">=</span> <span class="n">waves_statistics</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">waves_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">waves_statistics</span></div></div>
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -28,7 +28,9 @@ Few steps are required to extract the morphological ECG biomarkers, thos steps a
 ## Installation
 
 Available on pip, with the command: 
-pip install pecg
+pip install pebm
+
+pip project: pip install -i https://test.pypi.org/simple/ pebm
 
 ## Requirements
 
@@ -47,14 +49,9 @@ wfdb == 3.4.0
 All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb
 ### System Requirements:
 
-If you use linux machine - to run the wavdet fiucial-points detector matlab runtime (MCR) 2021a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
+To run the wavdet fiucial-points detector matlab runtime (MCR) 2021a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
 
-If you run on windows- to run the wavdet fiucial-points detector matlab runtime (MCR) 2020a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
-
-If you wish to use the epltd peak detector additional wfdb toolbox is requierd. https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.
-
-If you don't want or can't install this - It's Ok! you can use another peak detectors from the package.
+To run the epltd peak detector additional wfdb toolbox is requierd. https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml
 
 ## Documentation
 
-https://pecg.readthedocs.io/en/latest/
