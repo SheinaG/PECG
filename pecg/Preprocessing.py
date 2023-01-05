@@ -125,9 +125,7 @@ class Preprocessing:
 
         .. code-block:: python
 
-            jqrs_peaks = fp.jqrs()
-            xqrs_peaks = fp.xqrs()
-            bsqi_score = pre.bsqi(jqrs_peaks, xqrs_peaks)
+            bsqi_score = pre.bsqi()
             if bsqi_score < 0.8:
                 print('It's a bad quality ECG recording!')
 

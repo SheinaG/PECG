@@ -9,9 +9,10 @@ from pecg._ErrorHandler import _check_shape_, WrongParameter
 class Biomarkers:
     def __init__(self, signal: np.array, fs: int, fiducials: dict):
         """
+        The purpose of the Biomarkers class is to calculate the biomarkers, we divided the morphological biomarkers into two main groups: intervals and waves.
         :param signal: The ECG signal as a ndarray.
         :param fs: The sampling frequency of the signal [Hz].
-        :param fiducials: Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.
+        :param fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points. this nested dictionary can be calculated using the FiducialPoints module.
 
 
         .. code-block:: python

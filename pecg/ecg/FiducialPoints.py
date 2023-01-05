@@ -14,13 +14,12 @@ from pecg.ecg.wavedet_exe.Wavdet import wavdet
 
 class FiducialPoints:
 
-    def __init__(self, signal: np.array, fs: int, n_pools: int = 1):
+    def __init__(self, signal: np.array, fs: int):
         """
         The purpose of the FiducialPoints class is to calculate the fiducial points.
 
         :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.
         :param fs: The sampling frequency of the signal.[Hz]
-        :param n_pools: The number of cores to use when calculating the XQRS peaks,the default is 1.
 
         .. code-block:: python
 
@@ -35,10 +34,7 @@ class FiducialPoints:
         self.signal = signal
         self.fs = fs
         self.peaks = []
-        if n_pools is None:
-            self.n_pools = 1
-        else:
-            self.n_pools = n_pools
+
 
     def wavedet(self, matlab_pat: str, peaks: np.array = np.array([])):
         """
@@ -52,7 +48,7 @@ class FiducialPoints:
 
         :param matlab_pat: path to matlab runtime 2021a directory
         :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.
-        :return: fiducials: Dictionary that includes indexes for each fiducial point.
+        :return: fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points.
 
 
         .. code-block:: python

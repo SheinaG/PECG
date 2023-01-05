@@ -38,11 +38,11 @@ pip project: pip install -i https://test.pypi.org/simple/ pebm
 
 Python >= 3.6
 
-numpy == 1.20.2
+numpy == 1.19.4
 
-mne == 0.23.0
+mne == 0.23.4
 
-scipy == 1.7.0
+scipy == 1.5.2
 
 wfdb == 3.4.0
 
@@ -55,4 +55,3 @@ To run the epltd peak detector additional wfdb toolbox is requierd. https://arch
 
 ## Documentation
 
-https://pecg.readthedocs.io/en/latest/pecg.html
