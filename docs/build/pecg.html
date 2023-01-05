@@ -224,9 +224,7 @@ the ECG signal as well as estimating the signal quality.
 <dd><p>The notch function applies a notch filter in order to remove the power line artefacts.
 :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
 :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pebm</span>
-<span class="kn">from</span> <span class="nn">pebm</span> <span class="kn">import</span> <span class="n">Preprocessing</span> <span class="k">as</span> <span class="n">Pre</span>
-<span class="n">pre</span> <span class="o">=</span> <span class="n">Pre</span><span class="o">.</span><span class="n">Preprocessing</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ecg_rec</span> <span class="o">=</span> <span class="n">pre</span><span class="o">.</span><span class="n">notch</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -272,9 +270,7 @@ IEEE transactions on biomedical engineering, 60(6), 1660-1666.</p>
 <dd class="field-even"><p>The ‘bsqi’ score, a flout between 0 and 1.</p>
 </dd>
 </dl>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>jqrs_peaks = fp.jqrs()
-xqrs_peaks = fp.xqrs()
-bsqi_score = pre.bsqi(jqrs_peaks, xqrs_peaks)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>bsqi_score = pre.bsqi()
 if bsqi_score &lt; 0.8:
     print(&#39;It&#39;s a bad quality ECG recording!&#39;)
 </pre></div>

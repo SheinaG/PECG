@@ -170,9 +170,10 @@
 <div class="viewcode-block" id="Biomarkers"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.Biomarkers.Biomarkers">[docs]</a><span class="k">class</span> <span class="nc">Biomarkers</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">fs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The purpose of the Biomarkers class is to calculate the biomarkers, we divided the morphological biomarkers into two main groups: intervals and waves.</span>
 <span class="sd">        :param signal: The ECG signal as a ndarray.</span>
 <span class="sd">        :param fs: The sampling frequency of the signal [Hz].</span>
-<span class="sd">        :param fiducials: Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.</span>
+<span class="sd">        :param fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points. this nested dictionary can be calculated using the FiducialPoints module.</span>
 
 
 <span class="sd">        .. code-block:: python</span>

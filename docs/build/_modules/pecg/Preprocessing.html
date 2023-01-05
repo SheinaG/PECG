@@ -203,9 +203,7 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            import pebm</span>
-<span class="sd">            from pebm import Preprocessing as Pre</span>
-<span class="sd">            pre = Pre.Preprocessing(signal, fs)</span>
+<span class="sd">            filtered_ecg_rec = pre.notch()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">n_freq</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -222,7 +220,7 @@
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ecg_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
             <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">fsig</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">notch_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="n">n_freq</span><span class="p">)</span>
+            <span class="n">fsig</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">notch_filter</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="n">n_freq</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">fsig</span>
         <span class="k">return</span> <span class="n">fsig</span></div>
@@ -288,9 +286,7 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            jqrs_peaks = fp.jqrs()</span>
-<span class="sd">            xqrs_peaks = fp.xqrs()</span>
-<span class="sd">            bsqi_score = pre.bsqi(jqrs_peaks, xqrs_peaks)</span>
+<span class="sd">            bsqi_score = pre.bsqi()</span>
 <span class="sd">            if bsqi_score &lt; 0.8:</span>
 <span class="sd">                print(&#39;It&#39;s a bad quality ECG recording!&#39;)</span>
 

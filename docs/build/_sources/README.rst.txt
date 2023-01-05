@@ -32,20 +32,19 @@ Installation
 -----------------------
 
 Available on pip, with the command: 
-pip install pebm
 
-pip project: pip install pecg
+pip install pecg
 
 Requirements
 -----------------------
 
 Python >= 3.6
 
-numpy == 1.19.4
+numpy == 1.20.2
 
-mne == 0.23.4
+mne == 0.23.0
 
-scipy == 1.5.2
+scipy == 1.7.0
 
 wfdb == 3.4.0
 
@@ -54,11 +53,17 @@ All the requirements are installed when the toolbox is installed, no need for ad
 System Requirements
 ------------------------
 
-For linux- to run the wavdet fiucial-points detector matlab runtime (MCR) 2021a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
+For linux- to run the wavdet fiucial-points detector 'matlab runtime (MCR) 2021a'_ is requierd. 
 
-For windows- to run the wavdet fiucial-points detector matlab runtime (MCR) 2020a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
+.. _matlab runtime (MCR) 2021a: https://www.mathworks.com/products/compiler/matlab-runtime.html
 
-If you wish to use the epltd peak detector additional wfdb toolbox is requierd. https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.
+For windows- to run the wavdet fiucial-points detector 'matlab runtime (MCR) 2020a'_ is requierd.
+
+.. _matlab runtime (MCR) 2020a: https://www.mathworks.com/products/compiler/matlab-runtime.html
+
+If you wish to use the epltd peak detector 'additional wfdb toolbox'_ is requierd. 
+
+.. _additional wfdb toolbox: https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.
 
 If you don't want or can't install this - It's Ok! you can use another peak detectors from the package.
 

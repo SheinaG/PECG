@@ -185,7 +185,7 @@
 <span id="pecg-ecg-fiducialpoints"></span><h2>pecg.ecg.FiducialPoints<a class="headerlink" href="#module-pecg.ecg.FiducialPoints" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pecg.ecg.FiducialPoints.FiducialPoints">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pecg.ecg.FiducialPoints.</span></span><span class="sig-name descname"><span class="pre">FiducialPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_pools</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pecg.ecg.FiducialPoints.</span></span><span class="sig-name descname"><span class="pre">FiducialPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/FiducialPoints.html#FiducialPoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.FiducialPoints.FiducialPoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The purpose of the FiducialPoints class is to calculate the fiducial points.</p>
 <dl class="field-list simple">
@@ -193,7 +193,6 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> – the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</p></li>
 <li><p><strong>fs</strong> – The sampling frequency of the signal.[Hz]</p></li>
-<li><p><strong>n_pools</strong> – The number of cores to use when calculating the XQRS peaks,the default is 1.</p></li>
 </ul>
 </dd>
 </dl>
@@ -222,7 +221,7 @@ IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>fiducials: Dictionary that includes indexes for each fiducial point.</p>
+<dd class="field-even"><p>fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points.</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">matlab_pat</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/MATLAB/R2021a&#39;</span>
@@ -307,15 +306,10 @@ biomedical engineering 42, no. 6 (2014): 1340-1353.</p>
 <dt class="sig sig-object py" id="pecg.ecg.Biomarkers.Biomarkers">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pecg.ecg.Biomarkers.</span></span><span class="sig-name descname"><span class="pre">Biomarkers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fiducials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/ecg/Biomarkers.html#Biomarkers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.ecg.Biomarkers.Biomarkers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>signal</strong> – The ECG signal as a ndarray.</p></li>
-<li><p><strong>fs</strong> – The sampling frequency of the signal [Hz].</p></li>
-<li><p><strong>fiducials</strong> – Dictionary that includes indexes for each fiducial point. this dictionary can be calculated using the FiducialPoints module.</p></li>
-</ul>
-</dd>
-</dl>
+<p>The purpose of the Biomarkers class is to calculate the biomarkers, we divided the morphological biomarkers into two main groups: intervals and waves.
+:param signal: The ECG signal as a ndarray.
+:param fs: The sampling frequency of the signal [Hz].
+:param fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points. this nested dictionary can be calculated using the FiducialPoints module.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">Biomarkers</span> <span class="k">as</span> <span class="n">Obm</span>
 <span class="n">obm</span> <span class="o">=</span> <span class="n">Obm</span><span class="o">.</span><span class="n">Biomarkers</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">)</span>
 <span class="n">ints</span><span class="p">,</span> <span class="n">stat_i</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">intervals</span><span class="p">()</span>
