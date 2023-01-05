@@ -42,9 +42,7 @@ class Preprocessing:
 
         .. code-block:: python
 
-            import pebm
-            from pebm import Preprocessing as Pre
-            pre = Pre.Preprocessing(signal, fs)
+            filtered_ecg_rec = pre.notch()
 
         """
         if n_freq <= 0:
