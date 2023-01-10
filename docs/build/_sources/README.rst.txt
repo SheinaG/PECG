@@ -48,20 +48,20 @@ scipy == 1.7.0
 
 wfdb == 3.4.0
 
-All the requirements are installed when the toolbox is installed, no need for additional commands.
+All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb
 
 System Requirements
 ------------------------
 
-For linux- to run the wavdet fiucial-points detector 'matlab runtime (MCR) 2021a'_ is requierd. 
+For linux- to run the wavdet fiucial-points detector `matlab runtime (MCR) 2021a`_ is requierd. 
 
 .. _matlab runtime (MCR) 2021a: https://www.mathworks.com/products/compiler/matlab-runtime.html
 
-For windows- to run the wavdet fiucial-points detector 'matlab runtime (MCR) 2020a'_ is requierd.
+For windows- to run the wavdet fiucial-points detector `matlab runtime (MCR) 2020a`_ is requierd.
 
 .. _matlab runtime (MCR) 2020a: https://www.mathworks.com/products/compiler/matlab-runtime.html
 
-If you wish to use the epltd peak detector 'additional wfdb toolbox'_ is requierd. 
+If you wish to use the epltd peak detector `additional wfdb toolbox`_ is requierd. 
 
 .. _additional wfdb toolbox: https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.
 
