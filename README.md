@@ -38,11 +38,11 @@ pip project: pip install -i https://test.pypi.org/simple/ pebm
 
 Python >= 3.6
 
-numpy == 1.19.4
+numpy == 1.20.2
 
-mne == 0.23.4
+mne == 0.23.0
 
-scipy == 1.5.2
+scipy == 1.7.0
 
 wfdb == 3.4.0
 

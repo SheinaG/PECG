@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name="pecg",
-    version="1.1.8",
+    version="0.0.8",
     use_scm_version={
         "root": "..",
         "relative_to": __file__,
@@ -12,9 +12,9 @@ setuptools.setup(
     author="sheina Gendelman",
     author_email="sheina@campus.technion.ac.il",
     description="pecg: a python toolbox for ECG morphological analysis.",
-    long_description="file: README.md",
+    long_description="file:: README.rst",
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/SheinaG/PECG",
     project_urls={
         "Bug Tracker": "https://github.com/pypa/sampleproject/issues",
     },
@@ -33,5 +33,5 @@ setuptools.setup(
     },
     include_package_data=True,
     python_requires=">=3.6",
-    install_requires=["numpy", "mne", "scipy"],
+    install_requires=["numpy==1.20.2", "mne==0.23.0", "scipy==1.7.0"],
 )

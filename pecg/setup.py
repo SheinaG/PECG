@@ -3,18 +3,18 @@ import setuptools
 
 setuptools.setup(
     name="pecg",
-    version="1.1.7",
+    version="0.0.8",
     use_scm_version={
         "root": "..",
         "relative_to": __file__,
         "local_scheme": "node-and-timestamp",
     },
-    author="Example Author",
+    author="sheina Gendelman",
     author_email="sheina@campus.technion.ac.il",
-    description="A small example package",
-    long_description="aa",
+    description="pecg: a python toolbox for ECG morphological analysis.",
+    long_description="file:: README.rst",
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/SheinaG/PECG",
     project_urls={
         "Bug Tracker": "https://github.com/pypa/sampleproject/issues",
     },
@@ -23,9 +23,17 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "pebm"},
-    packages=setuptools.find_packages(where="pebm"),
-    package_data={"c_files": ["*"], "wavedet_exe": ["*"]},
+    # package_dir={"": "pecg"},
+    packages={"pecg", "pecg/ecg", "pecg/ecg/c_files", "pecg/ecg/wavedet_exe"},
+    package_data={
+        "pecg": ["*"],
+        "pecg/ecg": ["*"],
+        "pecg/ecg/c_files": ["*"],
+        "pecg/ecg/wavedet_exe": ["*"],
+    },
     include_package_data=True,
     python_requires=">=3.6",
+    install_requires=["numpy==1.20.2", "mne==0.23.0", "scipy==1.7.0"],
 )
+
+
