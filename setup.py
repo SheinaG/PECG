@@ -1,4 +1,7 @@
 import setuptools
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 
 setuptools.setup(
@@ -12,7 +15,7 @@ setuptools.setup(
     author="sheina Gendelman",
     author_email="sheina@campus.technion.ac.il",
     description="pecg: a python toolbox for ECG morphological analysis.",
-    long_description="file:: README.rst",
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/SheinaG/PECG",
     project_urls={
@@ -33,5 +36,5 @@ setuptools.setup(
     },
     include_package_data=True,
     python_requires=">=3.6",
-    install_requires=["numpy==1.20.2", "mne==0.23.0", "scipy==1.7.0"],
+    install_requires=["numpy==1.24", "mne==1.3", "scipy==1.7.0"],
 )
