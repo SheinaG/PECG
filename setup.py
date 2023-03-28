@@ -36,5 +36,5 @@ setuptools.setup(
     },
     include_package_data=True,
     python_requires=">=3.6",
-    install_requires=["numpy==1.24", "mne==1.3", "scipy==1.7.0"],
+    install_requires=["numpy==1.23.5", "mne==1.3.1"],
 )
