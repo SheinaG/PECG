@@ -149,7 +149,7 @@ class Preprocessing:
                 else:
                     testqrs = test_peaks
 
-                bsqi[i] = self.__calculate_bsqi(refqrs[refqrs[:, i] > 0, i], testqrs[testqrs[:, i] > 0, i], fs)
+                bsqi[i] = self.__calculate_bsqi(refqrs[refqrs > 0], testqrs[testqrs > 0], fs)
         elif len(np.shape(signal)) == 1:
             fp = FiducialPoints(signal, fs)
             if not peaks.any():
