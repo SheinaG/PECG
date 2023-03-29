@@ -26,7 +26,7 @@ Few steps are required to extract the morphological ECG biomarkers, thos steps a
   :width: 600
 
 
-4. Summary Statistics - For a specified time window the five summary statistics (median, min, max, Ql and Q3) are computed for all ECG biomarkers.
+4. Summary Statistics - For a specified time window the six summary statistics (mean, median, min, max, IQR and std) are computed for all ECG biomarkers.
 
 Installation
 -----------------------
@@ -40,13 +40,11 @@ Requirements
 
 Python >= 3.6
 
-numpy == 1.20.2
+numpy 
 
-mne == 0.23.0
+mne 
 
-scipy == 1.7.0
-
-wfdb == 3.4.0
+wfdb 
 
 All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb
 
@@ -67,7 +65,18 @@ If you wish to use the epltd peak detector `additional wfdb toolbox`_ is requier
 
 If you don't want or can't install this - It's Ok! you can use another peak detectors from the package.
 
+Instractions for installation:
+------------------------------
+
+1. Install the "pecg" package using pip by running the command line: "pip install pecg".
+
+2. Install the "wfdb" package using pip by running the command line: "pip install wfdb".
+
+3. Follow the guidelines provided in the link: https://www.mathworks.com/products/compiler/matlab-runtime.html, and choose the version of 2021a(9.10).
+
 Documentation
 ------------------------
 
 https://pecg.readthedocs.io/en/latest/
+
+

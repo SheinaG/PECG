@@ -180,7 +180,7 @@ S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to
 </ol>
 <a class="reference internal image-reference" href="_images/ecg_wth_bio.png"><img alt="_images/ecg_wth_bio.png" src="_images/ecg_wth_bio.png" style="width: 600px;" /></a>
 <ol class="arabic simple" start="4">
-<li><p>Summary Statistics - For a specified time window the five summary statistics (median, min, max, Ql and Q3) are computed for all ECG biomarkers.</p></li>
+<li><p>Summary Statistics - For a specified time window the six summary statistics (mean, median, min, max, IQR and std) are computed for all ECG biomarkers.</p></li>
 </ol>
 </div>
 <div class="section" id="installation">
@@ -191,10 +191,9 @@ S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">¶</a></h2>
 <p>Python &gt;= 3.6</p>
-<p>numpy == 1.20.2</p>
-<p>mne == 0.23.0</p>
-<p>scipy == 1.7.0</p>
-<p>wfdb == 3.4.0</p>
+<p>numpy</p>
+<p>mne</p>
+<p>wfdb</p>
 <p>All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb</p>
 </div>
 <div class="section" id="system-requirements">
@@ -203,6 +202,14 @@ S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to
 <p>For windows- to run the wavdet fiucial-points detector <a class="reference external" href="https://www.mathworks.com/products/compiler/matlab-runtime.html">matlab runtime (MCR) 2020a</a> is requierd.</p>
 <p>If you wish to use the epltd peak detector <a class="reference external" href="https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.">additional wfdb toolbox</a> is requierd.</p>
 <p>If you don’t want or can’t install this - It’s Ok! you can use another peak detectors from the package.</p>
+</div>
+<div class="section" id="instractions-for-installation">
+<h2>Instractions for installation:<a class="headerlink" href="#instractions-for-installation" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Install the “pecg” package using pip by running the command line: “pip install pecg”.</p></li>
+<li><p>Install the “wfdb” package using pip by running the command line: “pip install wfdb”.</p></li>
+<li><p>Follow the guidelines provided in the link: <a class="reference external" href="https://www.mathworks.com/products/compiler/matlab-runtime.html">https://www.mathworks.com/products/compiler/matlab-runtime.html</a>, and choose the version of 2021a(9.10).</p></li>
+</ol>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>

@@ -22,7 +22,7 @@ Few steps are required to extract the morphological ECG biomarkers, thos steps a
 
 ![alt text](https://github.com/SheinaG/pebm_new/blob/master/ecg_wth_bio.png?raw=true)
 
-4. Summary Statistics - For a specified time window the five summary statistics (median, min, max, Ql and Q3) are computed for all ECG biomarkers.
+4. Summary Statistics - For a specified time window the six summary statistics (mean, median, min, max, IQR and std) are computed for all ECG biomarkers.
 
 
 ## Installation
@@ -38,13 +38,11 @@ pip project: pip install -i https://test.pypi.org/simple/ pebm
 
 Python >= 3.6
 
-numpy == 1.20.2
+numpy 
 
-mne == 0.23.0
+mne 
 
-scipy == 1.7.0
-
-wfdb == 3.4.0
+wfdb 
 
 All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb
 ### System Requirements:
@@ -52,6 +50,14 @@ All the python requirements exept wfdb are installed when the toolbox is install
 To run the wavdet fiucial-points detector matlab runtime (MCR) 2021a is requierd. https://www.mathworks.com/products/compiler/matlab-runtime.html
 
 To run the epltd peak detector additional wfdb toolbox is requierd. https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml
+
+## Instractions for installation:
+
+1. Install the "pecg" package using pip by running the command line: "pip install pecg".
+
+2. Install the "wfdb" package using pip by running the command line: "pip install wfdb".
+
+3. Follow the guidelines provided in the link: https://www.mathworks.com/products/compiler/matlab-runtime.html, and choose the version of 2021a(9.10).
 
 ## Documentation
 
