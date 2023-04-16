@@ -14,7 +14,7 @@ def wavdet(signal, fs, peaks, matlab_pat):
     np.savetxt("peaks.txt", peaks)
     np.savetxt("signal.txt", signal)
     if platform.system() == "Linux":
-        wavedet_dir = my_path + "/run_run_wavedet.sh"
+        wavedet_dir = my_path + "/run_peak_det_2023.sh"
         for root, dirs, files in os.walk(my_path):
             for d in dirs:
                 os.chmod(os.path.join(root, d), 0o777)
@@ -27,7 +27,7 @@ def wavdet(signal, fs, peaks, matlab_pat):
         os.system(command)
         fiducials_mat = spio.loadmat(tmpdirname.name + "/output.mat")
     if platform.system() == "Windows":
-        wavedet_dir = my_path + "//run_wavdet_W.exe"
+        wavedet_dir = my_path + "//peak_det_2023.exe"
         command = " ".join([wavedet_dir, '"signal.txt" "peaks.txt" ', str(fs)])
         os.system(command)
         fiducials_mat = spio.loadmat(tmpdirname.name + "//output.mat")
