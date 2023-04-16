@@ -1,3 +1,0 @@
-file1 = "Dog_example_ecg1.txt";
-file2
-peak_det(file1, file2,fs)
