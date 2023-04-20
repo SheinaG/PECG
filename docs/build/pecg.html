@@ -92,7 +92,7 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">POBM API REFERENCE:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">pecg package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pecg.ecg.html">pecg.ecg package</a></li>
@@ -224,7 +224,7 @@ the ECG signal as well as estimating the signal quality.
 <dd><p>The notch function applies a notch filter in order to remove the power line artefacts.
 :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
 :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ecg_rec</span> <span class="o">=</span> <span class="n">pre</span><span class="o">.</span><span class="n">notch</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ecg_rec</span> <span class="o">=</span> <span class="n">pre</span><span class="o">.</span><span class="n">notch</span><span class="p">(</span><span class="n">n_freq</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

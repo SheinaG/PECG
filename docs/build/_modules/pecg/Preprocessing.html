@@ -90,7 +90,7 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">POBM API REFERENCE:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../pecg.html">pecg package</a></li>
 </ul>
@@ -203,7 +203,7 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            filtered_ecg_rec = pre.notch()</span>
+<span class="sd">            filtered_ecg_rec = pre.notch(n_freq=60)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">n_freq</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -216,7 +216,7 @@
             <span class="p">[</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
             <span class="n">fsig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">ecg_len</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ecg_num</span><span class="p">):</span>
-                <span class="n">fsig</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">notch_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">fsig</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">notch_filter</span><span class="p">(</span><span class="n">signal</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span> <span class="n">fs</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ecg_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
             <span class="n">ecg_num</span> <span class="o">=</span> <span class="mi">1</span>
@@ -310,7 +310,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">testqrs</span> <span class="o">=</span> <span class="n">test_peaks</span>
 
-                <span class="n">bsqi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_bsqi</span><span class="p">(</span><span class="n">refqrs</span><span class="p">[</span><span class="n">refqrs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">testqrs</span><span class="p">[</span><span class="n">testqrs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">fs</span><span class="p">)</span>
+                <span class="n">bsqi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_bsqi</span><span class="p">(</span><span class="n">refqrs</span><span class="p">[</span><span class="n">refqrs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">],</span> <span class="n">testqrs</span><span class="p">[</span><span class="n">testqrs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">],</span> <span class="n">fs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">fp</span> <span class="o">=</span> <span class="n">FiducialPoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">peaks</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>

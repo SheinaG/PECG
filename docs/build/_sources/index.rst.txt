@@ -7,9 +7,10 @@
 
 .. toctree::
    :maxdepth: 4
-   :caption: POBM API REFERENCE:
+   :caption: PECG API REFERENCE:
 
    pecg
+   tutorials/pecg_analysis.rst
 
 
 

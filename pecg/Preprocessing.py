@@ -42,7 +42,7 @@ class Preprocessing:
 
         .. code-block:: python
 
-            filtered_ecg_rec = pre.notch()
+            filtered_ecg_rec = pre.notch(n_freq=60)
 
         """
         if n_freq <= 0:
@@ -55,7 +55,7 @@ class Preprocessing:
             [ecg_len, ecg_num] = np.shape(signal)
             fsig = np.zeros([ecg_len, ecg_num])
             for i in np.arange(0, ecg_num):
-                fsig[:, i] = mne.filter.notch_filter(signal[:, i].astype(np.float), fs, freqs=n_freq, verbose=False)
+                fsig[:, i] = mne.filter.notch_filter(signal[:, i].astype(float), fs, freqs=n_freq, verbose=False)
         elif len(np.shape(signal)) == 1:
             ecg_len = len(signal)
             ecg_num = 1
