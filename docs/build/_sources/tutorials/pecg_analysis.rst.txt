@@ -11,7 +11,7 @@ The ECG provides information about the function of the intracardiac conduction s
 The ECG records the sequence of depolarization and repolarization of the atria and ventricles, which are represented by different waves on the ECG.
 
 Studying the morphological statistics of the signal may provide information on the underlying physiological heart condition. 
-*PhysioZoo ECG* provides the framework and tools for extracting morphological biomarkers from the ECG signal.
+**PhysioZoo ECG** provides the framework and tools for extracting morphological biomarkers from the ECG signal.
 
 **Performing ECG morphological analysis**
 ------------------------------------------------------------
@@ -22,13 +22,19 @@ ECG file you uploded.
    :align: center
 
 To perform your morphological analysis, please follow these instructions:
-#. Prefiltering the signal: On the left panel, select the "Configuration" tab. On the bottom of the tab, you will find a section labeled: *Fiducials filtering parameters*
+
+#. Prefiltering the signal: On the left panel, select the "Configuration" tab. On the bottom of the tab, you will find a section labeled: **Fiducials filtering parameters**
 which refers to two filters applied to your signal before analysis:
+
    * The bandpass filter in the range of [0.67,100] Hz. Its purpose is to remove the baseline wander and high frequency noise. Check the box labeled *Bandpass filter* if you want to use it
+
    * The notch filter. Its purpose is to remove the powerline interface. If you want to use it, choose the frequency of the powerline interface of the country where the ECG was recorded.
+
 #. Definition of the window for anlysis: On the right panel, define the W.S. (start of the window) and the W.L. (length of the window) you want to analyze. 
 You can analyze all of your signal or part of it. Note that if you analyze a long window,it may take some time. 
-#. Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points. 
+
+#. Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points.
+ 
 #. Click the *Find Fiducials* button.
 
 Congrats! You have made your first morphological analysis with **PhysioZoo ECG**!

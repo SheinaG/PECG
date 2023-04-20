@@ -176,15 +176,15 @@
 The ECG provides information about the function of the intracardiac conduction system, which is responsible for generating and propagating electrical impulses through the heart.
 The ECG records the sequence of depolarization and repolarization of the atria and ventricles, which are represented by different waves on the ECG.</p>
 <p>Studying the morphological statistics of the signal may provide information on the underlying physiological heart condition.
-<em>PhysioZoo ECG</em> provides the framework and tools for extracting morphological biomarkers from the ECG signal.</p>
+<strong>PhysioZoo ECG</strong> provides the framework and tools for extracting morphological biomarkers from the ECG signal.</p>
 </div>
 <div class="section" id="performing-ecg-morphological-analysis">
 <h2><strong>Performing ECG morphological analysis</strong><a class="headerlink" href="#performing-ecg-morphological-analysis" title="Permalink to this heading">¶</a></h2>
 <p>Start by entering the ECG interface by clicking on the ‘Peak Detection’ tab on the top right, then load some ECG example by clicking File -&gt; Open data file -&gt; ECG_example.txt. The program will automaticly present the
 ECG file you uploded.</p>
 <img alt="../_images/before_analysis.png" class="align-center" src="../_images/before_analysis.png" />
-<p>To perform your morphological analysis, please follow these instructions:
-#. Prefiltering the signal: On the left panel, select the “Configuration” tab. On the bottom of the tab, you will find a section labeled: <em>Fiducials filtering parameters</em>
+<p>To perform your morphological analysis, please follow these instructions:</p>
+<p>#. Prefiltering the signal: On the left panel, select the “Configuration” tab. On the bottom of the tab, you will find a section labeled: <strong>Fiducials filtering parameters</strong>
 which refers to two filters applied to your signal before analysis:</p>
 <blockquote>
 <div><ul class="simple">
@@ -193,12 +193,14 @@ which refers to two filters applied to your signal before analysis:</p>
 </ul>
 </div></blockquote>
 <p>#. Definition of the window for anlysis: On the right panel, define the W.S. (start of the window) and the W.L. (length of the window) you want to analyze.
-You can analyze all of your signal or part of it. Note that if you analyze a long window,it may take some time.
-#. Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points.
-#. Click the <em>Find Fiducials</em> button.</p>
+You can analyze all of your signal or part of it. Note that if you analyze a long window,it may take some time.</p>
+<ol class="arabic simple">
+<li><p>Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points.</p></li>
+<li><p>Click the <em>Find Fiducials</em> button.</p></li>
+</ol>
 <p>Congrats! You have made your first morphological analysis with <strong>PhysioZoo ECG</strong>!
 The biomarkers are divided into two different categories: Duration and Amplitudes, the statistical measurments of the biomarkers will be presented in a table, in the bottom panel.</p>
-<img alt="tutorials/after_analysis.png" class="align-center" src="tutorials/after_analysis.png" />
+<img alt="../_images/after_analysis.png" class="align-center" src="../_images/after_analysis.png" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For multilead anlysis only the median of each biomarker will be presented in the table, while for singel lead anlysis 6 statistical mesurment will be presented for each biomarker:</p>
