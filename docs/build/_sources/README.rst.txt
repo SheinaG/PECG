@@ -14,13 +14,13 @@ The electrocardiogram (ECG) is a standard tool used in medical practice for iden
 Description
 ----------------------
 
-Few steps are required to extract the morphological ECG biomarkers, thos steps are impelemented in the PEBM toolbox:
+Few steps are required to extract the morphological ECG biomarkers, those steps were implemented in the PECG toolbox:
 
-1. ECG Signal Preprocessing - Before computing the ECG morphological biomarkers, prefiltering of the raw ECG time series is performed to remove the baseline wander as well as remove high frequency noise. Specifically, the toolbox include a zero phase second-order infinite impulse response bandpass filter with the passband of 0.67Hz - 100Hz to remove baseline wander and high frequency noise. Also, the toolbox include an optional Notch filter that can be set to 50 or 60Hz to remove the power-line interference.
+1. ECG Signal Preprocessing - Before computing the ECG morphological biomarkers, prefiltering of the raw ECG time series is performed to remove the baseline wander and the high frequency noise. Specifically, the toolbox includes a zero phase second-order infinite impulse response bandpass filter with the passband of 0.67Hz - 100Hz. Also, the toolbox includes an optional Notch filter that can be set to 50 or 60Hz to remove the power-line interference.
 
-2. ECG Fiducial Points Detection - The toolbox include the epltd R-peaks algorithem, and the the well-known wavedet algorithm for ECG fiducial points  detection. 
+2. ECG Fiducial Points Detection - The toolbox includes the epltd R-peaks algorithm, and the well-known wavedet algorithm for ECG fiducial points detection.
 
-3. Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet then the feature was marked as a NaN. For an ECG channel a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.
+3. Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet, then the feature was marked as a NaN. For an ECG channel, a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.
 
 .. image:: ../ecg_wth_bio.png
   :width: 600
@@ -46,27 +46,23 @@ mne
 
 wfdb 
 
-All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb
+All the python requirements except wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb
 
 System Requirements
 ------------------------
 
-For linux- to run the wavdet fiucial-points detector `matlab runtime (MCR) 2021a`_ is requierd. 
+To run the wavdet fiducial-points detector `matlab runtime (MCR) 2021a`_ is required. 
 
 .. _matlab runtime (MCR) 2021a: https://www.mathworks.com/products/compiler/matlab-runtime.html
 
-For windows- to run the wavdet fiucial-points detector `matlab runtime (MCR) 2020a`_ is requierd.
-
-.. _matlab runtime (MCR) 2020a: https://www.mathworks.com/products/compiler/matlab-runtime.html
-
-If you wish to use the epltd peak detector `additional wfdb toolbox`_ is requierd. 
+If you wish to use the epltd peak detector `additional wfdb toolbox`_ is required. 
 
 .. _additional wfdb toolbox: https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.
 
-If you don't want or can't install this - It's Ok! you can use another peak detectors from the package.
+If you don't want or can't install this - It's Ok! you can use another peak detector from the package.
 
-Instractions for installation:
-------------------------------
+Installation instractions:
+---------------------------
 
 1. Install the "pecg" package using pip by running the command line: "pip install pecg".
 

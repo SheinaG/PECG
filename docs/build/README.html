@@ -90,9 +90,10 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">POBM API REFERENCE:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pecg.html">pecg package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -171,11 +172,11 @@ S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to
 </div>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
-<p>Few steps are required to extract the morphological ECG biomarkers, thos steps are impelemented in the PEBM toolbox:</p>
+<p>Few steps are required to extract the morphological ECG biomarkers, those steps were implemented in the PECG toolbox:</p>
 <ol class="arabic simple">
-<li><p>ECG Signal Preprocessing - Before computing the ECG morphological biomarkers, prefiltering of the raw ECG time series is performed to remove the baseline wander as well as remove high frequency noise. Specifically, the toolbox include a zero phase second-order infinite impulse response bandpass filter with the passband of 0.67Hz - 100Hz to remove baseline wander and high frequency noise. Also, the toolbox include an optional Notch filter that can be set to 50 or 60Hz to remove the power-line interference.</p></li>
-<li><p>ECG Fiducial Points Detection - The toolbox include the epltd R-peaks algorithem, and the the well-known wavedet algorithm for ECG fiducial points  detection.</p></li>
-<li><p>Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet then the feature was marked as a NaN. For an ECG channel a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.</p></li>
+<li><p>ECG Signal Preprocessing - Before computing the ECG morphological biomarkers, prefiltering of the raw ECG time series is performed to remove the baseline wander and the high frequency noise. Specifically, the toolbox includes a zero phase second-order infinite impulse response bandpass filter with the passband of 0.67Hz - 100Hz. Also, the toolbox includes an optional Notch filter that can be set to 50 or 60Hz to remove the power-line interference.</p></li>
+<li><p>ECG Fiducial Points Detection - The toolbox includes the epltd R-peaks algorithm, and the well-known wavedet algorithm for ECG fiducial points detection.</p></li>
+<li><p>Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet, then the feature was marked as a NaN. For an ECG channel, a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.</p></li>
 </ol>
 <a class="reference internal image-reference" href="_images/ecg_wth_bio.png"><img alt="_images/ecg_wth_bio.png" src="_images/ecg_wth_bio.png" style="width: 600px;" /></a>
 <ol class="arabic simple" start="4">
@@ -193,17 +194,16 @@ S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to
 <p>numpy</p>
 <p>mne</p>
 <p>wfdb</p>
-<p>All the python requirements exept wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb</p>
+<p>All the python requirements except wfdb are installed when the toolbox is installed. To install wfbd run: pip install wfdb</p>
 </div>
 <div class="section" id="system-requirements">
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this heading">¶</a></h2>
-<p>For linux- to run the wavdet fiucial-points detector <a class="reference external" href="https://www.mathworks.com/products/compiler/matlab-runtime.html">matlab runtime (MCR) 2021a</a> is requierd.</p>
-<p>For windows- to run the wavdet fiucial-points detector <a class="reference external" href="https://www.mathworks.com/products/compiler/matlab-runtime.html">matlab runtime (MCR) 2020a</a> is requierd.</p>
-<p>If you wish to use the epltd peak detector <a class="reference external" href="https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.">additional wfdb toolbox</a> is requierd.</p>
-<p>If you don’t want or can’t install this - It’s Ok! you can use another peak detectors from the package.</p>
+<p>To run the wavdet fiducial-points detector <a class="reference external" href="https://www.mathworks.com/products/compiler/matlab-runtime.html">matlab runtime (MCR) 2021a</a> is required.</p>
+<p>If you wish to use the epltd peak detector <a class="reference external" href="https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml.">additional wfdb toolbox</a> is required.</p>
+<p>If you don’t want or can’t install this - It’s Ok! you can use another peak detector from the package.</p>
 </div>
-<div class="section" id="instractions-for-installation">
-<h2>Instractions for installation:<a class="headerlink" href="#instractions-for-installation" title="Permalink to this heading">¶</a></h2>
+<div class="section" id="installation-instractions">
+<h2>Installation instractions:<a class="headerlink" href="#installation-instractions" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Install the “pecg” package using pip by running the command line: “pip install pecg”.</p></li>
 <li><p>Install the “wfdb” package using pip by running the command line: “pip install wfdb”.</p></li>
