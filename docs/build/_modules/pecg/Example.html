@@ -164,11 +164,11 @@
 <span class="kn">import</span> <span class="nn">wfdb</span>
 
 
-<div class="viewcode-block" id="load_example"><a class="viewcode-back" href="../../pecg.html#pecg.Example.load_example">[docs]</a><span class="k">def</span> <span class="nf">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="load_example"><a class="viewcode-back" href="../../pecg.html#pecg.Example.load_example">[docs]</a><span class="k">def</span> <span class="nf">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The load_example function loads an ECG signal from the PhysioNet open source datasets. There are three types of ECG</span>
 <span class="sd">    that might be downloded: longe single lead ECG, &#39;12-lead&#39; and a Holter with two channels.</span>
-<span class="sd">    </span>
+
 <span class="sd">    :param  ecg_type: The type of the signal that you would like download: &#39;single-lead&#39;, &#39;12-lead&#39; and &#39;Holter&#39;.</span>
 <span class="sd">    :return:</span>
 <span class="sd">        * signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</span>
