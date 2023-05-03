@@ -15,6 +15,15 @@ pecg.Preprocessing
    :undoc-members:
    :show-inheritance:
 
+pecg.Example
+--------------------------
+
+.. automodule:: pecg.Example
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 
 Module contents
 ---------------
