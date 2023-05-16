@@ -20,17 +20,16 @@ Few steps are required to extract the morphological ECG biomarkers, those steps 
 
 3. Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet, then the feature was marked as a NaN. For an ECG channel, a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.
 
-![alt text](https://github.com/SheinaG/pebm_new/blob/master/ecg_wth_bio.png?raw=true)
-
 4. Summary Statistics - For a specified time window the six summary statistics (mean, median, min, max, IQR and std) are computed for all ECG biomarkers.
+
+![alt text](https://github.com/SheinaG/pebm_new/blob/master/ecg_wth_bio.png?raw=true)
 
 
 ## Installation
 
 Available on pip, with the command: 
-pip install pebm
+pip install pecg
 
-pip project: pip install -i https://test.pypi.org/simple/ pebm
 
 ## Requirements
 

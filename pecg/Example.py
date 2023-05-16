@@ -34,5 +34,3 @@ def load_example(ecg_type: str) -> (np.ndarray, int):
     return signal, fields['fs']
 
 
-
-a = 5
