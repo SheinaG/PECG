@@ -29,7 +29,7 @@ def load_example(ecg_type: str) -> (np.ndarray, int):
     if ecg_type == 'single-lead':
         signal, fields = wfdb.rdsamp('a01', pn_dir='apnea-ecg')
 
-    signal = np.transpose(signal)
+    #signal = np.transpose(signal)
 
     return signal, fields['fs']
 
