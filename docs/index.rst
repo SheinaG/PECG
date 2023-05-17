@@ -3,6 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+PECG API REFERENCE
+==================
+
 .. include:: README.rst
 
 .. toctree::
@@ -10,7 +13,17 @@
    :caption: PECG API REFERENCE:
 
    pecg
+
+
+TUTORIALS
+==================
+
+.. toctree::
+   :maxdepth: 4
+   :caption: tutorials:
+
    tutorials/pecg_analysis.rst
+   tutorials/pecg_Holter_analysis.rst
 
 
 

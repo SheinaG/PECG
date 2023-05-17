@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pecg.ecg package" href="pecg.ecg.html" />
-    <link rel="prev" title="PhysioZoo ECG documentation" href="index.html" /> 
+    <link rel="prev" title="PECG API REFERENCE" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -112,7 +112,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-pecg">Module contents</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -219,7 +223,10 @@ the ECG signal as well as estimating the signal quality.
 :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N i the number of samples.
 :param fs: The sampling frequency of the signal [Hz].</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pecg</span>
+<span class="kn">from</span> <span class="nn">pecg.Example</span> <span class="kn">import</span> <span class="n">load_example</span>
 <span class="kn">from</span> <span class="nn">pecg</span> <span class="kn">import</span> <span class="n">Preprocessing</span> <span class="k">as</span> <span class="n">Pre</span>
+
+<span class="n">signal</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="o">=</span><span class="s1">&#39;single-lead&#39;</span><span class="p">)</span>
 <span class="n">pre</span> <span class="o">=</span> <span class="n">Pre</span><span class="o">.</span><span class="n">Preprocessing</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -275,9 +282,7 @@ IEEE transactions on biomedical engineering, 60(6), 1660-1666.</p>
 <dd class="field-even"><p>The ‘bsqi’ score, a flout between 0 and 1.</p>
 </dd>
 </dl>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>bsqi_score = pre.bsqi()
-if bsqi_score &lt; 0.8:
-    print(&#39;It&#39;s a bad quality ECG recording!&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bsqi_score</span> <span class="o">=</span> <span class="n">pre</span><span class="o">.</span><span class="n">bsqi</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -324,7 +329,7 @@ that might be downloded: longe single lead ECG, ‘12-lead’ and a Holter with 
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="pecg.ecg.html" class="btn btn-neutral float-right" title="pecg.ecg package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="index.html" class="btn btn-neutral float-left" title="PhysioZoo ECG documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="PECG API REFERENCE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

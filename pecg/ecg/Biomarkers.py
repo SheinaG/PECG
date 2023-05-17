@@ -16,9 +16,13 @@ class Biomarkers:
 
 
         .. code-block:: python
-
+            
+            import pecg 
             from pecg.ecg import Biomarkers as Obm
-            obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)
+            from pecg.Example import load_example
+            
+            signal, fs = load_example(ecg_type='12-lead')
+            obm = Obm.Biomarkers(signal, fs, fiducials)
             ints, stat_i = obm.intervals()
             waves, stat_w = obm.waves()
 

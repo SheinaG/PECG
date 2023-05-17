@@ -22,9 +22,13 @@ class FiducialPoints:
         :param fs: The sampling frequency of the signal.[Hz]
 
         .. code-block:: python
-
+        
+            import pecg
+            from pecg.Example import load_example
             from pecg.ecg import FiducialPoints as Fp
-            fp = Fp.FiducialPoints(f_ecg_rec, fs)
+            
+            signal, fs = load_example(ecg_type='Holter')
+            fp = Fp.FiducialPoints(signal, fs)
 
         """
         if fs <= 0:
@@ -42,9 +46,7 @@ class FiducialPoints:
         The algorithm is described in the following paper: [1]_. The function is calculating
         the fiducial points of the ECG recording using wavelet transform.
 
-        .. [1] Martinze at el (2004),
-            A wavelet-based ECG delineator: evaluation on standard databases.
-            IEEE Transactions on Biomedical Engineering, 51(4), 570-581.
+        .. [1] Martínez, Juan Pablo, Rute Almeida, Salvador Olmos, Ana Paula Rocha, and Pablo Laguna. "A wavelet-based ECG delineator: evaluation on standard databases." IEEE Transactions on biomedical engineering 51, no. 4 (2004): 570-581.
 
         :param matlab_pat: path to matlab runtime 2021a directory
         :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.

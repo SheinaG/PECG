@@ -20,7 +20,10 @@ class Preprocessing:
         .. code-block:: python
 
             import pecg
+            from pecg.Example import load_example
             from pecg import Preprocessing as Pre
+            
+            signal, fs = load_example(ecg_type='single-lead')
             pre = Pre.Preprocessing(signal, fs)
 
         """
@@ -78,7 +81,7 @@ class Preprocessing:
         """
         signal = self.signal
         fs = self.fs
-        filter_order = 75  # ??
+        filter_order = 75  
         low_cut = 0.67
         high_cut = 100
 
@@ -123,14 +126,13 @@ class Preprocessing:
         :return: The 'bsqi' score, a flout between 0 and 1.
 
 
+
         .. code-block:: python
 
             bsqi_score = pre.bsqi()
-            if bsqi_score < 0.8:
-                print('It's a bad quality ECG recording!')
+
 
         """
-
         fs = self.fs
         signal = self.signal
 

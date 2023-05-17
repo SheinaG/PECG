@@ -90,9 +90,14 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">POBM API REFERENCE:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../pecg.html">pecg package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -183,9 +188,13 @@
 <span class="sd">        :param fs: The sampling frequency of the signal.[Hz]</span>
 
 <span class="sd">        .. code-block:: python</span>
-
+<span class="sd">        </span>
+<span class="sd">            import pecg</span>
+<span class="sd">            from pecg.Example import load_example</span>
 <span class="sd">            from pecg.ecg import FiducialPoints as Fp</span>
-<span class="sd">            fp = Fp.FiducialPoints(f_ecg_rec, fs)</span>
+<span class="sd">            </span>
+<span class="sd">            signal, fs = load_example(ecg_type=&#39;Holter&#39;)</span>
+<span class="sd">            fp = Fp.FiducialPoints(signal, fs)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
@@ -203,9 +212,7 @@
 <span class="sd">        The algorithm is described in the following paper: [1]_. The function is calculating</span>
 <span class="sd">        the fiducial points of the ECG recording using wavelet transform.</span>
 
-<span class="sd">        .. [1] Martinze at el (2004),</span>
-<span class="sd">            A wavelet-based ECG delineator: evaluation on standard databases.</span>
-<span class="sd">            IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</span>
+<span class="sd">        .. [1] Martínez, Juan Pablo, Rute Almeida, Salvador Olmos, Ana Paula Rocha, and Pablo Laguna. &quot;A wavelet-based ECG delineator: evaluation on standard databases.&quot; IEEE Transactions on biomedical engineering 51, no. 4 (2004): 570-581.</span>
 
 <span class="sd">        :param matlab_pat: path to matlab runtime 2021a directory</span>
 <span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.</span>

@@ -94,6 +94,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../pecg.html">pecg package</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
+</ul>
 
             
           
@@ -181,7 +186,10 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            import pecg</span>
+<span class="sd">            from pecg.Example import load_example</span>
 <span class="sd">            from pecg import Preprocessing as Pre</span>
+<span class="sd">            </span>
+<span class="sd">            signal, fs = load_example(ecg_type=&#39;single-lead&#39;)</span>
 <span class="sd">            pre = Pre.Preprocessing(signal, fs)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -239,7 +247,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
         <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
-        <span class="n">filter_order</span> <span class="o">=</span> <span class="mi">75</span>  <span class="c1"># ??</span>
+        <span class="n">filter_order</span> <span class="o">=</span> <span class="mi">75</span>  
         <span class="n">low_cut</span> <span class="o">=</span> <span class="mf">0.67</span>
         <span class="n">high_cut</span> <span class="o">=</span> <span class="mi">100</span>
 
@@ -284,14 +292,13 @@
 <span class="sd">        :return: The &#39;bsqi&#39; score, a flout between 0 and 1.</span>
 
 
+
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            bsqi_score = pre.bsqi()</span>
-<span class="sd">            if bsqi_score &lt; 0.8:</span>
-<span class="sd">                print(&#39;It&#39;s a bad quality ECG recording!&#39;)</span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal</span>
 

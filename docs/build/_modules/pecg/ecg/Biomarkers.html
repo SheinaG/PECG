@@ -90,9 +90,14 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">POBM API REFERENCE:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../pecg.html">pecg package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -177,9 +182,13 @@
 
 
 <span class="sd">        .. code-block:: python</span>
-
+<span class="sd">            </span>
+<span class="sd">            import pecg </span>
 <span class="sd">            from pecg.ecg import Biomarkers as Obm</span>
-<span class="sd">            obm = Obm.Biomarkers(f_ecg_rec, fs, fiducials)</span>
+<span class="sd">            from pecg.Example import load_example</span>
+<span class="sd">            </span>
+<span class="sd">            signal, fs = load_example(ecg_type=&#39;12-lead&#39;)</span>
+<span class="sd">            obm = Obm.Biomarkers(signal, fs, fiducials)</span>
 <span class="sd">            ints, stat_i = obm.intervals()</span>
 <span class="sd">            waves, stat_w = obm.waves()</span>
 

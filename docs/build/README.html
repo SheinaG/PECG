@@ -93,7 +93,11 @@
               <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pecg.html">pecg package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -177,11 +181,9 @@ S. Gendelman et al., “PhysioZoo ECG: Digital electrocardiography biomarkers to
 <li><p>ECG Signal Preprocessing - Before computing the ECG morphological biomarkers, prefiltering of the raw ECG time series is performed to remove the baseline wander and the high frequency noise. Specifically, the toolbox includes a zero phase second-order infinite impulse response bandpass filter with the passband of 0.67Hz - 100Hz. Also, the toolbox includes an optional Notch filter that can be set to 50 or 60Hz to remove the power-line interference.</p></li>
 <li><p>ECG Fiducial Points Detection - The toolbox includes the epltd R-peaks algorithm, and the well-known wavedet algorithm for ECG fiducial points detection.</p></li>
 <li><p>Engineering of ECG Biomarkers - Using the fiducial points ECG biomarkers are engineered for individual ECG cycles. When a biomarker cannot be engineered because some fiducial points could not be detected by wavedet, then the feature was marked as a NaN. For an ECG channel, a total of 14 features are extracted from intervals duration and 8 from waves characteristics to describe the ECG morphology.</p></li>
-</ol>
-<a class="reference internal image-reference" href="_images/ecg_wth_bio.png"><img alt="_images/ecg_wth_bio.png" src="_images/ecg_wth_bio.png" style="width: 600px;" /></a>
-<ol class="arabic simple" start="4">
 <li><p>Summary Statistics - For a specified time window the six summary statistics (mean, median, min, max, IQR and std) are computed for all ECG biomarkers.</p></li>
 </ol>
+<a class="reference internal image-reference" href="_images/ecg_wth_bio.png"><img alt="_images/ecg_wth_bio.png" src="_images/ecg_wth_bio.png" style="width: 600px;" /></a>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>

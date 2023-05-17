@@ -43,6 +43,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ECG morphological analysis" href="tutorials/pecg_analysis.html" />
     <link rel="prev" title="pecg package" href="pecg.html" /> 
 </head>
 
@@ -107,9 +108,15 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pecg.html#module-pecg.Preprocessing">pecg.Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pecg.html#module-pecg.Example">pecg.Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pecg.html#module-pecg">Module contents</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -196,8 +203,12 @@
 </ul>
 </dd>
 </dl>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">FiducialPoints</span> <span class="k">as</span> <span class="n">Fp</span>
-<span class="n">fp</span> <span class="o">=</span> <span class="n">Fp</span><span class="o">.</span><span class="n">FiducialPoints</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pecg</span>
+<span class="kn">from</span> <span class="nn">pecg.Example</span> <span class="kn">import</span> <span class="n">load_example</span>
+<span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">FiducialPoints</span> <span class="k">as</span> <span class="n">Fp</span>
+
+<span class="n">signal</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="o">=</span><span class="s1">&#39;Holter&#39;</span><span class="p">)</span>
+<span class="n">fp</span> <span class="o">=</span> <span class="n">Fp</span><span class="o">.</span><span class="n">FiducialPoints</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -208,9 +219,7 @@ The algorithm is described in the following paper: <a class="footnote-reference 
 the fiducial points of the ECG recording using wavelet transform.</p>
 <dl class="footnote brackets">
 <dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Martinze at el (2004),
-A wavelet-based ECG delineator: evaluation on standard databases.
-IEEE Transactions on Biomedical Engineering, 51(4), 570-581.</p>
+<dd><p>Martínez, Juan Pablo, Rute Almeida, Salvador Olmos, Ana Paula Rocha, and Pablo Laguna. “A wavelet-based ECG delineator: evaluation on standard databases.” IEEE Transactions on biomedical engineering 51, no. 4 (2004): 570-581.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -310,8 +319,12 @@ biomedical engineering 42, no. 6 (2014): 1340-1353.</p>
 :param signal: The ECG signal as a ndarray.
 :param fs: The sampling frequency of the signal [Hz].
 :param fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points. this nested dictionary can be calculated using the FiducialPoints module.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">Biomarkers</span> <span class="k">as</span> <span class="n">Obm</span>
-<span class="n">obm</span> <span class="o">=</span> <span class="n">Obm</span><span class="o">.</span><span class="n">Biomarkers</span><span class="p">(</span><span class="n">f_ecg_rec</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pecg</span> 
+<span class="kn">from</span> <span class="nn">pecg.ecg</span> <span class="kn">import</span> <span class="n">Biomarkers</span> <span class="k">as</span> <span class="n">Obm</span>
+<span class="kn">from</span> <span class="nn">pecg.Example</span> <span class="kn">import</span> <span class="n">load_example</span>
+
+<span class="n">signal</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="o">=</span><span class="s1">&#39;12-lead&#39;</span><span class="p">)</span>
+<span class="n">obm</span> <span class="o">=</span> <span class="n">Obm</span><span class="o">.</span><span class="n">Biomarkers</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fiducials</span><span class="p">)</span>
 <span class="n">ints</span><span class="p">,</span> <span class="n">stat_i</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">intervals</span><span class="p">()</span>
 <span class="n">waves</span><span class="p">,</span> <span class="n">stat_w</span> <span class="o">=</span> <span class="n">obm</span><span class="o">.</span><span class="n">waves</span><span class="p">()</span>
 </pre></div>
@@ -452,6 +465,7 @@ biomedical engineering 42, no. 6 (2014): 1340-1353.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tutorials/pecg_analysis.html" class="btn btn-neutral float-right" title="ECG morphological analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="pecg.html" class="btn btn-neutral float-left" title="pecg package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

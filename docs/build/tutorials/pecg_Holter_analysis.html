@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ECG morphological analysis &mdash; pecg  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="ECG morphological analysis" href="pecg_analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pecg
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pecg.html">pecg package</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="pecg_analysis.html">ECG morphological analysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ECG morphological analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction"><strong>Introduction</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performing-ecg-morphological-analysis"><strong>Performing ECG morphological analysis</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exporting-morphological-biomarkers"><strong>Exporting morphological biomarkers</strong></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pecg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ECG morphological analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/tutorials/pecg_Holter_analysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ecg-morphological-analysis">
+<h1>ECG morphological analysis<a class="headerlink" href="#ecg-morphological-analysis" title="Permalink to this heading">¶</a></h1>
+<p>In this tutorial you will learn how to use <strong>PhysioZoo ECG</strong> to compute the morphological biomarkers and export the computed values.
+(link: <a class="reference external" href="https://physiozoo.com/">https://physiozoo.com/</a>)</p>
+<div class="section" id="introduction">
+<h2><strong>Introduction</strong><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>An electrocardiogram (ECG) is a simple test that uses temporary electrodes on the chest and limbs to monitor, track, and document the heart’s electrical activity.
+The ECG provides information about the function of the intracardiac conduction system, which is responsible for generating and propagating electrical impulses through the heart.
+The ECG records the sequence of depolarization and repolarization of the atria and ventricles, which are represented by different waves on the ECG.</p>
+<p>Studying the morphological statistics of the signal may provide information on the underlying physiological heart condition.
+<strong>PhysioZoo ECG</strong> provides the framework and tools for extracting morphological biomarkers from the ECG signal.</p>
+</div>
+<div class="section" id="performing-ecg-morphological-analysis">
+<h2><strong>Performing ECG morphological analysis</strong><a class="headerlink" href="#performing-ecg-morphological-analysis" title="Permalink to this heading">¶</a></h2>
+<p>Start by entering the ECG interface by clicking on the ‘Peak Detection’ tab on the top right, then load some ECG example by clicking File -&gt; Open data file -&gt; ECG_example.txt. The program will automaticly present the
+ECG file you uploded.</p>
+<img alt="../_images/before_analysis.png" class="align-center" src="../_images/before_analysis.png" />
+<p>To perform your morphological analysis, please follow these instructions:</p>
+<ol class="arabic simple">
+<li><p>Prefiltering the signal: On the left panel, select the “Configuration” tab. On the bottom of the tab, you will find a section labeled: <strong>Fiducials filtering parameters</strong> which refers to two filters applied to your signal before analysis:</p>
+<ul class="simple">
+<li><p>The bandpass filter in the range of [0.67,100] Hz. Its purpose is to remove the baseline wander and high frequency noise. Check the box labeled <em>Bandpass filter</em> if you want to use it</p></li>
+<li><p>The notch filter. Its purpose is to remove the powerline interface. If you want to use it, choose the frequency of the powerline interface of the country where the ECG was recorded.</p></li>
+</ul>
+</li>
+<li><p>Definition of the window for anlysis: On the right panel, define the W.S. (start of the window) and the W.L. (length of the window) you want to analyze. You can analyze all of your signal or part of it. Note that if you analyze a long window,it may take some time.</p></li>
+<li><p>Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points.</p></li>
+<li><p>Click the <strong>Find Fiducials</strong> button.</p></li>
+</ol>
+<p>Congrats! You have made your first morphological analysis with <strong>PhysioZoo ECG</strong>!
+The biomarkers are divided into two different categories: Duration and Amplitudes, the statistical measurments of the biomarkers will be presented in a table, in the bottom panel.</p>
+<img alt="../_images/after_analysis.png" class="align-center" src="../_images/after_analysis.png" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For multilead anlysis only the median of each biomarker will be presented in the table, while for singel lead anlysis 6 statistical mesurment will be presented for each biomarker:</p>
+</div>
+<p>mean, median, min, max. IQR and std.</p>
+</div>
+<div class="section" id="exporting-morphological-biomarkers">
+<h2><strong>Exporting morphological biomarkers</strong><a class="headerlink" href="#exporting-morphological-biomarkers" title="Permalink to this heading">¶</a></h2>
+<p>You can export the morphological biomarkers by <strong>PhysioZoo ECG</strong>. Go to File -&gt; Save Fiducial statistics. The excel file that you saved containe all the computed biomarkers for each lead.</p>
+<img alt="../_images/results_mor_analysis.PNG" class="align-center" src="../_images/results_mor_analysis.PNG" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pecg_analysis.html" class="btn btn-neutral float-left" title="ECG morphological analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Sheina.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
