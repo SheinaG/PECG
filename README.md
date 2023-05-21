@@ -50,7 +50,7 @@ To run the wavdet fiducial-points detector matlab runtime (MCR) 2021a is require
 
 To run the epltd peak detector additional wfdb toolbox is required. https://archive.physionet.org/physiotools/wfdb-linux-quick-start.shtml
 
-## Installation instructions:
+## Installation instructions
 
 1. Install the "pecg" package using pip by running the command line: "pip install pecg".
 
@@ -61,3 +61,34 @@ To run the epltd peak detector additional wfdb toolbox is required. https://arch
 ## Documentation
 
 https://pecg.readthedocs.io/en/latest/pecg.html
+
+## Code Example
+
+```
+import pecg
+from pecg.Example import load_example
+from pecg import Preprocessing as Pre
+from pecg.ecg import FiducialPoints as Fp
+from pecg.ecg import Biomarkers as Obm
+
+signal, fs = load_example(ecg_type='12-lead')
+
+pre = Pre.Preprocessing(signal, fs)
+filtered_ecg_rec = pre.notch(n_freq=60)
+filtered_ecg_rec = pre.bpfilt()
+
+
+fp = Fp.FiducialPoints(signal, fs)
+matlab_pat = '/usr/local/MATLAB/R2021a'
+peaks_jqrs = fp.jqrs()
+peaks_xqrs = fp.xqrs()
+
+bsqi_score = pre.bsqi(peaks_jqrs , peaks_xqrs)
+
+fiducials = fp.wavedet(matlab_pat, peaks_jqrs)
+
+obm = Obm.Biomarkers(signal, fs, fiducials)
+ints, stat_i = obm.intervals()
+waves, stat_w = obm.waves()
+
+```
