@@ -78,7 +78,7 @@ filtered_ecg_rec = pre.notch(n_freq=60)
 filtered_ecg_rec = pre.bpfilt()
 
 
-fp = Fp.FiducialPoints(signal, fs)
+fp = Fp.FiducialPoints(filtered_ecg_rec, fs)
 matlab_pat = '/usr/local/MATLAB/R2021a'
 peaks_jqrs = fp.jqrs()
 peaks_xqrs = fp.xqrs()
@@ -87,7 +87,7 @@ bsqi_score = pre.bsqi(peaks_jqrs , peaks_xqrs)
 
 fiducials = fp.wavedet(matlab_pat, peaks_jqrs)
 
-obm = Obm.Biomarkers(signal, fs, fiducials)
+obm = Obm.Biomarkers(filtered_ecg_rec, fs, fiducials)
 ints, stat_i = obm.intervals()
 waves, stat_w = obm.waves()
 
