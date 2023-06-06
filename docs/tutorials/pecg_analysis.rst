@@ -14,7 +14,7 @@ Studying the morphological characteristics of the ECG may provide information on
 
 **Performing ECG morphological analysis**
 ------------------------------------------------------------
-Start by entering the ECG interface by clicking on the 'Peak Detection' tab on the top right, then load some ECG example by clicking File -> Open data file -> Human_example_ecg_12_leads_short.txt. The program will automaticly present the ECG file you imported.
+Start by entering the ECG interface by clicking on the 'Pulse' menu on the top left, then load some ECG example by clicking File -> Open data file -> Human_example_ecg_12_leads_short.txt. The program will automaticly present the ECG file you imported.
 
 .. image:: before_analysis.png
    :align: center
@@ -29,7 +29,7 @@ To perform the analysis, please follow the instructions:
 
 #. Definition of the window for anlysis: On the right panel, define the W.S. (start of the window) and the W.L. (length of the window) you want to analyze. You can analyze all of your signal or part of it. Note that if you analyze a long window,it may take some time. 
 
-#. Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points.
+#. Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points (the fiducials points are calculated using the  `wavdet <https://pubmed.ncbi.nlm.nih.gov/15072211/>`_ algorithm).
  
 #. Click the **Find Fiducials** button. The fiducial poits will be detected and highlighted while the biomarkers will be automatically engineered and displayed on the lower pannels.
 
