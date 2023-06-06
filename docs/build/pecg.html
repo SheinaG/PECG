@@ -95,6 +95,10 @@
               <p class="caption" role="heading"><span class="caption-text">PECG API REFERENCE:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">pecg package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pecg.Example">pecg.Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pecg.Example.load_example"><code class="docutils literal notranslate"><span class="pre">load_example()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#module-pecg.Preprocessing">pecg.Preprocessing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pecg.Preprocessing.Preprocessing"><code class="docutils literal notranslate"><span class="pre">Preprocessing</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pecg.Preprocessing.Preprocessing.notch"><code class="docutils literal notranslate"><span class="pre">Preprocessing.notch()</span></code></a></li>
@@ -104,8 +108,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-pecg.Example">pecg.Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pecg.Example.load_example"><code class="docutils literal notranslate"><span class="pre">load_example()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pecg-ecg">pecg.ecg</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pecg.ecg.html">pecg.ecg package</a></li>
 </ul>
 </li>
@@ -185,6 +188,33 @@
             
   <div class="section" id="pecg-package">
 <h1>pecg package<a class="headerlink" href="#pecg-package" title="Permalink to this heading">¶</a></h1>
+<div class="section" id="module-pecg.Example">
+<span id="pecg-example"></span><h2>pecg.Example<a class="headerlink" href="#module-pecg.Example" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pecg.Example.load_example">
+<span class="sig-prename descclassname"><span class="pre">pecg.Example.</span></span><span class="sig-name descname"><span class="pre">load_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_type:</span> <span class="pre">str)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'numpy.ndarray'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/Example.html#load_example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.Example.load_example" title="Permalink to this definition">¶</a></dt>
+<dd><p>The load_example function loads ECG signal from some of the PhysioNet open source datasets. There are three types of ECG examples: long single lead ECG, 12-lead and a Holter with two channels.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param  ecg_type</dt>
+<dd class="field-odd"><p>The type of the signal that you would like download: ‘single-lead’, ‘12-lead’ and ‘Holter’.</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</p></li>
+<li><p>fs: The sampling frequency of the signal [Hz].</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pecg</span>
+<span class="kn">from</span> <span class="nn">pecg.Example</span> <span class="kn">import</span> <span class="n">load_example</span>
+<span class="n">signal</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="o">=</span><span class="s1">&#39;12-lead&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+</div>
 <div class="section" id="module-pecg.Preprocessing">
 <span id="pecg-preprocessing"></span><h2>pecg.Preprocessing<a class="headerlink" href="#module-pecg.Preprocessing" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
@@ -278,32 +308,8 @@ IEEE transactions on biomedical engineering, 60(6), 1660-1666.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-pecg.Example">
-<span id="pecg-example"></span><h2>pecg.Example<a class="headerlink" href="#module-pecg.Example" title="Permalink to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="pecg.Example.load_example">
-<span class="sig-prename descclassname"><span class="pre">pecg.Example.</span></span><span class="sig-name descname"><span class="pre">load_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_type:</span> <span class="pre">str)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'numpy.ndarray'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pecg/Example.html#load_example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pecg.Example.load_example" title="Permalink to this definition">¶</a></dt>
-<dd><p>The load_example function loads ECG signal from some of the PhysioNet open source datasets. There are three types of ECG examples: long single lead ECG, 12-lead and a Holter with two channels.</p>
-<blockquote>
-<div><dl class="field-list simple">
-<dt class="field-odd">param  ecg_type</dt>
-<dd class="field-odd"><p>The type of the signal that you would like download: ‘single-lead’, ‘12-lead’ and ‘Holter’.</p>
-</dd>
-<dt class="field-even">return</dt>
-<dd class="field-even"><ul class="simple">
-<li><p>signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</p></li>
-<li><p>fs: The sampling frequency of the signal [Hz].</p></li>
-</ul>
-</dd>
-</dl>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pecg</span>
-<span class="kn">from</span> <span class="nn">pecg.Example</span> <span class="kn">import</span> <span class="n">load_example</span>
-<span class="n">signal</span><span class="p">,</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">load_example</span><span class="p">(</span><span class="n">ecg_type</span><span class="o">=</span><span class="s1">&#39;12-lead&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</dd></dl>
-
+<div class="section" id="pecg-ecg">
+<h2>pecg.ecg<a class="headerlink" href="#pecg-ecg" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pecg.ecg.html">pecg.ecg package</a><ul>
