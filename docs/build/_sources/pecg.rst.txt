@@ -1,11 +1,6 @@
 pecg package
 ============
 
-.. toctree::
-   :maxdepth: 4
-
-   pecg.ecg
-
 
 pecg.Preprocessing
 --------------------------
@@ -22,6 +17,11 @@ pecg.Example
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. toctree::
+   :maxdepth: 4
+
+   pecg.ecg
 
 
 
