@@ -23,7 +23,7 @@ TUTORIALS
    :caption: tutorials:
 
    tutorials/pecg_analysis.rst
-   tutorials/pecg_Holter_analysis.rst
+
 
 
 

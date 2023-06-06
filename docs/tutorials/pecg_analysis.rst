@@ -1,8 +1,7 @@
 ECG morphological analysis
 ==========================
 
-In this tutorial you will learn how to use **PhysioZoo ECG** to compute the morphological biomarkers and export the computed values.
-(link: https://physiozoo.com/)
+In this tutorial you will learn how to use **PhysioZoo ECG** to engineer morphological ECG  biomarkers and export their values.
 
 **Introduction**
 ----------------------
@@ -10,18 +9,17 @@ An electrocardiogram (ECG) is a simple test that uses temporary electrodes on th
 The ECG provides information about the function of the intracardiac conduction system, which is responsible for generating and propagating electrical impulses through the heart. 
 The ECG records the sequence of depolarization and repolarization of the atria and ventricles, which are represented by different waves on the ECG.
 
-Studying the morphological statistics of the signal may provide information on the underlying physiological heart condition. 
-**PhysioZoo ECG** provides the framework and tools for extracting morphological biomarkers from the ECG signal.
+Studying the morphological characteristics of the ECG may provide information on  underlying physiological heart conditions. 
+**PhysioZoo ECG** provides a framework and tools for extracting morphological biomarkers from the ECG signal.
 
 **Performing ECG morphological analysis**
 ------------------------------------------------------------
-Start by entering the ECG interface by clicking on the 'Peak Detection' tab on the top right, then load some ECG example by clicking File -> Open data file -> ECG_example.txt. The program will automaticly present the 
-ECG file you uploded.
+Start by entering the ECG interface by clicking on the 'Peak Detection' tab on the top right, then load some ECG example by clicking File -> Open data file -> Human_example_ecg_12_leads_short.txt. The program will automaticly present the ECG file you imported.
 
 .. image:: before_analysis.png
    :align: center
 
-To perform your morphological analysis, please follow these instructions:
+To perform the analysis, please follow the instructions:
 
 #. Prefiltering the signal: On the left panel, select the "Configuration" tab. On the bottom of the tab, you will find a section labeled: **Fiducials filtering parameters** which refers to two filters applied to your signal before analysis:
    
@@ -33,7 +31,7 @@ To perform your morphological analysis, please follow these instructions:
 
 #. Visualization of multiple leads: Choose the leads you want to visualize and the leads on which you want to plot the fiducial points.
  
-#. Click the **Find Fiducials** button.
+#. Click the **Find Fiducials** button. The fiducial poits will be detected and highlighted while the biomarkers will be automatically engineered and displayed on the lower pannels.
 
 Congrats! You have made your first morphological analysis with **PhysioZoo ECG**!
 The biomarkers are divided into two different categories: Duration and Amplitudes, the statistical measurments of the biomarkers will be presented in a table, in the bottom panel. 
@@ -41,13 +39,12 @@ The biomarkers are divided into two different categories: Duration and Amplitude
 .. image:: after_analysis.png
    :align: center
 
-.. note:: For multilead anlysis only the median of each biomarker will be presented in the table, while for singel lead anlysis 6 statistical mesurment will be presented for each biomarker:
-mean, median, min, max. IQR and std.
+.. note:: For multilead anlysis only the median of each biomarker will be presented in the table, while for single lead anlysis 6 statistical mesurment computed over the selected window (defined by W.S. W.L.) will be presented for each biomarker namely: mean, median, min, max. IQR and std.
 
 **Exporting morphological biomarkers**
 --------------------------------------------
 
-You can export the morphological biomarkers by **PhysioZoo ECG**. Go to File -> Save Fiducial statistics. The excel file that you saved containe all the computed biomarkers for each lead. 
+You can export the morphological biomarkers. Go to File -> Save Fiducial Biomarkers. The excel file contains the engineered ECG biomarkers for each lead. 
 
 .. image:: results_mor_analysis.PNG
    :align: center
