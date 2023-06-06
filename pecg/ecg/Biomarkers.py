@@ -10,6 +10,7 @@ class Biomarkers:
     def __init__(self, signal: np.array, fs: int, fiducials: dict):
         """
         The purpose of the Biomarkers class is to calculate the biomarkers, we divided the morphological biomarkers into two main groups: intervals and waves.
+        
         :param signal: The ECG signal as a ndarray.
         :param fs: The sampling frequency of the signal [Hz].
         :param fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points. this nested dictionary can be calculated using the FiducialPoints module.
@@ -18,13 +19,17 @@ class Biomarkers:
         .. code-block:: python
             
             import pecg 
-            from pecg.ecg import Biomarkers as Obm
+            from pecg.ecg import Biomarkers as Bm
+            from pecg.ecg import FiducialPoints as Fp
             from pecg.Example import load_example
             
             signal, fs = load_example(ecg_type='12-lead')
-            obm = Obm.Biomarkers(signal, fs, fiducials)
-            ints, stat_i = obm.intervals()
-            waves, stat_w = obm.waves()
+            fp = Fp.FiducialPoints(signal, fs)
+            matlab_pat = '/usr/local/MATLAB/R2021a'
+            fiducials = fp.wavedet(matlab_pat)
+            bm = Bm.Biomarkers(signal, fs, fiducials)
+            ints, stat_i = bm.intervals()
+            waves, stat_w = bm.waves()
 
         """
         if fs <= 0:
@@ -43,11 +48,11 @@ class Biomarkers:
     def intervals(self):
         """
         :return:
-            * intervals_b: Dictionary that includes all the row data, for the **Interval duration and segments** biomarkers.
-            * intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Interval duration and segments** biomarker.
+            * intervals_b: Dictionary that includes all the raw data, for the **Intervals  and segments** biomarkers.
+            * intervals_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Intervals and segments** biomarker.
 
 
-        .. list-table:: **Interval duration and segments**:
+        .. list-table:: **Intervals and segments**:
             :widths: 25 75
             :header-rows: 1
 
@@ -114,11 +119,11 @@ class Biomarkers:
     def waves(self):
         """
         :return:
-            * waves_b: Dictionary that includes all the row data, for every **Waves characteristic** biomarker.
-            * waves_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Waves characteristic** biomarker.
+            * waves_b: Dictionary that includes all the raw data, for every **Wave characteristic** biomarker.
+            * wave_statistics: Dictionary that includes the mean, median, min, max, iqr and std, for every **Wave characteristic** biomarker.
 
 
-        .. list-table:: **Waves characteristics**:
+        .. list-table:: **Waves**:
             :widths: 25 75
             :header-rows: 1
 

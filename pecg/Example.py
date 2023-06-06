@@ -4,8 +4,7 @@ import wfdb
 
 def load_example(ecg_type: str) -> (np.ndarray, int):
     """
-    The load_example function loads an ECG signal from the PhysioNet open source datasets. There are three types of ECG
-    that might be downloded: longe single lead ECG, '12-lead' and a Holter with two channels.
+The load_example function loads ECG signal from some of the PhysioNet open source datasets. There are three types of ECG examples: long single lead ECG, 12-lead and a Holter with two channels.
 
     :param  ecg_type: The type of the signal that you would like download: 'single-lead', '12-lead' and 'Holter'.
     :return:

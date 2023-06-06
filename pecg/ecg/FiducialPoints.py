@@ -42,22 +42,20 @@ class FiducialPoints:
 
     def wavedet(self, matlab_pat: str, peaks: np.array = np.array([])):
         """
-        The wavedat function uses the matlab algorithm wavedet, compiled for python.
-        The algorithm is described in the following paper: [1]_. The function is calculating
-        the fiducial points of the ECG recording using wavelet transform.
+        The wavedet function uses the matlab algorithm wavedet which was compiled for Windows OS for its usage in python.
+        The algorithm is described in the the work of Martinez et al. [1]_. The function is calculating the fiducial points of the ECG time series using the wavelet transform.
 
         .. [1] Martínez, Juan Pablo, Rute Almeida, Salvador Olmos, Ana Paula Rocha, and Pablo Laguna. "A wavelet-based ECG delineator: evaluation on standard databases." IEEE Transactions on biomedical engineering 51, no. 4 (2004): 570-581.
 
         :param matlab_pat: path to matlab runtime 2021a directory
-        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.
-        :return: fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points.
+        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not provided they are calculated using the jqrs detector.
+        :return: fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for each one of nine fiducials points.
 
 
         .. code-block:: python
 
             matlab_pat = '/usr/local/MATLAB/R2021a'
-            peaks = fp.jqrs()
-            fiducials = fp.wavedet(matlab_pat, peaks)
+            fiducials = fp.wavedet(matlab_pat)
 
 
         """

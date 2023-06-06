@@ -97,7 +97,6 @@
 <p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -208,22 +207,20 @@
 
 <div class="viewcode-block" id="FiducialPoints.wavedet"><a class="viewcode-back" href="../../../pecg.ecg.html#pecg.ecg.FiducialPoints.FiducialPoints.wavedet">[docs]</a>    <span class="k">def</span> <span class="nf">wavedet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matlab_pat</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The wavedat function uses the matlab algorithm wavedet, compiled for python.</span>
-<span class="sd">        The algorithm is described in the following paper: [1]_. The function is calculating</span>
-<span class="sd">        the fiducial points of the ECG recording using wavelet transform.</span>
+<span class="sd">        The wavedet function uses the matlab algorithm wavedet which was compiled for Windows OS for its usage in python.</span>
+<span class="sd">        The algorithm is described in the the work of Martinez et al. [1]_. The function is calculating the fiducial points of the ECG time series using the wavelet transform.</span>
 
 <span class="sd">        .. [1] Martínez, Juan Pablo, Rute Almeida, Salvador Olmos, Ana Paula Rocha, and Pablo Laguna. &quot;A wavelet-based ECG delineator: evaluation on standard databases.&quot; IEEE Transactions on biomedical engineering 51, no. 4 (2004): 570-581.</span>
 
 <span class="sd">        :param matlab_pat: path to matlab runtime 2021a directory</span>
-<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with the jqrs detector.</span>
-<span class="sd">        :return: fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for for each one of nine fiducials points.</span>
+<span class="sd">        :param peaks: Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not provided they are calculated using the jqrs detector.</span>
+<span class="sd">        :return: fiducials: Nested dictionary of leads - For every lead there is a dictionary that includes indexes for each one of nine fiducials points.</span>
 
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            matlab_pat = &#39;/usr/local/MATLAB/R2021a&#39;</span>
-<span class="sd">            peaks = fp.jqrs()</span>
-<span class="sd">            fiducials = fp.wavedet(matlab_pat, peaks)</span>
+<span class="sd">            fiducials = fp.wavedet(matlab_pat)</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>

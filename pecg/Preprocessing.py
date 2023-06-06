@@ -13,6 +13,7 @@ class Preprocessing:
         """
         The Preprocessing class provides some routines for pre-filtering
         the ECG signal as well as estimating the signal quality.
+        
         :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N i the number of samples.
         :param fs: The sampling frequency of the signal [Hz].
 
@@ -39,7 +40,9 @@ class Preprocessing:
 
         """
         The notch function applies a notch filter in order to remove the power line artefacts.
+        
         :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)
+        
         :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.
 
 
@@ -71,6 +74,7 @@ class Preprocessing:
         """
         The bpfilt function applies a bandpass filter between [0.67, 100] Hz,
         this function uses a zero-phase Butterworth filter with 75 coefficients.
+        
         :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.
 
 
@@ -109,8 +113,7 @@ class Preprocessing:
     def bsqi(self, peaks: np.array = np.array([]), test_peaks: np.array = np.array([])):
         """
         bSQI is an automated algorithm to detect poor-quality electrocardiograms.
-        This function is based on the following paper:[1]_.
-        The implementation itself is based on: [2]_.
+        This function is based on the work of Li et al. [1]_ and Behar [2]_.
 
         .. [1] Li, Qiao, Roger G. Mark, and Gari D. Clifford.
             "Robust heart rate estimation from multiple asynchronous noisy sources
@@ -123,7 +126,8 @@ class Preprocessing:
 
         :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with jqrs detector.
         :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when N is the number of peaks. If test peaks are not given, the test peaks are calculated with xqrs detector.
-        :return: The 'bsqi' score, a flout between 0 and 1.
+        
+        :return: The 'bsqi' score, a float between 0 and 1.
 
 
 

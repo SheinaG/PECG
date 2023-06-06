@@ -97,7 +97,6 @@
 <p class="caption" role="heading"><span class="caption-text">tutorials:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pecg_analysis.html">ECG morphological analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pecg_Holter_analysis.html">ECG morphological analysis</a></li>
 </ul>
 
             
@@ -179,6 +178,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The Preprocessing class provides some routines for pre-filtering</span>
 <span class="sd">        the ECG signal as well as estimating the signal quality.</span>
+<span class="sd">        </span>
 <span class="sd">        :param signal: the ECG signal as a ndarray, with shape (L, N) when L is the number of channels or leads and N i the number of samples.</span>
 <span class="sd">        :param fs: The sampling frequency of the signal [Hz].</span>
 
@@ -205,7 +205,9 @@
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The notch function applies a notch filter in order to remove the power line artefacts.</span>
+<span class="sd">        </span>
 <span class="sd">        :param n_freq: The expected center frequency of the power line interference. Typically, 50Hz (e.g. Europe) or 60Hz (e.g. US)</span>
+<span class="sd">        </span>
 <span class="sd">        :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</span>
 
 
@@ -237,6 +239,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The bpfilt function applies a bandpass filter between [0.67, 100] Hz,</span>
 <span class="sd">        this function uses a zero-phase Butterworth filter with 75 coefficients.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: The filtered ECG signal, with shape (L, N) when L is the number of channels or leads and N is the number of samples.</span>
 
 
@@ -275,8 +278,7 @@
 <div class="viewcode-block" id="Preprocessing.bsqi"><a class="viewcode-back" href="../../pecg.html#pecg.Preprocessing.Preprocessing.bsqi">[docs]</a>    <span class="k">def</span> <span class="nf">bsqi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">test_peaks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        bSQI is an automated algorithm to detect poor-quality electrocardiograms.</span>
-<span class="sd">        This function is based on the following paper:[1]_.</span>
-<span class="sd">        The implementation itself is based on: [2]_.</span>
+<span class="sd">        This function is based on the work of Li et al. [1]_ and Behar [2]_.</span>
 
 <span class="sd">        .. [1] Li, Qiao, Roger G. Mark, and Gari D. Clifford.</span>
 <span class="sd">            &quot;Robust heart rate estimation from multiple asynchronous noisy sources</span>
@@ -289,7 +291,8 @@
 
 <span class="sd">        :param peaks:  Optional input- Annotation of the reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when L is the number of channels or leads and N is the number of peaks. If peaks are not given, the peaks are calculated with jqrs detector.</span>
 <span class="sd">        :param test_peaks: Optional input - Annotation of the anther reference peak detector (Indices of the peaks), as an ndarray of shape (L,N), when N is the number of peaks. If test peaks are not given, the test peaks are calculated with xqrs detector.</span>
-<span class="sd">        :return: The &#39;bsqi&#39; score, a flout between 0 and 1.</span>
+<span class="sd">        </span>
+<span class="sd">        :return: The &#39;bsqi&#39; score, a float between 0 and 1.</span>
 
 
 
