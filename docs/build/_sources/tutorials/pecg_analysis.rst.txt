@@ -41,10 +41,19 @@ The biomarkers are divided into two different categories: Duration and Amplitude
 
 .. note:: For multilead anlysis only the median of each biomarker will be presented in the table, while for single lead anlysis 6 statistical mesurment computed over the selected window (defined by W.S. W.L.) will be presented for each biomarker namely: mean, median, min, max. IQR and std.
 
+**Exporting fiducial points**
+--------------------------------------------
+
+You can export the fiducial points. Go to File -> Save fiducial points. The excel file contains the computed fiducial points for each lead. 
+
+
+.. image:: results_fiducials.png
+   :align: center
+
 **Exporting morphological biomarkers**
 --------------------------------------------
 
-You can export the morphological biomarkers. Go to File -> Save Fiducial Biomarkers. The excel file contains the engineered ECG biomarkers for each lead. 
+You can export the morphological biomarkers. Go to File -> Save fiducial biomarkers. The excel file contains the engineered ECG biomarkers for each lead. 
 
 .. image:: results_mor_analysis.PNG
    :align: center
