@@ -1,8 +1,7 @@
 import numpy as np
 import sys
-sys.path.append("C:\Sheina\PECG")
 
-#ecg = open("C:\Sheina\PECG\pecg\ecg\wavedet_exe\Dog_example_ecg1.txt", "r")
+
 ecg = open("/home/sheina/PECG/pecg/ecg/wavedet_exe/Dog_example_ecg1.txt")
 signal1 = ecg.read()
 signal_dog = signal1.split('\n')
@@ -17,7 +16,6 @@ bsqi = pre.bsqi()
 
 from pecg.ecg import FiducialPoints as Fp
 fp = Fp.FiducialPoints(signal, fs=500)
-#matlab_pat = 'C:\Apps\MATLAB_Runtime_R2022a_Update_5_win64'
 matlab_pat = '/usr/local/MATLAB/R2021a'
 peaks = fp.jqrs()
 fiducials = fp.wavedet(matlab_pat, peaks)
