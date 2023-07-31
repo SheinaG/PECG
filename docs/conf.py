@@ -100,7 +100,7 @@ html_theme = "sphinx_rtd_theme"
 # documentation.
 #
 
-html_logo = "logo.png"
+html_logo = "logo_org.png"
 
 html_theme_options = {"logo_only": False}
 
