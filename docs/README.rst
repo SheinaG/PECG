@@ -6,8 +6,6 @@ Digital electrocardiography biomarkers to assess cardiac conduction.
 Based on the paper 
 S. Gendelman et al., "PhysioZoo ECG: Digital electrocardiography biomarkers to assess cardiac conduction," 2021 Computing in Cardiology (CinC), 2021, pp. 1-4, doi: 10.23919/CinC53138.2021.9662857.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2tfL3wckNcQ" frameborder="0" allowfullscreen></iframe>
-
 ..  youtube:: 2tfL3wckNcQ
     :width: 640
     :height: 480
