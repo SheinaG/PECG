@@ -61,7 +61,7 @@ If you wish to use the epltd peak detector `additional wfdb toolbox`_ is require
 
 If you don't want or can't install this - It's Ok! you can use another peak detector from the package.
 
-Installation instractions:
+Installation instructions:
 ---------------------------
 
 1. Install the "pecg" package using pip by running the command line: "pip install pecg".
